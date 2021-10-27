@@ -16,8 +16,10 @@ import { MainPage } from './pages/MainPage/Loadable';
 import { SignUpPage } from './pages/SignUpPage/Loadable';
 import { SignInPage } from './pages/SignInPage/Loadable';
 
-import { NotFoundPage } from './components/NotFoundPage/Loadable';
+import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
+
+import 'tailwindcss/tailwind.css';
 
 export function App() {
   const { i18n } = useTranslation();
