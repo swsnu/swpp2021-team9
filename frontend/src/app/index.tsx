@@ -30,7 +30,7 @@ export function App() {
         defaultTitle="Bandcruit"
         htmlAttributes={{ lang: i18n.language }}
       >
-        <meta name="description" content="Bandcruit, where bands recruit" />
+        <meta name="description" content="Bandcruit" />
       </Helmet>
 
       <Switch>
