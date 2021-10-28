@@ -7,9 +7,7 @@ assignees: ''
 
 ---
 
-**Bug description**
-A clear and concise description of the bug.
+**Bug description :**
 
 
-**Additional context**
-Add screenshots or other context about the bug.
+**Screenshots / Additional context :**

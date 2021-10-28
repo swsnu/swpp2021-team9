@@ -7,8 +7,7 @@ assignees: ''
 
 ---
 
-**Feature description**
-A clear and concise description of the feature.
+**Feature description :**
 
-**Additional context**
-Add any other context or screenshots about the feature request.
+
+**Screenshots / Additional context :**
