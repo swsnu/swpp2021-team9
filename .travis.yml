@@ -11,15 +11,13 @@ jobs:
         - pylint **/*.py --load-plugins pylint_django
         - coverage run --source='.' manage.py test
         - coverage xml
-
     - language: node_js
-      node_js: 
-        -'14'
-        addons:
-          sonarcloud:
-            organization: "swsnu"
-              token:
-                secure: "i8qfmNiGa2QwlTEROazQ4Gx2vikSpEBPd7pSFVbjyoiuANuShmWZcdFT4RJMGPPEpJtmPauK4DR2uE9EK9JTNLI2yrQ8AF5ns9owU8TNVjaR2Oc4ZmDKSDcYoYRL2O6OFz0d6mKmxu8EjGkuLvTORaGuoopfaPKyGJQSuskl1EmLL2sDX+/xJcu0NA6t0t2ibfxbLvt08hhEhLY47Wn0Q/M/PJvKycGZkazj4LSfYLdsSy3ZRh3Jtxv4XgtfvVcQjtU47CvJQwwb3GuYztzLLSzZPiRbo6KQ/YSB5mj/OnBclWfFIyGFoUXxqB3OpAJvWJo0PGvJbUTDVCtxe9+UFikd6+LkzK2Dg1NDDGW6JBiD+96qYYhZo5QJYqgrFybBNqrs5LgSJ3uD8voHQZCuAvTsJOcvDNqF9NYQuqeCj1vFPZIxe/gBcUemDfjxLX9JClWkdlFCoHAPjz7qPBCJ8rwtkzgcn8sDzQ9UoEsV9ogM//IjvsvGvrqYlSSFtY0RI7sQqJNUxrhDLFzsncCtd1zgeanYcmz0znMVK3BpsYVeUYQyNtaFeEb/4EmDnG4d2mWk8b+7dgMTM9xLQb6CicDv6hRmR2bDOvYc+p8C5Lds9AVRtyymqsfmAvHfhpISsqTyBrEHiwoEt3qByWKR6kgNbLqYJVF3eooZa6oZxeI="
+      node_js: 14
+      addons:
+        sonarcloud:
+          organization: "swsnu"
+            token:
+              secure: "i8qfmNiGa2QwlTEROazQ4Gx2vikSpEBPd7pSFVbjyoiuANuShmWZcdFT4RJMGPPEpJtmPauK4DR2uE9EK9JTNLI2yrQ8AF5ns9owU8TNVjaR2Oc4ZmDKSDcYoYRL2O6OFz0d6mKmxu8EjGkuLvTORaGuoopfaPKyGJQSuskl1EmLL2sDX+/xJcu0NA6t0t2ibfxbLvt08hhEhLY47Wn0Q/M/PJvKycGZkazj4LSfYLdsSy3ZRh3Jtxv4XgtfvVcQjtU47CvJQwwb3GuYztzLLSzZPiRbo6KQ/YSB5mj/OnBclWfFIyGFoUXxqB3OpAJvWJo0PGvJbUTDVCtxe9+UFikd6+LkzK2Dg1NDDGW6JBiD+96qYYhZo5QJYqgrFybBNqrs5LgSJ3uD8voHQZCuAvTsJOcvDNqF9NYQuqeCj1vFPZIxe/gBcUemDfjxLX9JClWkdlFCoHAPjz7qPBCJ8rwtkzgcn8sDzQ9UoEsV9ogM//IjvsvGvrqYlSSFtY0RI7sQqJNUxrhDLFzsncCtd1zgeanYcmz0znMVK3BpsYVeUYQyNtaFeEb/4EmDnG4d2mWk8b+7dgMTM9xLQb6CicDv6hRmR2bDOvYc+p8C5Lds9AVRtyymqsfmAvHfhpISsqTyBrEHiwoEt3qByWKR6kgNbLqYJVF3eooZa6oZxeI="
       install:
         - cd frontend
         - yarn install
