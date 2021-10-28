@@ -20,6 +20,8 @@ jobs:
 
     - language: node_js
       node_js: 14
+      before_install:
+        - npm install -g yarn
       install:
         - cd frontend
         - yarn install
