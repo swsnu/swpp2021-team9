@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Bug description :**
+### Bug description
 
 
-**Screenshots / Additional context :**
+### Screenshots / Additional context
