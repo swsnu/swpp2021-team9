@@ -1,6 +1,6 @@
 ### Related Issues
-<!--Write issue number-->
-Issue #
+<!--Write 'Fixes #(issue)' for every issue fixed-->
+Fixes #
 
 ### Description
 <!--Describe how you solved the issue for your reviewer-->
