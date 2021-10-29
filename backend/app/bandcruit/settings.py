@@ -38,9 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
     'band',
+    'user',
 ]
+
+
+# Use Custom User as default user
+AUTH_USER_MODEL = 'user.CustomUser'
+
+
+# To use Auto Field id
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

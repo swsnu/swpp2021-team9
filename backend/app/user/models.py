@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .managers import UserManager
-from band.models import Instrument
 
 
 class CustomUser(AbstractUser):
@@ -13,8 +12,8 @@ class CustomUser(AbstractUser):
     last_name = None
     description = models.TextField(db_column='description', default='')
     photo = models.ImageField(upload_to='profile_pic', default=None)
-    followings = models.ManyToManyField('CustomUser', related_name='followers', db_table='UserFollowing')
-    instruments = models.ForeignKey(Instrument, db_column='instruments')
+    followings = models.ManyToManyField('CustomUser', related_name='followers', db_table='User_Following')
+    instruments = models.ManyToManyField('band.Instrument', related_name='+', db_table='User_Instruments')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -22,7 +21,7 @@ class CustomUser(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return f'([{self.pk}] {self.email})'
+        return f'([{self.id}] {self.email})'
 
     class Meta:
-        db_name = "User"
+        db_table = "User"
