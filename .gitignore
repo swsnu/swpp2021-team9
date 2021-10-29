@@ -128,3 +128,6 @@ server/keyfile.json
 
 # redis
 *.rdb
+
+# vscode
+.vscode
