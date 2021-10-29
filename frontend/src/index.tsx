@@ -12,9 +12,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-// Use consistent styling
-import 'sanitize.css/sanitize.css';
-
 // Import root app
 import { App } from 'app';
 
