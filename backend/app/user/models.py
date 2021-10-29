@@ -1,3 +1,6 @@
+""" user models
+Make custom user model for bandcruit
+"""
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -6,6 +9,16 @@ from .managers import UserManager
 
 
 class CustomUser(AbstractUser):
+    """ Custom user model class for bandcruit
+    Remove :
+        `first_name`
+        `last_name`
+    Add :
+        `description`: Bio of this user
+        `photo`: Profile image
+        `followings`: User can follow the other users. (related_name: `followers`)
+        `instruments`: Instruments user can play.
+    """
     username = models.CharField(max_length=30, db_column='Username', default='')
     email = models.EmailField(_('email address'), unique=True, max_length=30)
     first_name = None
