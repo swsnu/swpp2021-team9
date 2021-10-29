@@ -7,6 +7,7 @@ jobs:
       install:
         - cd backend
         - pip install -r requirements.txt
+        - cd app
       script: 
         - pylint **/*.py --load-plugins pylint_django
         - coverage run --source='.' manage.py test
