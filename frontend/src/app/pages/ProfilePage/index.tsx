@@ -4,10 +4,10 @@ export type Props = {};
 
 export type State = {};
 
-export default class SignUpPage extends Component<Props, State> {
+export default class ProfilePage extends Component<Props, State> {
   state: State = {};
 
   render() {
-    return <div className="signUpPage">signup</div>;
+    return <div className="profilePage">signup</div>;
   }
 }

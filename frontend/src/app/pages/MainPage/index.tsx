@@ -1,19 +1,13 @@
-/**
- *
- * MainPage
- *
- */
-import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { Component } from 'react';
 
-interface Props {}
+export type Props = {};
 
-export function MainPage(props: Props) {
-  return (
-    <div>
-      <Helmet>
-        <title>Home</title>
-      </Helmet>
-    </div>
-  );
+export type State = {};
+
+export default class MainPage extends Component<Props, State> {
+  state: State = {};
+
+  render() {
+    return <div className="mainPage">Main</div>;
+  }
 }

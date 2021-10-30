@@ -1,12 +1,13 @@
-/**
- *
- * SignInPage
- *
- */
-import * as React from 'react';
+import React, { Component } from 'react';
 
-interface Props {}
+export type Props = {};
 
-export function SignInPage(props: Props) {
-  return <div>Sign In Page</div>;
+export type State = {};
+
+export default class SignInPage extends Component<Props, State> {
+  state: State = {};
+
+  render() {
+    return <div className="signInPage">signin</div>;
+  }
 }
