@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "6.4.0",
     "@reduxjs/toolkit": "1.6.0",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "12.0.0",
@@ -59,10 +60,18 @@
     "typescript": "4.2.2",
     "web-vitals": "2.1.0"
   },
+  "devDependencies": {
+    "autoprefixer": "^9",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-17-updated": "1.0.2",
+    "enzyme-to-json": "3.6.2",
+    "postcss": "^7",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "test:generators": "ts-node --project=./internals/ts-node.tsconfig.json ./internals/testing/generators/test-generators.ts",
     "start:prod": "yarn run build && serve -s build",
@@ -120,10 +129,5 @@
         "statements": 90
       }
     }
-  },
-  "devDependencies": {
-    "enzyme": "3.11.0",
-    "enzyme-adapter-react-17-updated": "1.0.2",
-    "enzyme-to-json": "3.6.2"
   }
 }
