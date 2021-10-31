@@ -5,5 +5,7 @@
   You have to declare them here manually
 */
 export interface RootState {
+  example;
+  playerBar;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

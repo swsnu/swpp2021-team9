@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import CreateSongPage, { Props, State } from './index';
+import CreateSongPage, { Props, State } from '.';
 
 describe('<CreateSongPage />', () => {
   it('should render', () => {

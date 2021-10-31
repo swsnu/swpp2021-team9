@@ -32,7 +32,7 @@ export function App() {
   // const { i18n } = useTranslation();
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="app">
         <Helmet
           titleTemplate="%s - Bandcruit"
           defaultTitle="Bandcruit"

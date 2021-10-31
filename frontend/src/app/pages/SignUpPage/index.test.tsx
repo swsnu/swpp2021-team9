@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import SignUpPage, { Props, State } from './index';
+import SignUpPage, { Props, State } from '.';
 
 describe('<SignUpPage />', () => {
   it('should render', () => {
