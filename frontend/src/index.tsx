@@ -25,7 +25,7 @@ import reportWebVitals from 'reportWebVitals';
 import './locales/i18n';
 
 // activate tailwindCSS
-import './index.css';
+import 'tailwindcss/tailwind.css';
 
 const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
