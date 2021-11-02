@@ -8,6 +8,5 @@ import { MainState } from 'app/containers/MainPage/slice';
 */
 export interface RootState {
   main?: MainState;
-  profile?;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
