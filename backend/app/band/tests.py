@@ -104,11 +104,9 @@ class BandModelTest(TestCase):
         self.assertIsNone(cover.user)
 
     def test_combination(self):
-        user = User.objects.create_user(
-            email="calli@bandcruit.com", password="ppwwddaa")
         sample_song: Song = Song.objects.order_by('?').first()
         sample_covers = sample_song.covers.all()
-        
+
         combination = Combination(
             view=100, song=sample_song)
         combination.save()
