@@ -1,7 +1,5 @@
 import { initialState, MainState, useMainSlice, mainActions } from './index';
 
-import { useInjectReducer } from 'utils/redux-injectors';
-
 import {
   InjectReducerParams,
   RootStateKeyType,
