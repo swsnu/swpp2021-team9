@@ -12,19 +12,20 @@ import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
-import MainPage from './pages/MainPage';
-import SignUpPage from './pages/SignUpPage';
-import SignInPage from './pages/SignInPage';
-import SearchResultPage from './pages/SearchResultPage';
-import SongPage from './pages/SongPage';
-import CreateSongPage from './pages/CreateSongPage';
-import CoverPage from './pages/CoverPage';
+import Wrapper from './wrapper';
+import MainPage from './containers/MainPage';
+import SignUpPage from './containers/SignUpPage';
+import SignInPage from './containers/SignInPage';
+import SearchResultPage from './containers/SearchResultPage';
+import SongPage from './containers/SongPage';
+import CreateSongPage from './containers/CreateSongPage';
+import CoverPage from './containers/CoverPage';
 import {
   CreateCoverRecordPage,
   CreateCoverPreviewPage,
   CreateCoverInfoPage,
-} from './pages/CreateCoverPage';
-import ProfilePage from './pages/ProfilePage';
+} from './containers/CreateCoverPage';
+import ProfilePage from './containers/ProfilePage';
 
 // import { useTranslation } from 'react-i18next';
 
@@ -41,12 +42,15 @@ export function App() {
           <meta name="description" content="Bandcruit" />
         </Helmet>
 
-        <Switch>
-          <Route exact path="/" component={MainPage} />
-          <Route exact path="/signup" component={SignUpPage} />
-          <Route exact path="/signin" component={SignInPage} />
-          <Redirect to="/" />
-        </Switch>
+        <Wrapper>
+          <Switch>
+            <Route exact path="/" component={MainPage} />
+            <Route exact path="/signup" component={SignUpPage} />
+            <Route exact path="/signin" component={SignInPage} />
+            <Redirect to="/" />
+          </Switch>
+        </Wrapper>
+
         <GlobalStyle />
       </div>
     </BrowserRouter>

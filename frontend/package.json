@@ -6,7 +6,7 @@
     "@craco/craco": "6.4.0",
     "@reduxjs/toolkit": "1.6.0",
     "@testing-library/jest-dom": "5.14.1",
-    "@testing-library/react": "12.0.0",
+    "@testing-library/react": "12.1.2",
     "@types/fontfaceobserver": "0.0.6",
     "@types/jest": "26.0.23",
     "@types/node": "14.6.4",
@@ -61,6 +61,8 @@
     "web-vitals": "2.1.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "8.10.1",
+    "@testing-library/user-event": "13.5.0",
     "autoprefixer": "^9",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-17-updated": "1.0.2",
@@ -113,11 +115,13 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*/*.d.ts",
+      "!src/**/*/*.test.{js,jsx,ts,tsx}",
       "!src/**/*/Loadable.{js,jsx,ts,tsx}",
       "!src/**/*/messages.ts",
       "!src/**/*/types.ts",
       "!src/index.tsx",
       "!src/reportWebVitals.ts",
+      "!src/setupTests.js",
       "!src/utils/*",
       "!src/locales/*"
     ],

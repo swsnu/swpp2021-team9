@@ -1,3 +1,5 @@
+import { MainState } from 'app/containers/MainPage/slice';
+// import { ProfileState } from 'app/containers/ProfilePage/slice';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -5,7 +7,7 @@
   You have to declare them here manually
 */
 export interface RootState {
-  example;
-  playerBar;
+  main?: MainState;
+  profile?;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

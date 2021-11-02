@@ -1,12 +1,7 @@
-/**
- *
- * Header
- *
- */
 import * as React from 'react';
 
 interface Props {}
 
 export default function Header(props: Props) {
-  return <div id="header"></div>;
+  return <div data-testid="Header">header</div>;
 }
