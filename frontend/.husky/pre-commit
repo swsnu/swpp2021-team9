@@ -1,6 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+cd frontend
 yarn checkTs
 yarn lint-staged
 
