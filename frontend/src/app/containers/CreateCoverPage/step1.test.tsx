@@ -1,11 +1,31 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import CreateCoverRecordPage, { Props, State } from './step1';
+import { Provider } from 'react-redux';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-describe('<CreateCoverRecordPage />', () => {
-  it('should render', () => {
-    const component = shallow(<CreateCoverRecordPage />);
-    const wrapper = component.find('.createCoverRecordPage');
-    expect(wrapper.length).toBe(1);
-  });
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
+import { configureAppStore } from 'store/configureStore';
+import CreateCoverRecordPage, { Props } from './step1';
+
+const store = configureAppStore();
+
+function setup() {
+  const path = '/';
+  const page = (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route path={path} render={() => <CreateCoverRecordPage />} />
+          <Redirect to={path} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  );
+  return { page };
+}
+
+test('should render', () => {
+  const { page } = setup();
+  render(page);
+  expect(screen.getByTestId('CreateCoverRecordPage')).toBeTruthy();
 });

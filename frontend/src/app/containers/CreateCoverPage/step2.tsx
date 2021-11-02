@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 export type Props = {};
 
-export type State = {};
-
-export default class CreateCoverPreviewPage extends Component<Props, State> {
-  state: State = {};
-
-  render() {
-    return <div className="createCoverPreviewPage">signup</div>;
-  }
+export default function CreateCoverPreviewPage(props: Props) {
+  return <div data-testid="CreateCoverPreviewPage">CreateCoverPreviewPage</div>;
 }

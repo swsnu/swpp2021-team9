@@ -27,7 +27,7 @@ import {
 } from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
-// import { useTranslation } from 'react-i18next';
+import * as url from 'utils/urls';
 
 export function App() {
   // const { i18n } = useTranslation();
@@ -44,10 +44,24 @@ export function App() {
 
         <Wrapper>
           <Switch>
-            <Route exact path="/" component={MainPage} />
-            <Route exact path="/signup" component={SignUpPage} />
-            <Route exact path="/signin" component={SignInPage} />
-            <Redirect to="/" />
+            <Route exact path={url.Main()} component={MainPage} />
+            <Route exact path={url.SignUp()} component={SignUpPage} />
+            <Route exact path={url.SignIn()} component={SignInPage} />
+            <Route
+              exact
+              path={url.SearchResult()}
+              component={SearchResultPage}
+            />
+            <Route exact path={url.CreateSong()} component={CreateSongPage} />
+            <Route exact path={url.Song(':id')} component={SongPage} />
+            <Route
+              exact
+              path={url.CreateCover()}
+              component={CreateCoverRecordPage}
+            />
+            <Route exact path={url.Song(':id')} component={CoverPage} />
+            <Route exact path={url.Profile(':id')} component={ProfilePage} />
+            <Redirect to={url.Main()} />
           </Switch>
         </Wrapper>
 

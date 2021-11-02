@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 export type Props = {};
 
-export type State = {};
-
-export default class CreateCoverInfoPage extends Component<Props, State> {
-  state: State = {};
-
-  render() {
-    return <div className="createCoverInfoPage">signup</div>;
-  }
+export default function CreateCoverInfoPage(props: Props) {
+  return <div data-testid="CreateCoverInfoPage">CreateCoverInfoPage</div>;
 }

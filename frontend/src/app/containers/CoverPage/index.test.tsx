@@ -1,11 +1,31 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import CoverPage, { Props, State } from '.';
+import { Provider } from 'react-redux';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-describe('<CoverPage />', () => {
-  it('should render', () => {
-    const component = shallow(<CoverPage />);
-    const wrapper = component.find('.coverPage');
-    expect(wrapper.length).toBe(1);
-  });
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
+import { configureAppStore } from 'store/configureStore';
+import CoverPage, { Props } from '.';
+
+const store = configureAppStore();
+
+function setup() {
+  const path = '/cover/1';
+  const page = (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route path={path} component={CoverPage} />
+          <Redirect to={path} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  );
+  return { page };
+}
+
+test('should render', () => {
+  const { page } = setup();
+  render(page);
+  expect(screen.getByTestId('CoverPage')).toBeTruthy();
 });

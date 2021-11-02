@@ -9,10 +9,5 @@ export default function MainPage(props: Props) {
   const dispatch = useDispatch();
   const { actions } = useMainSlice();
 
-  return (
-    <div data-testid="MainPage">
-      Main
-      <button onClick={() => history.push('/signin')}>click</button>
-    </div>
-  );
+  return <div data-testid="MainPage">Main</div>;
 }

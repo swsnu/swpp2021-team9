@@ -10,12 +10,12 @@ import SongPage, { Props } from '.';
 const store = configureAppStore();
 
 function setup() {
-  const path = '/searchresult';
+  const path = '/song/1';
   const page = (
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} render={() => <SongPage />} />
+          <Route path={path} component={SongPage} />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>
