@@ -107,17 +107,8 @@ class BandModelTest(TestCase):
         user = User.objects.create_user(
             email="calli@bandcruit.com", password="ppwwddaa")
         sample_song: Song = Song.objects.order_by('?').first()
-
-        cover_data = make_cover_data(0, 0)
-        cover = Cover(
-            **cover_data,
-            user=user,
-            instrument=Instrument.objects.order_by('?').first(),
-            song=sample_song,
-        )
-        cover.save()
-
         sample_covers = sample_song.covers.all()
+        
         combination = Combination(
             view=100, song=sample_song)
         combination.save()
