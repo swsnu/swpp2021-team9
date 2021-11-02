@@ -106,9 +106,6 @@ class CoverTag(models.Model):
     """CoverTag model"""
     name: str = CharField(max_length=30, db_column='name')
 
-    def __str__(self):
-        return f'([{self.pk}] {self.name})'
-
     class Meta:
         db_table = "CoverTag"
 
@@ -120,9 +117,6 @@ class CoverLog(models.Model):
     cover: Cover = ForeignKey(Cover, related_name='+', on_delete=CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f'([{self.pk}] {self.cover} {self.timestamp})'
-
     class Meta:
         db_table = "CoverLog"
 
@@ -133,9 +127,6 @@ class CombinationLog(models.Model):
                             on_delete=models.SET_NULL, null=True)
     combination: Combination = ForeignKey(Combination, on_delete=CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'([{self.pk}] {self.combination} {self.timestamp})'
 
     class Meta:
         db_table = "CombinationLog"

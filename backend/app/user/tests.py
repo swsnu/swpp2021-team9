@@ -44,4 +44,4 @@ class UserManagersTests(TestCase):
     def test_user_str(self):
         user = User.objects.create_user(email='super@user.com', password='foo')
         preview_str = str(user)
-        self.assertEqual(f'([{self.id}] {user.email})', preview_str)
+        self.assertEqual(f'([{user.id}] {user.email})', preview_str)

@@ -4,7 +4,7 @@ Test codes for band app
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from .models import Instrument, Song, Cover
+from .models import Combination, Instrument, Song, Cover
 
 
 # pylint: disable=C0114
@@ -28,7 +28,7 @@ def make_cover_data(song_id: int, i: int):
         'title': f'COVER_TITLE{song_id}_{i}',
         'category': f'COVER_CATEGORY{song_id}_{i}',
         'description': f'COVER_DESCRIPTION{song_id}_{i}',
-        'view': (song_id * i * 100000) % 9883,
+        'views': (song_id * i * 100000) % 9883,
     }
 
 
@@ -39,13 +39,30 @@ class BandModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super(BandModelTest, cls).setUpClass()
+
+        # Make user
+        user = User.objects.create_user(
+            email="setup@bandcruit.com", password="setuppwd")
+
+        # Make Instruments
         for instrument_name in instrument_name_list:
             Instrument(name=instrument_name).save()
+
+        # Make Songs and Covers
         for i in range(100):
             song_data = make_song_data(i)
             song = Song(**song_data)
             song.save()
 
+            for j in range(10):
+                cover_data = make_cover_data(i, j)
+                cover = Cover(
+                    **cover_data,
+                    user=user,
+                    instrument=Instrument.objects.order_by('?').first(),
+                    song=Song.objects.order_by('?').first(),
+                )
+                cover.save()
 
     def test_instruments(self):
         self.assertEqual(Instrument.objects.count(), len(instrument_name_list))
@@ -85,3 +102,30 @@ class BandModelTest(TestCase):
         user.delete()
         cover = Cover.objects.get(id=cover.id)
         self.assertIsNone(cover.user)
+
+    def test_combination(self):
+        user = User.objects.create_user(
+            email="calli@bandcruit.com", password="ppwwddaa")
+        sample_song: Song = Song.objects.order_by('?').first()
+
+        cover_data = make_cover_data(0, 0)
+        cover = Cover(
+            **cover_data,
+            user=user,
+            instrument=Instrument.objects.order_by('?').first(),
+            song=sample_song,
+        )
+        cover.save()
+
+        sample_covers = sample_song.covers.all()
+        combination = Combination(
+            view=100, song=sample_song)
+        combination.save()
+        combination.covers.set(sample_covers)
+
+        combination = Combination.objects.get(id=combination.id)
+        # test __str__
+        self.assertEqual(
+            f'([{combination.pk}] {combination.song} combination)',
+            str(combination)
+        )
