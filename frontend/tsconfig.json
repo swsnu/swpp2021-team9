@@ -23,7 +23,6 @@
     "baseUrl": "./src"
   },
   "include": [
-    "src",
-    "internals/startingTemplate/**/*"
+    "src"
   ]
 }

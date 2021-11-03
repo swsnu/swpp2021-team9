@@ -8,31 +8,65 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-import { GlobalStyle } from '../styles/global-styles';
+import { GlobalStyle } from 'styles/global-styles';
 
-import { HomePage } from './pages/HomePage/Loadable';
-import { NotFoundPage } from './pages/NotFoundPage/Loadable';
-import { useTranslation } from 'react-i18next';
+import Wrapper from './wrapper';
+import MainPage from './containers/MainPage';
+import SignUpPage from './containers/SignUpPage';
+import SignInPage from './containers/SignInPage';
+import SearchResultPage from './containers/SearchResultPage';
+import SongPage from './containers/SongPage';
+import CreateSongPage from './containers/CreateSongPage';
+import CoverPage from './containers/CoverPage';
+import {
+  CreateCoverRecordPage,
+  CreateCoverPreviewPage,
+  CreateCoverInfoPage,
+} from './containers/CreateCoverPage';
+import ProfilePage from './containers/ProfilePage';
+
+import * as url from 'utils/urls';
 
 export function App() {
-  const { i18n } = useTranslation();
+  // const { i18n } = useTranslation();
   return (
     <BrowserRouter>
-      <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
-        htmlAttributes={{ lang: i18n.language }}
-      >
-        <meta name="description" content="A React Boilerplate application" />
-      </Helmet>
+      <div className="app">
+        <Helmet
+          titleTemplate="%s - Bandcruit"
+          defaultTitle="Bandcruit"
+          // htmlAttributes={{ lang: i18n.language }}
+        >
+          <meta name="description" content="Bandcruit" />
+        </Helmet>
 
-      <Switch>
-        <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-      <GlobalStyle />
+        <Wrapper>
+          <Switch>
+            <Route exact path={url.Main()} component={MainPage} />
+            <Route exact path={url.SignUp()} component={SignUpPage} />
+            <Route exact path={url.SignIn()} component={SignInPage} />
+            <Route
+              exact
+              path={url.SearchResult()}
+              component={SearchResultPage}
+            />
+            <Route exact path={url.CreateSong()} component={CreateSongPage} />
+            <Route exact path={url.Song(':id')} component={SongPage} />
+            <Route
+              exact
+              path={url.CreateCover()}
+              component={CreateCoverRecordPage}
+            />
+            <Route exact path={url.Song(':id')} component={CoverPage} />
+            <Route exact path={url.Profile(':id')} component={ProfilePage} />
+            <Redirect to={url.Main()} />
+          </Switch>
+        </Wrapper>
+
+        <GlobalStyle />
+      </div>
     </BrowserRouter>
   );
 }
