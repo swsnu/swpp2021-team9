@@ -1,10 +1,13 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false,
   theme: {
     fontFamily: {
-      sans: ['Spoqa Han Sans Neo'],
-      body: ['Spoqa Han Sans Neo'],
+      sans: ['Graphik', 'sans-serif'],
+      serif: ['serif'],
+      body: ['Graphik', 'sans-serif'],
     },
     extend: {
       fontSize: {},
@@ -20,7 +23,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['disabled'],
+    },
   },
   plugins: [],
 };
