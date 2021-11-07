@@ -1,4 +1,3 @@
-import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 
@@ -18,14 +17,10 @@ export const initialState: WrapperState = {
 const slice = createSlice({
   name: 'wrapper', // 이 이름을 types/RootState.ts에 써놓아야 함
   initialState,
-  reducers: {
-    someAction(state, action: PayloadAction<any>) {
-      return state;
-    },
-  },
+  reducers: {},
 });
 
-export const { actions: WrapperActions } = slice;
+export const { actions: wrapperActions, reducer } = slice;
 
 export const useWrapperSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });

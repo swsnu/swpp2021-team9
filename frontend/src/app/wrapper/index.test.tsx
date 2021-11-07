@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import * as reactRedux from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import Wrapper from '.';
+import { WrapperState } from './slice';
+
+import * as Search from 'app/components/Search';
 
 const store = configureAppStore();
 
@@ -24,8 +28,88 @@ function setup() {
   return { page };
 }
 
-test('should render', () => {
-  const { page } = setup();
-  render(page);
-  expect(screen.getByTestId('Wrapper')).toBeTruthy();
+describe('index', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('should render', () => {
+    const { page } = setup();
+    render(page);
+    expect(screen.getByTestId('Wrapper')).toBeTruthy();
+  });
+
+  test('should render signout and profile buttons when logged in', () => {
+    jest.spyOn(console, 'log').mockImplementation();
+    const mockState: WrapperState = {
+      name: 'wrapper',
+      user: {
+        id: 0,
+        username: 'USERNAME',
+      },
+    };
+    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+    useSelectorMock.mockReturnValue(mockState);
+    const { page } = setup();
+    const { container } = render(page);
+
+    const signInButton = container.querySelector('#signin_button');
+    const signUpButton = container.querySelector('#signup_button');
+    const signOutButton = container.querySelector('#signout_button');
+    const profileButton = container.querySelector('#profile_button');
+
+    expect(screen.getByTestId('Wrapper')).toBeTruthy();
+    expect(signInButton).toBeNull();
+    expect(signUpButton).toBeNull();
+    expect(signOutButton).toBeTruthy();
+    expect(profileButton).toBeTruthy();
+
+    fireEvent.click(signOutButton!);
+    fireEvent.click(profileButton!);
+  });
+
+  test('should render signin and signup buttons when not logged in', () => {
+    jest.spyOn(console, 'log').mockImplementation();
+    const mockState: WrapperState = {
+      name: 'wrapper',
+    };
+    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+    useSelectorMock.mockReturnValue(mockState);
+    const { page } = setup();
+    const { container } = render(page);
+
+    const signInButton = container.querySelector('#signin_button');
+    const signUpButton = container.querySelector('#signup_button');
+    const signOutButton = container.querySelector('#signout_button');
+    const profileButton = container.querySelector('#profile_button');
+
+    expect(screen.getByTestId('Wrapper')).toBeTruthy();
+    expect(signInButton).toBeTruthy();
+    expect(signUpButton).toBeTruthy();
+    expect(signOutButton).toBeNull();
+    expect(profileButton).toBeNull();
+
+    fireEvent.click(signInButton!);
+    fireEvent.click(signUpButton!);
+  });
+
+  test('should get search key when click search button', () => {
+    jest.spyOn(console, 'log').mockImplementation();
+    jest.spyOn(Search, 'default').mockImplementation((props: any) => {
+      return (
+        <div>
+          <input type="text" data-testid="mockSearchTerm" />
+          <button data-testid="mockSubmit" onClick={props.onSearchClicked} />
+        </div>
+      );
+    });
+    const { page } = setup();
+    const { getByTestId } = render(page);
+
+    const mockSearchButton = getByTestId('mockSubmit');
+    const mockSearchInput = getByTestId('mockSearchTerm');
+
+    fireEvent.change(mockSearchInput, { target: { value: 'SEARCH_KEY' } });
+    fireEvent.click(mockSearchButton);
+  });
 });
