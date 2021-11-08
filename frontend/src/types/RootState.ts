@@ -1,4 +1,5 @@
 import { MainState } from 'app/containers/MainPage/slice';
+import { SongState } from 'app/containers/SongPage/slice';
 // import { ProfileState } from 'app/containers/ProfilePage/slice';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
@@ -8,5 +9,6 @@ import { MainState } from 'app/containers/MainPage/slice';
 */
 export interface RootState {
   main?: MainState;
+  song?: SongState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
