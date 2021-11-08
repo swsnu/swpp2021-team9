@@ -50,7 +50,7 @@ export default function CreateSongPage(props: Props) {
         Upload a song link to create covers!
       </p>
 
-      <div className="w-full sm:w-3/4 m-5">
+      <div className="w-full sm:w-3/4 max-w-screen-md m-5">
         <form
           onSubmit={onSubmitForm}
           className="shadow border overflow-hidden sm:rounded-md"
