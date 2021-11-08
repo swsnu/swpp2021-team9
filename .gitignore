@@ -131,3 +131,6 @@ server/keyfile.json
 
 # vscode
 .vscode
+
+# secret key
+/.secrets

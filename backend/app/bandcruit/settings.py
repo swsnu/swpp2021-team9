@@ -23,19 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: Get secret key from secrets.json file
-secret_file = os.path.join(BASE_DIR, 'secrets.json')
-with open(secret_file) as f:
-    secrets = json.loads(f.read())
+# SECURITY WARNING: Get secret key from base.json file
+BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(BASE_DIR2)
+SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
+SECRETS_BASE = os.path.join(SECRETS_DIR, 'base.json')
+secrets_base = json.loads(open(SECRETS_BASE, 'rt').read())
 
-def get_secret(setting, secrets=secrets):
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = "Set the {} environment variable". format(setting)
-        raise ImproperlyConfigured(error_msg)
-
-SECRET_KEY = get_secret("SECRET_KEY")
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = secrets_base['SECRET_KEY']
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
