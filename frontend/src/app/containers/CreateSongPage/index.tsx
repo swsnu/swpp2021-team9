@@ -32,7 +32,7 @@ export default function CreateSongPage(props: Props) {
   };
 
   const submitDisabled = () => {
-    return (Form.title === '' || Form.artist === '' || Form.reference === '');
+    return Form.title === '' || Form.artist === '' || Form.reference === '';
   };
 
   const styles = {
@@ -120,7 +120,7 @@ export default function CreateSongPage(props: Props) {
 
               <div className="col-span-6">
                 <label htmlFor="description" className={styles.label}>
-                  Description
+                  Description (optional)
                 </label>
                 <textarea
                   name="description"
