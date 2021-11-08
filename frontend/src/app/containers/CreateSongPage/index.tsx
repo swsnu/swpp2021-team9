@@ -32,7 +32,7 @@ export default function CreateSongPage(props: Props) {
   };
 
   const submitDisabled = () => {
-    return !!(Form.title === '' || Form.artist === '' || Form.reference === '');
+    return (Form.title === '' || Form.artist === '' || Form.reference === '');
   };
 
   const styles = {
