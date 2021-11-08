@@ -134,3 +134,5 @@ server/keyfile.json
 
 # secret key
 /.secrets
+secrets.tar
+.txt
