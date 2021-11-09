@@ -1,5 +1,4 @@
 import React from 'react';
-import { Song } from 'types/models';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';

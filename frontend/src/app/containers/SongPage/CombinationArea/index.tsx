@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Instrument, Cover } from 'types/models';
 import { CreateCover } from 'utils/urls';
 
 import AddedCoverList from './AddedCoverList';

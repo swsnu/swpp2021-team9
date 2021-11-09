@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSongSlice } from '../slice';
-import { Instrument } from 'types/models';
 
 import { Menu, Transition } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

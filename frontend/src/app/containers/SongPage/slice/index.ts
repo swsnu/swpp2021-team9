@@ -2,8 +2,6 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 
-import { Cover, Instrument } from 'types/models';
-
 interface CombinationItem {
   id: number;
   instrument: Instrument;

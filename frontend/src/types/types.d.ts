@@ -1,4 +1,4 @@
-export interface Combination {
+interface Combination {
   id: number;
   views: number;
   song: number;
@@ -6,7 +6,7 @@ export interface Combination {
   likes: number;
 }
 
-export interface Cover {
+interface Cover {
   id: number;
   audio: string;
   title: string;
@@ -21,13 +21,13 @@ export interface Cover {
   combination: number | null;
 }
 
-export interface Instrument {
+interface Instrument {
   id: number;
   name: string;
   icon: string;
 }
 
-export interface Song {
+interface Song {
   id: number;
   title: string;
   singer: string;
@@ -36,7 +36,7 @@ export interface Song {
   description?: string;
 }
 
-export interface User {
+interface User {
   id: number;
   username: string;
   email: string;

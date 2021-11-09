@@ -1,5 +1,3 @@
-import { Song, Instrument, Combination, Cover } from 'types/models';
-
 export const dummyInstruments: Instrument[] = [
   {
     id: 0,
