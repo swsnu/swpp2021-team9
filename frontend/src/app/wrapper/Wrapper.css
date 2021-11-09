@@ -71,15 +71,24 @@
 }
 
 .PlayerBar .info {
+    flex-basis: 25%;
     margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.PlayerBar .text {
     padding: 8px;
     border-width: 1px;
     border-color: black;
 }
 
+.PlayerBar .svgButton {
+    margin-left: 16px;
+}
+
+
 .PlayerBar .controller {
-    position: absolute;
-    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -115,4 +124,10 @@
 	width: 0px;
 	height: 6px;
 	background-color: #0f0f0f;
+}
+
+.PlayerBar .timer {
+    flex-basis: 25%;
+    text-align: end;
+    margin-right: 40px;
 }

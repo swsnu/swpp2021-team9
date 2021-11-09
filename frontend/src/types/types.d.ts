@@ -19,4 +19,5 @@ type SongInfo = {
 type TrackInfo = {
   song: SongInfo;
   sources: string[];
+  like: boolean;
 };

@@ -45,6 +45,11 @@ export default class Player extends TrackPlayer {
     }
   }
 
+  addTrack(track: TrackInfo) {
+    this.tracks.splice(this.index, 0, track);
+    this.setIndex(this.index);
+  }
+
   playNext() {
     if (this.index + 1 < this.tracks.length) {
       this.setIndex(this.index + 1);

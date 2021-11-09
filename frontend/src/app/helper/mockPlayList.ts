@@ -1,34 +1,31 @@
 const mockPlaylist = [
   {
-    name: 'Mekanın Sahibi',
-    artist: 'Norm Ender',
+    name: '신호등',
+    artist: '이무진',
     cover:
       'https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/1.jpg',
-    source:
-      'https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/1.mp3',
+    source: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/1.mp3',
     url: 'https://www.youtube.com/watch?v=z3wAjJXbYzA',
     favorited: false,
   },
   {
-    name: 'Everybody Knows',
-    artist: 'Leonard Cohen',
+    name: 'strawberry moon',
+    artist: 'IU(아이유)',
     cover:
       'https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/2.jpg',
-    source:
-      'https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/8.mp3',
+    source: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/2.mp3',
     url: 'https://www.youtube.com/watch?v=Lin-a2lTelg',
     favorited: true,
   },
-  // {
-  //   name: 'Extreme Ways',
-  //   artist: 'Moby',
-  //   cover:
-  //     'https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/3.jpg',
-  //   source:
-  //     'https://raw.githubusercontent.com/muhammederdem/mini-player/master/mp3/3.mp3',
-  //   url: 'https://www.youtube.com/watch?v=ICjyAe9S54c',
-  //   favorited: false,
-  // },
+  {
+    name: 'My Universe',
+    artist: 'Coldplay X BTS',
+    cover:
+      'https://raw.githubusercontent.com/muhammederdem/mini-player/master/img/3.jpg',
+    source: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/3.mp3',
+    url: 'https://www.youtube.com/watch?v=ICjyAe9S54c',
+    favorited: false,
+  },
   // {
   //   name: 'Butterflies',
   //   artist: 'Sia',

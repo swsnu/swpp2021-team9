@@ -5,8 +5,12 @@ export default class TrackPlayer {
   private status = 'init';
 
   private checkLoading() {
-    if (this.loadingCount === 0) {
-      this.setStatus('canplay');
+    if (
+      this.status === 'loading' &&
+      this.audios.every(audio => audio.readyState > 3)
+    ) {
+      this.setStatus('loadFinish');
+      this.play();
     }
   }
 
@@ -48,6 +52,7 @@ export default class TrackPlayer {
   play() {
     if (this.getMinReadyState() < 3) {
       console.log('not ready', this.getMinReadyState());
+      this.setStatus('loading');
       return false;
     }
     if (this.audios.length !== 0) {
@@ -55,11 +60,13 @@ export default class TrackPlayer {
       this.setCurrentTime(currentTime);
       this.audios.forEach(audio => {
         if (!audio.ended) {
-          audio.play();
+          const promise = audio.play();
+          promise.catch(() => this.setStatus('pause'));
         }
         console.log(audio.readyState);
       });
     }
+    this.setStatus('playing');
     return true;
   }
 
@@ -69,6 +76,7 @@ export default class TrackPlayer {
         audio.pause();
       });
     }
+    this.setStatus('pause');
   }
 
   getDuration() {

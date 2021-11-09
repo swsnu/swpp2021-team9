@@ -4,6 +4,8 @@ import { ReactComponent as PrevSvg } from 'res/prev-button.svg';
 import { ReactComponent as NextSvg } from 'res/next-button.svg';
 import { ReactComponent as PlaySvg } from 'res/play-button.svg';
 import { ReactComponent as PauseSvg } from 'res/pause-button.svg';
+import { ReactComponent as LikeOutlined } from 'res/thumb_up_black_outlined.svg';
+import { ReactComponent as LikeFilled } from 'res/thumb_up_black_filled.svg';
 import loadingGif from 'res/loading.gif';
 
 import Player from 'app/helper/Player';
@@ -14,7 +16,6 @@ interface Props {}
 
 export default function PlayerBar(props: Props) {
   const [player] = useState(Player.getInstance());
-  const [paused, setPaused] = useState(player.isPaused());
   const [currLength, setCurrLength] = useState(0);
   const [length, setLength] = useState(0);
   const [status, setStatus] = useState('');
@@ -23,6 +24,9 @@ export default function PlayerBar(props: Props) {
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    player.onStatusChange = newStatus => setStatus(newStatus);
+    player.onTrackChanged = newTrack => setTrack(newTrack);
+
     const trackList: TrackInfo[] = [];
     mockPlaylist.forEach(v => {
       trackList.push({
@@ -34,11 +38,10 @@ export default function PlayerBar(props: Props) {
           description: 'des',
         },
         sources: [v.source],
+        like: false,
       });
     });
     player.setTracks(trackList);
-    player.onStatusChange = newStatus => setStatus(newStatus);
-    player.onTrackChanged = newTrack => setTrack(newTrack);
   }, [player]);
 
   const onPlayClicked = useCallback(() => {
@@ -48,7 +51,6 @@ export default function PlayerBar(props: Props) {
     } else {
       player.pause();
     }
-    setPaused(player.isPaused());
   }, [player]);
 
   const onPrevClicked = useCallback(() => {
@@ -61,6 +63,14 @@ export default function PlayerBar(props: Props) {
     player.playNext();
   }, [player]);
 
+  const onLikeClicked = useCallback(() => {
+    console.log('onLikeClicked');
+    if (track) {
+      const newTrack = { ...track, like: !track?.like };
+      setTrack(newTrack);
+    }
+  }, [track]);
+
   const updateProgress = useCallback(() => {
     const duration = player.getDuration();
     const currentTime = player.getCurrentTime();
@@ -72,6 +82,7 @@ export default function PlayerBar(props: Props) {
     }
     if (currentTime === duration) {
       console.log('Finish Play this song');
+      player.playNext();
     }
   }, [player]);
 
@@ -83,17 +94,29 @@ export default function PlayerBar(props: Props) {
       let secPerPx = length / (progress.current?.offsetWidth ?? 1);
       player.setCurrentTime(secPerPx * newWidth);
       updateProgress();
-      setPaused(player.isPaused());
     },
     [length, player, updateProgress],
   );
+
+  const formatMinute = useCallback((time: number) => {
+    const min = Math.floor(time / 60);
+    const sec = time % 60;
+    return `${min}:${`0${sec}`.slice(-2)}`;
+  }, []);
 
   useInterval(updateProgress, 1000);
 
   return (
     <div data-testid="PlayerBar" className="PlayerBar">
       <div className="info">
-        {track ? `${track.song.title} - ${track.song.singer}` : 'Selete Music'}
+        <div className="text">
+          {track
+            ? `${track.song.title} - ${track.song.singer}`
+            : 'Selete Music'}
+        </div>
+        <button className="svgButton" onClick={onLikeClicked}>
+          {track?.like ? <LikeFilled /> : <LikeOutlined />}
+        </button>
       </div>
       <div className="controller">
         <button className="svgButton" id="prev-button" onClick={onPrevClicked}>
@@ -102,17 +125,19 @@ export default function PlayerBar(props: Props) {
         <button className="svgButton" id="play-button" onClick={onPlayClicked}>
           {status === 'loading' ? (
             <img style={{ width: '28px' }} src={loadingGif} alt="Loading" />
-          ) : paused ? (
-            <PlaySvg />
-          ) : (
+          ) : status === 'playing' ? (
             <PauseSvg />
+          ) : (
+            <PlaySvg />
           )}
         </button>
         <button className="svgButton" id="next-button" onClick={onNextClicked}>
           <NextSvg className="svgButton" />
         </button>
       </div>
-      <div>{currLength}</div>
+      <div className="timer">
+        {`${formatMinute(currLength)} / ${formatMinute(length)}`}
+      </div>
       <div ref={progress} className="progress">
         <div className="progressCenter" onClick={e => onProgressClick(e)}>
           <div ref={bar} className="progressBar"></div>
