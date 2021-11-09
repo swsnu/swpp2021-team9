@@ -147,8 +147,6 @@ export default function CustomPlayer({}: Props) {
           'https://www.youtube.com/watch?v=ww9hZfgC2d8',
         ]}
         controls={true}
-        width={900}
-        height={600}
       />
     </div>
   );
