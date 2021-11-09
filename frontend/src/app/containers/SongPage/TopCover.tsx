@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useSongSlice } from './slice';
 
@@ -12,8 +12,6 @@ export interface Props {
 export default function TopCover(props: Props) {
   const dispatch = useDispatch();
   const { actions } = useSongSlice();
-
-  const [state, setstate] = useState({});
 
   const styles = {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
