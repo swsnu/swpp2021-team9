@@ -11,11 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import json
 from pathlib import Path
-
-import os, json
-from django.core import exceptions
-from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,17 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: Get secret key from secrets.json file
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
+secrets = {}
 with open(secret_file) as f:
     secrets = json.loads(f.read())
 
-def get_secret(setting, secrets=secrets):
+def get_secret(setting, fallback):
     try:
         return secrets[setting]
     except KeyError:
-        error_msg = "Set the {} environment variable". format(setting)
-        raise ImproperlyConfigured(error_msg)
+        return fallback
 
-SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = get_secret("SECRET_KEY", "ASDFG")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!

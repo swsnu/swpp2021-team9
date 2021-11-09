@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Header from './Header';
 import PlayerBar from './PlayerBar';
-import { useDispatch } from 'react-redux';
 
 interface Props {
   children?: React.ReactChild | React.ReactChild[];
