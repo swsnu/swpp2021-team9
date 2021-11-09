@@ -1,8 +1,9 @@
+type status = 'init' | 'loading' | 'loadFinish' | 'pause' | 'playing';
+
 export default class TrackPlayer {
   private audios: HTMLAudioElement[] = [];
   private track?: TrackInfo;
-  private loadingCount = 0;
-  private status = 'init';
+  private status: status = 'init';
 
   private checkLoading() {
     if (
@@ -14,7 +15,7 @@ export default class TrackPlayer {
     }
   }
 
-  private setStatus(status: string) {
+  private setStatus(status: status) {
     this.status = status;
     this.onStatusChange?.(this.status);
   }
@@ -31,7 +32,6 @@ export default class TrackPlayer {
     this.pause();
     this.track = track;
     this.audios = [];
-    this.loadingCount = track.sources.length;
     this.setStatus('loading');
     this.track.sources.forEach(async (source, idx) => {
       const audio = new Audio();
@@ -39,7 +39,6 @@ export default class TrackPlayer {
       audio.src = source;
       audio.load();
       audio.addEventListener('canplay', () => {
-        this.loadingCount -= 1;
         this.checkLoading();
       });
     });
