@@ -34,7 +34,10 @@ export default function TopCover(props: Props) {
             >
               {index + 1}
             </td>
-            <td className="px-3 py-2 text-sm font-medium whitespace-nowrap text-center text-gray-600">
+            <td
+              className="px-3 py-2 text-sm font-medium whitespace-nowrap text-center text-gray-600"
+              onClick={() => dispatch(actions.editCurrent(cover))}
+            >
               {'User ' + cover.user}
             </td>
             <td className="flex px-3 font-medium whitespace-normal">
