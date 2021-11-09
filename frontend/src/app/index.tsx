@@ -10,8 +10,6 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-import { GlobalStyle } from 'styles/global-styles';
-
 import Wrapper from './wrapper';
 import MainPage from './containers/MainPage';
 import SignUpPage from './containers/SignUpPage';
@@ -64,8 +62,6 @@ export function App() {
             <Redirect to={url.Main()} />
           </Switch>
         </Wrapper>
-
-        <GlobalStyle />
       </div>
     </BrowserRouter>
   );
