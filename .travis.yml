@@ -19,7 +19,7 @@ jobs:
         - yarn install
         - pip install overalls
         - yarn global add coveralls
-        - gen install coveralls-lcov
+        - gem install coveralls-lcov
       script:
         - ./node_modules/.bin/eslint src
         - yarn test --coverage --watchAll=false
