@@ -20,6 +20,7 @@ jobs:
         - cd ../../ && sonar-scanner
     - language: node_js
       node_js: 14
+      python: "3.7.9"
       addons:
         sonarcloud:
           organization: "swsnu"
@@ -28,8 +29,20 @@ jobs:
       before-install:
         - npm install -g yarn
       install:
+        - source ~/virtualenv/python3.7/bin/activate
+        - pip install -r backend/requirements.txt
         - cd frontend
         - yarn install
+        - pip install overalls
+        - yarn global add coveralls
+        - gen install coveralls-lcov
       script:
         - ./node_modules/.bin/eslint src
+        - yarn test --coverage --watchAll=false
+        - coveralls-lcov -v -n coverage/lcov.info > coverage.json
+        - cd ../backend
+        - pylint app
+        - coverage run --source='.' manage.py test
+        - coverage xml
         - cd .. && sonar-scanner
+        - coveralls --merge=frontend/coverage.json
