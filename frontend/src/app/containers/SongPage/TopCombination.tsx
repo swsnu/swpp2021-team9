@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSongSlice } from './slice';
 import { Combination, Cover } from 'types/models';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,10 +12,22 @@ export interface Props {
 }
 
 export default function TopCombination(props: Props) {
+  const dispatch = useDispatch();
+  const { actions } = useSongSlice();
   const [state, setstate] = useState({});
 
   const styles = {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
+  };
+
+  const onClickGet = (combination: Combination) => {
+    dispatch(
+      actions.addCovers(
+        combination.covers.map(id =>
+          props.covers.find(cover => cover.id === id),
+        ),
+      ),
+    );
   };
 
   const renderCoverButtons = (covers: number[]) => {
@@ -22,7 +36,7 @@ export default function TopCombination(props: Props) {
       return cover ? (
         <button
           key={id}
-          className="justify-center px-1 border border-transparent shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
+          className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
         >
           {cover.title}
         </button>
@@ -39,25 +53,41 @@ export default function TopCombination(props: Props) {
           return -(a.views - b.views); // more views = higher rank
         })
         .map((combination, index) => (
-          <tr key={combination.id}>
-            <td className="px-3 py-2 whitespace-nowrap text-center">
+          <tr key={combination.id} className="hover:bg-gray-100 cursor-pointer">
+            <td
+              className="px-3 py-2 font-bold whitespace-nowrap text-center"
+              onClick={() => onClickGet(combination)}
+            >
               {index + 1}
             </td>
-            <td className="px-3 py-2 whitespace-nowrap">
-              <ul className="flex -my-1.5 py-2 gap-1 overflow-x-auto scroll-simple">
+            <td className="flex px-3 whitespace-nowrap">
+              <ul className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
                 {renderCoverButtons(combination.covers)}
               </ul>
+              <button
+                className="self-stretch flex-grow"
+                onClick={() => onClickGet(combination)}
+              />
             </td>
-            <td className="px-3 py-2 whitespace-nowrap text-center">
+            <td
+              className="px-3 py-2 whitespace-nowrap text-center"
+              onClick={() => onClickGet(combination)}
+            >
               {combination.views}
             </td>
-            <td className="px-3 py-2 whitespace-nowrap text-center">
+            <td
+              className="px-3 py-2 whitespace-nowrap text-center"
+              onClick={() => onClickGet(combination)}
+            >
               {combination.likes}
             </td>
-            <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">
-              <button className="text-indigo-600 hover:text-indigo-900 font-bold">
+            <td
+              className="px-3 py-2 whitespace-nowrap text-sm font-medium"
+              onClick={() => onClickGet(combination)}
+            >
+              <div className="text-indigo-600 hover:text-indigo-900 font-bold">
                 GET
-              </button>
+              </div>
             </td>
           </tr>
         ))

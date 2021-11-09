@@ -13,7 +13,7 @@ export interface Cover {
   category: string;
   description?: string;
   user: number;
-  instrument: number;
+  instrument: Instrument;
   song: number;
   tags: string[];
   likes: number;

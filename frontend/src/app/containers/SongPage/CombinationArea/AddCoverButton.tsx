@@ -20,14 +20,14 @@ export default function AddCoverButton(props: Props) {
     menuitem: (active: boolean) =>
       `${
         active && 'bg-gray-200'
-      } text-gray-700 group flex rounded-md items-center w-full pr-4 py-1 text-sm font-medium`,
+      } text-gray-700 group flex rounded-lg items-center w-full pr-4 py-1 text-sm font-medium`,
   };
 
   return (
     <div data-testid="AddCoverButton">
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="relative inline-block text-left mx-2 pt-2">
         <div>
-          <Menu.Button className="inline-flex justify-center px-2 border-transparent rounded-md text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600">
+          <Menu.Button className="inline-flex justify-center px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600">
             <div className="text-lg text-center">
               <FontAwesomeIcon icon={faPlus} />
             </div>
@@ -42,7 +42,7 @@ export default function AddCoverButton(props: Props) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute z-10 left-0 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute z-10 left-0 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1">
               {props.instruments.map(instrument => (
                 <Menu.Item key={instrument.id}>
@@ -66,7 +66,7 @@ export default function AddCoverButton(props: Props) {
                   <div className={styles.menuitem(false)}>
                     <FontAwesomeIcon
                       icon={faAngleRight}
-                      className="text-lg ml-1 mr-2 text-gray-500"
+                      className="text-md mx-2 text-gray-500"
                     />
                     <span className="text-gray-500">More...</span>
                   </div>

@@ -25,7 +25,10 @@ export default function AddedCoverList(props: Props) {
   };
 
   return (
-    <ul data-testid="AddedCoverList" className="flex flex-wrap mr-2 gap-2">
+    <ul
+      data-testid="AddedCoverList"
+      className="flex flex-wrap p-2 gap-2 rounded-lg bg-gray-200"
+    >
       {combination.length > 0 ? (
         combination.map(item => (
           <li key={item.id}>
@@ -36,9 +39,9 @@ export default function AddedCoverList(props: Props) {
                     item.id === current
                       ? 'bg-indigo-200'
                       : item.cover === null
-                      ? 'bg-red-200'
+                      ? 'bg-red-200 hover:bg-red-300'
                       : 'bg-gray-200 hover:bg-gray-300'
-                  } inline-flex justify-center items-center px-1 rounded-md text-sm font-medium text-gray-600`}
+                  } inline-flex justify-center items-center px-1 rounded-lg text-sm font-medium text-gray-600`}
                 >
                   <div className="mr-1 w-6 text-lg text-center text-gray-700">
                     <FontAwesomeIcon icon={getIcon(item.instrument.icon)} />
@@ -57,7 +60,7 @@ export default function AddedCoverList(props: Props) {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute z-10 left-0 w-24 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute z-10 left-0 w-24 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="px-1 py-1">
                     <Menu.Item>
                       {({ active }) => (
@@ -92,7 +95,7 @@ export default function AddedCoverList(props: Props) {
           </li>
         ))
       ) : (
-        <span className="text-sm font-medium text-gray-500 tracking-wider">
+        <span className="text-sm py-1 px-2 font-medium text-gray-500 tracking-wider">
           Add covers to make your own combination!
         </span>
       )}

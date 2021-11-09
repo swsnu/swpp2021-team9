@@ -44,7 +44,7 @@ export default function SongPage(props: Props) {
     return (
       <TopCover
         covers={dummyCovers.filter(
-          cover => cover.instrument === item.instrument.id,
+          cover => cover.instrument.id === item.instrument.id,
         )}
       />
     );

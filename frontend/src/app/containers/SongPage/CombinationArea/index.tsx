@@ -1,8 +1,13 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Instrument, Cover } from 'types/models';
+import { CreateCover } from 'utils/urls';
 
 import AddedCoverList from './AddedCoverList';
 import AddCoverButton from './AddCoverButton';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faCircle } from '@fortawesome/free-solid-svg-icons';
 
 export interface Props {
   instruments: Instrument[];
@@ -10,14 +15,30 @@ export interface Props {
 }
 
 export default function CombinationArea(props: Props) {
+  const history = useHistory();
+
   return (
     <div data-testid="CombinationArea" className="mt-4 ml-4 sm:ml-0">
       <h2 className="text-left text-sm font-bold text-gray-600 tracking-wider">
         MAKE COMBINATION
       </h2>
-      <div className="mt-1 flex w-full items-start">
+      <div className="mt-2 flex w-full items-start">
         <AddedCoverList />
         <AddCoverButton instruments={props.instruments} />
+        <button className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600">
+          <div className="text-lg text-center">
+            <FontAwesomeIcon icon={faPlay} />
+          </div>
+        </button>
+        <button
+          onClick={() => history.push(CreateCover())}
+          className="ml-2 inline-flex justify-center items-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600"
+        >
+          <div className="text-md text-center">
+            <FontAwesomeIcon icon={faCircle} />
+          </div>
+          <span className="ml-1 text-lg">REC</span>
+        </button>
       </div>
     </div>
   );

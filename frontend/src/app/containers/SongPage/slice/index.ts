@@ -35,7 +35,6 @@ const slice = createSlice({
         instrument: action.payload,
         cover: null,
       };
-      console.log(nextItemID);
       state.combination.push(newItem);
       state.current = nextItemID;
       nextItemID += 1;
@@ -44,10 +43,20 @@ const slice = createSlice({
       state.current = action.payload;
     },
     editCurrent(state, action: PayloadAction<Cover>) {
+      const alreadyExist = state.combination.find(
+        item =>
+          item.cover &&
+          item.cover.id === action.payload.id &&
+          item.id !== state.current,
+      );
+      if (alreadyExist) return state;
+
       const targetItem = state.combination.find(
         item => item.id === state.current,
       );
-      if (targetItem) targetItem.cover = action.payload;
+      if (!targetItem) return state;
+
+      targetItem.cover = action.payload;
       state.current = null;
     },
     deleteItem(state, action: PayloadAction<number>) {
@@ -56,8 +65,21 @@ const slice = createSlice({
       );
       state.current = null;
     },
-    addCovers(state, action: PayloadAction<Cover[]>) {
-      return state;
+    addCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
+      action.payload.forEach(cover => {
+        if (!cover) return;
+        const alreadyExist = state.combination.find(
+          item => item.cover && item.cover.id === cover.id,
+        );
+        if (alreadyExist) return;
+
+        const newItem: CombinationItem = {
+          id: nextItemID++,
+          instrument: cover.instrument,
+          cover: cover,
+        };
+        state.combination.push(newItem);
+      });
     },
   },
 });
