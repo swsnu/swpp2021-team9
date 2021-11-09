@@ -15,3 +15,8 @@ type SongInfo = {
   reference: string;
   description: string;
 };
+
+type TrackInfo = {
+  song: SongInfo;
+  sources: string[];
+};

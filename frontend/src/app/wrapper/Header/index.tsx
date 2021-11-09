@@ -9,6 +9,7 @@ interface Props {
   onSignUpClicked: () => void;
   onSignOutClicked: () => void;
   onProfileClicked: () => void;
+  onLogoClicked: () => void;
 }
 
 export default function Header(props: Props) {
@@ -19,7 +20,7 @@ export default function Header(props: Props) {
 
   return (
     <div className="Header" data-testid="Header">
-      <div className="logo">
+      <div className="logo" onClick={props.onLogoClicked}>
         <Cookie />
       </div>
       <div className="searchWrapper">

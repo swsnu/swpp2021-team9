@@ -18,6 +18,9 @@ test('should render', () => {
       onProfileClicked={function (): void {
         throw new Error('Function not implemented.');
       }}
+      onLogoClicked={function (): void {
+        throw new Error('Function not implemented.');
+      }}
     />,
   );
   expect(screen.getByTestId('Header')).toBeTruthy();
