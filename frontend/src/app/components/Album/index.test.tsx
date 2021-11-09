@@ -4,6 +4,6 @@ import { screen } from '@testing-library/dom';
 import Album from '.';
 
 test('should render', () => {
-  render(<Album />);
+  render(<Album title="Album1" singer="Singer1" />);
   expect(screen.getByTestId('Album')).toBeTruthy();
 });

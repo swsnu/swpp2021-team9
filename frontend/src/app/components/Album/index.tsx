@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { Component, useState } from 'react';
-import Image from './AlbumImage.png';
 import '../Album/Album.css';
 import { useHistory } from 'react-router-dom';
 import { Song } from 'utils/urls';
+import Playerbar from '../SimplePlayer/index';
 
 interface Props {
+  id: number;
   title: string;
   singer: string;
-  //thumbnail:string|undefined,
+  thumbnail: string | undefined;
   //play:string|undefined,
   //onTitleClicked: Function,
   //onPlayClicked: Function
 }
 
-//const onTitleClicked = ()=>{//Redirect to SongPage of the clicked song}
 //const onPlayClicked = ()=>{//Resume or pause playing the song}
 
 export default function Album(props: Props) {
@@ -25,33 +25,38 @@ export default function Album(props: Props) {
     singer: '',
   });
 
-  const onSubmitForm = (e: React.FormEvent) => {
+  const onTitleClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
-    history.push(Song(0));
+    history.push(Song(props.id));
   };
 
-  const styles = {
-    label: 'block text-sm font-medium text-gray-700',
-    input:
-      'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md',
+  const onPlayClicked = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(Form);
+    //Playerbar.onPlayButtonClicked();
   };
 
   return (
-    <div data-testid="Album" className="flex flex-col items-center">
-      <h3 className="text-lg font-medium leading-6 text-gray-900">
-        {props.title} - {props.singer}
-      </h3>
-      <div className="px-4 py-3 bg-gray-50 text-left sm:px-6">
-        <img
-          className="AlbumImage"
-          src={Image}
-          width="100"
-          height="120"
-          alt="AlbumImage"
-        />
-      </div>
-      <form onSubmit={onSubmitForm}>
+    <div data-testid="Album" className="flex flex-col items-center w-full">
+      <br></br>
+      <br></br>
+      <form onSubmit={onTitleClicked}>
+        <button className="text-lg font-medium leading-6 text-gray-900">
+          {props.title}
+          <br></br> {props.singer}
+        </button>
+      </form>
+      <br></br>
+      <img
+        className="rounded-full border border-gray-100 shadow-sm AlbumImage"
+        src={props.thumbnail}
+        width="150"
+        height="150"
+        alt="Album image"
+      />
+      <br></br>
+      <form onSubmit={onPlayClicked}>
         <div className="px-4 py-3 bg-gray-50 text-left sm:px-6">
           <button
             type="submit"
@@ -61,6 +66,8 @@ export default function Album(props: Props) {
           </button>
         </div>
       </form>
+      <br></br>
+      <br></br>
     </div>
   );
 }
