@@ -3,18 +3,23 @@ import { Song, Instrument, Combination, Cover } from 'types/models';
 export const dummyInstruments: Instrument[] = [
   {
     id: 0,
-    name: 'Vocal',
-    icon: '',
+    name: 'Vocals',
+    icon: 'mic',
   },
   {
     id: 1,
     name: 'Keyboard',
-    icon: '',
+    icon: 'piano',
   },
   {
     id: 2,
     name: 'Guitar',
-    icon: '',
+    icon: 'guitar',
+  },
+  {
+    id: 3,
+    name: 'Drum',
+    icon: 'drum',
   },
 ];
 
@@ -47,7 +52,7 @@ export const dummyCovers: Cover[] = [
   {
     id: 1,
     audio: '',
-    title: '신호등 Folk Guitar Cover',
+    title: 'Folk Guitar Cover',
     category: '',
     description: '',
     user: 1,

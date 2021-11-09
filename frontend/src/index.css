@@ -23,6 +23,10 @@ code {
     monospace;
 }
 
+button {
+  user-select: none;
+}
+
 input,
 textarea {
   border-width: 1px;

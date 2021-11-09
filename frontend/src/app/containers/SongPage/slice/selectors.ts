@@ -3,6 +3,14 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'types';
 import { initialState } from './index';
 
-const selectSlice = (state: RootState) => state.song || initialState; // state.??? 부분을 이름으로 바꾸기
+const selectSlice = (state: RootState) => (state && state.song) || initialState;
 
-export const selectMain = createSelector([selectSlice], state => state);
+export const selectCombination = createSelector(
+  [selectSlice],
+  state => state.combination,
+);
+
+export const selectCurrent = createSelector(
+  [selectSlice],
+  state => state.current,
+);

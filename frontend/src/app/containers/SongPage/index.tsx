@@ -1,15 +1,22 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCombination, selectCurrent } from './slice/selectors';
 
 import { Main } from 'utils/urls';
-import { Song, Combination, Cover } from 'types/models';
 
 import SongInfo from './SongInfo';
 import TopCombination from './TopCombination';
-import MakeCombination from './MakeCombinationArea';
+import CombinationArea from './CombinationArea';
+import TopCover from './TopCover';
 
-import { dummySongs, dummyCombinations, dummyCovers } from './dummy';
+import {
+  dummySongs,
+  dummyCombinations,
+  dummyCovers,
+  dummyInstruments,
+} from './dummy';
 
 interface MatchParams {
   id?: string;
@@ -18,6 +25,8 @@ export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function SongPage(props: Props) {
   const history = useHistory();
+  const combination = useSelector(selectCombination);
+  const current = useSelector(selectCurrent);
 
   useEffect(() => {
     // 존재하지 않는 노래면 리다이렉트
@@ -27,6 +36,20 @@ export default function SongPage(props: Props) {
     }
   }, [history, props.match.params.id]);
 
+  const renderTopCover = () => {
+    if (current === null) return null;
+    const item = combination.find(item => item.id === current);
+    if (!item) return null;
+
+    return (
+      <TopCover
+        covers={dummyCovers.filter(
+          cover => cover.instrument === item.instrument.id,
+        )}
+      />
+    );
+  };
+
   return (
     <div data-testid="SongPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
@@ -35,7 +58,8 @@ export default function SongPage(props: Props) {
           image={'https://img.youtube.com/vi/SK6Sm2Ki9tI/hqdefault.jpg'}
         />
         <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
-        <MakeCombination />
+        <CombinationArea instruments={dummyInstruments} covers={dummyCovers} />
+        {renderTopCover()}
       </div>
     </div>
   );

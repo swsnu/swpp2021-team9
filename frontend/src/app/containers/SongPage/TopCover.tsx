@@ -1,60 +1,60 @@
 import React, { useState } from 'react';
-import { Combination, Cover } from 'types/models';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSongSlice } from './slice';
+import { selectCombination } from './slice/selectors';
+import { Cover } from 'types/models';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export interface Props {
-  combinations: Combination[];
   covers: Cover[];
 }
 
-export default function TopCombination(props: Props) {
+export default function TopCover(props: Props) {
+  const dispatch = useDispatch();
+  const { actions } = useSongSlice();
+  const combination = useSelector(selectCombination);
+
   const [state, setstate] = useState({});
 
   const styles = {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
   };
 
-  const renderCoverButtons = (covers: number[]) => {
-    return covers.map(id => {
-      const cover = props.covers.find(cover => cover.id === id);
-      return cover ? (
-        <button
-          key={id}
-          className="justify-center px-1 border border-transparent shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
-        >
-          {cover.title}
-        </button>
-      ) : (
-        <div key={id}></div>
-      );
-    });
-  };
-
-  const renderCombinations = (combinations: Combination[]) => {
-    return combinations.length > 0 ? (
-      combinations
+  const renderCovers = (covers: Cover[]) => {
+    return covers.length > 0 ? (
+      covers
         .sort((a, b) => {
           return -(a.views - b.views); // more views = higher rank
         })
-        .map((combination, index) => (
-          <tr key={combination.id}>
+        .map((cover, index) => (
+          <tr
+            key={cover.id}
+            className="hover:bg-gray-200 cursor-pointer"
+            onClick={() => dispatch(actions.editCurrent(cover))}
+          >
             <td className="px-3 py-2 whitespace-nowrap text-center">
               {index + 1}
             </td>
+            <td className="px-3 py-2 whitespace-nowrap text-center">
+              {cover.user}
+            </td>
+            <td className="px-3 py-2 whitespace-nowrap">{cover.title}</td>
             <td className="px-3 py-2 whitespace-nowrap">
-              <ul className="flex -my-1.5 py-2 gap-1 overflow-x-auto scroll-simple">
-                {renderCoverButtons(combination.covers)}
+              <ul className="flex gap-1">
+                {cover.tags.map((tag, index) => (
+                  <li key={index}>{tag}</li>
+                ))}
               </ul>
             </td>
             <td className="px-3 py-2 whitespace-nowrap text-center">
-              {combination.views}
+              {cover.views}
             </td>
             <td className="px-3 py-2 whitespace-nowrap text-center">
-              {combination.likes}
+              {cover.likes}
             </td>
-            <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">
+            <td className="whitespace-nowrap text-sm font-medium sr-only sm:not-sr-only sm:px-3 sm:py-2">
               <button className="text-indigo-600 hover:text-indigo-900 font-bold">
                 GET
               </button>
@@ -64,26 +64,29 @@ export default function TopCombination(props: Props) {
     ) : (
       <tr>
         <td colSpan={5} className={styles.th}>
-          There are no combinations yet.
+          There are no covers yet.
         </td>
       </tr>
     );
   };
 
   return (
-    <div data-testid="TopCombination" className="mt-8 flex flex-col">
-      <h2 className="pl-4 sm:pl-0 text-left text-sm font-bold text-gray-600 tracking-wider">
-        TOP COMBINATIONS
-      </h2>
-      <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
-        <table className="table-fixed w-full">
-          <thead className="bg-gray-50">
+    <div data-testid="TopCover" className="mt-4 flex flex-col">
+      <div className="shadow border-b border-gray-200 sm:rounded-lg">
+        <table className="w-full">
+          <thead className="bg-indigo-50">
             <tr>
               <th scope="col" className={styles.th}>
                 RANK
               </th>
-              <th scope="col" className={styles.th + ' w-1/2 sm:w-2/3'}>
-                COVERS
+              <th scope="col" className={styles.th}>
+                AUTHOR
+              </th>
+              <th scope="col" className={styles.th}>
+                TITLE
+              </th>
+              <th scope="col" className={styles.th}>
+                TAGS
               </th>
               <th scope="col" className={styles.th}>
                 <FontAwesomeIcon icon={faPlay} />
@@ -97,7 +100,7 @@ export default function TopCombination(props: Props) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {renderCombinations(props.combinations)}
+            {renderCovers(props.covers)}
           </tbody>
         </table>
       </div>
