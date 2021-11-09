@@ -47,10 +47,10 @@ export default function TopCover(props: Props) {
               />
             </td>
             <td
-              className="sr-only sm:not-sr-only sm:px-3 sm:py-2 whitespace-nowrap"
+              className="px-3 py-2 whitespace-nowrap"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
-              <ul className="flex gap-1">
+              <ul className="flex flex-wrap gap-1">
                 {cover.tags.map((tag, index) => (
                   <li
                     key={index}
@@ -108,7 +108,7 @@ export default function TopCover(props: Props) {
                 TITLE
               </th>
               <th scope="col" className={styles.th}>
-                <span className="sr-only sm:not-sr-only">TAGS</span>
+                <span>TAGS</span>
               </th>
               <th scope="col" className={styles.th}>
                 <FontAwesomeIcon icon={faPlay} />
@@ -116,8 +116,8 @@ export default function TopCover(props: Props) {
               <th scope="col" className={styles.th}>
                 <FontAwesomeIcon icon={faHeart} />
               </th>
-              <th scope="col" className={styles.th}>
-                <span className="sr-only">GET</span>
+              <th scope="col" className={'sr-only ' + styles.th}>
+                <span>GET</span>
               </th>
             </tr>
           </thead>

@@ -32,7 +32,7 @@ export default function CombinationArea(props: Props) {
         </button>
         <button
           onClick={() => history.push(CreateCover())}
-          className="ml-2 inline-flex justify-center items-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600"
+          className="ml-2 mr-4 sm:mr-0 inline-flex justify-center items-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600"
         >
           <div className="text-md text-center">
             <FontAwesomeIcon icon={faCircle} />

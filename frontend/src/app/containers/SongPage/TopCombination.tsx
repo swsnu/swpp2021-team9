@@ -121,8 +121,8 @@ export default function TopCombination(props: Props) {
               <th scope="col" className={styles.th}>
                 <FontAwesomeIcon icon={faHeart} />
               </th>
-              <th scope="col" className={styles.th}>
-                <span className="sr-only">GET</span>
+              <th scope="col" className={'sr-only ' + styles.th}>
+                <span>GET</span>
               </th>
             </tr>
           </thead>
