@@ -17,7 +17,7 @@ export default function Search({ onSearchClicked }: Props) {
     [setInputKey],
   );
 
-  const handleClick = useCallback(() => {
+  const handelClick = useCallback(() => {
     onSearchClicked && onSearchClicked(inputKey);
   }, [inputKey, onSearchClicked]);
 
@@ -34,7 +34,7 @@ export default function Search({ onSearchClicked }: Props) {
         type="submit"
         data-testid="submit"
         className="searchButton"
-        onClick={handleClick}
+        onClick={handelClick}
       >
         <SearchSvg />
       </button>
