@@ -5,7 +5,7 @@ import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
-import CreateCoverPreviewPage, { Props } from './step2';
+import CreateCoverInfoPage, { Props } from './step2';
 
 const store = configureAppStore();
 
@@ -15,7 +15,7 @@ function setup() {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} render={() => <CreateCoverPreviewPage />} />
+          <Route path={path} render={() => <CreateCoverInfoPage />} />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>
@@ -27,5 +27,5 @@ function setup() {
 test('should render', () => {
   const { page } = setup();
   render(page);
-  expect(screen.getByTestId('CreateCoverPreviewPage')).toBeTruthy();
+  expect(screen.getByTestId('CreateCoverInfoPage')).toBeTruthy();
 });

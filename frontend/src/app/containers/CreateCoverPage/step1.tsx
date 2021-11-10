@@ -12,7 +12,9 @@ import {
 import { useReactMediaRecorder } from 'react-media-recorder';
 import Waveform from './Waveform';
 import { useHistory } from 'react-router-dom';
-import { Song } from 'utils/urls';
+import { Song, CreateCover } from 'utils/urls';
+import { useDispatch } from 'react-redux';
+import { useCreateCoverSlice } from './slice';
 export interface Props {}
 
 const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
@@ -31,10 +33,11 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
 
 export default function CreateCoverRecordPage(props: Props) {
   const history = useHistory();
-
+  const dispatch = useDispatch();
+  const { actions } = useCreateCoverSlice();
   const [isVideo, setIsVideo] = useState(false);
   const [isYoutubeLink, setIsYoutubeLink] = useState(true);
-  const [isUploaded, setIsUploaded] = useState(false);
+  // const [isUploaded, setIsUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -61,13 +64,24 @@ export default function CreateCoverRecordPage(props: Props) {
     console.log(mediaBlobUrl);
   };
 
-  const onCancelClicked = e => {
+  const onCancelClicked = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     // 임시 구현
     // TODO
     // song id를 route params로 받아와서 사용해야할 듯.
     e.preventDefault();
     history.push(Song(0));
   };
+
+  const onNextClicked = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    dispatch(actions.setAudioURL(mediaBlobUrl));
+    history.push(CreateCover(2));
+  };
+
   return (
     <div
       data-testid="CreateCoverRecordPage"
@@ -163,7 +177,8 @@ export default function CreateCoverRecordPage(props: Props) {
         </div>
         <button
           type="button"
-          disabled={!isUploaded}
+          onClick={e => onNextClicked(e)}
+          disabled={!mediaBlobUrl}
           className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Next

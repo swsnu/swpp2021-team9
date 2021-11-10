@@ -12,13 +12,13 @@ type CoverInfo = {
 
 export interface CreateCoverState {
   name: string;
-  audioURL: string;
+  audioURL: string | null;
   info: {};
 }
 
 export const initialState: CreateCoverState = {
   name: 'createCover',
-  audioURL: '',
+  audioURL: null,
   info: {},
 };
 
@@ -29,7 +29,7 @@ const slice = createSlice({
     setInfo(state, action: PayloadAction<CoverInfo>) {
       state.info = action.payload;
     },
-    setAudioURL(state, action: PayloadAction<string>) {
+    setAudioURL(state, action: PayloadAction<string | null>) {
       state.audioURL = action.payload;
     },
   },
