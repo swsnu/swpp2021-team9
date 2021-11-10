@@ -9,5 +9,5 @@ export default function MainPage(props: Props) {
   const dispatch = useDispatch();
   const { actions } = useMainSlice();
 
-  return <div data-testid="MainPage">Main</div>;
+  return <div data-testid="MainPage">{'Main'}</div>;
 }
