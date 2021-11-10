@@ -29,6 +29,7 @@ export default function Wrapper(props: Props) {
 
   const onSearchClicked = useCallback(
     (key: string) => {
+      if (key === '') return;
       history.push({
         pathname: url.SearchResult(),
         search: `?key=${key}`,
@@ -55,7 +56,10 @@ export default function Wrapper(props: Props) {
   }, [history, user]);
 
   return (
-    <div className="Wrapper" data-testid="Wrapper">
+    <div
+      data-testid="Wrapper"
+      className="min-w-full min-h-full flex flex-col justify-between"
+    >
       <Header
         user={user}
         onSearchClicked={onSearchClicked}
@@ -65,7 +69,7 @@ export default function Wrapper(props: Props) {
         onProfileClicked={onProfileClicked}
         onLogoClicked={onLogoClicked}
       />
-      <div className="Content">{props.children}</div>
+      <div className="relative self-stretch pt-4 pb-20">{props.children}</div>
       <PlayerBar />
     </div>
   );

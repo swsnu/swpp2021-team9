@@ -35,8 +35,8 @@ export default function SearchResultPage(props: Props) {
   return key === 'strawberry moon' ? (
     <div data-testid="SearchResultPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
-        <h2 className="mt-8 pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
-          SEARCH RESULT PAGE
+        <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
+          SEARCH RESULT
         </h2>
         <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
           <table className="px-0 table-fixed w-full">

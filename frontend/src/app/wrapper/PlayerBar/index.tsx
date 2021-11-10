@@ -107,7 +107,10 @@ export default function PlayerBar(props: Props) {
   useInterval(updateProgress, 1000);
 
   return (
-    <div data-testid="PlayerBar" className="PlayerBar">
+    <div
+      data-testid="PlayerBar"
+      className="fixed bottom-0 left-0 h-20 w-full self-stretch flex items-center justify-between bg-gray-200"
+    >
       <div className="info">
         <div className="text">
           {track
