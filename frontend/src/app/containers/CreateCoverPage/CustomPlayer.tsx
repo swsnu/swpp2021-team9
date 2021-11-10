@@ -143,6 +143,7 @@ export default function CustomPlayer({}: Props) {
         ref={player}
         className={'shadow border'}
         url={[
+          'https://www.youtube.com/watch?v=SK6Sm2Ki9tI',
           'https://www.youtube.com/watch?v=FtaW6YMAafk',
           'https://www.youtube.com/watch?v=ww9hZfgC2d8',
         ]}
