@@ -23,9 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: Get secret key from secrets.json file
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
-secrets = {}
-with open(secret_file) as f:
-    secrets = json.loads(f.read())
+try:
+    with open(secret_file) as f:
+        secrets = json.loads(f.read())
+except:
+    secrets = {}
 
 def get_secret(setting, fallback):
     try:
