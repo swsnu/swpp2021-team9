@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 import json
+from json.decoder import JSONDecodeError
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,7 @@ secret_file = os.path.join(BASE_DIR, 'secrets.json')
 try:
     with open(secret_file) as f:
         secrets = json.loads(f.read())
-except:
+except (FileNotFoundError, JSONDecodeError):
     secrets = {}
 
 def get_secret(setting, fallback):
