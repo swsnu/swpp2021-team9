@@ -6,6 +6,9 @@ import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
 import { dummyResultLines } from './dummy';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
+
 export type Props = {
   hasresult: boolean;
 };
@@ -29,59 +32,59 @@ export default function SearchResultPage(props: Props) {
     history.push(CreateSong());
   };
 
-  return key == 'strawberry moon' ? (
-    <div>
-      <br></br>
-      <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
-        SEARCH RESULT PAGE
-      </h2>
-      <div className="mt-2 shadow border-b border-gray-200 sm:rounded-lg">
-        <table className="px-0 table-fixed w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className={styles.th}>
-                TITLE
-              </th>
-              <th scope="col" className={styles.th}>
-                AUTHOR
-              </th>
-              <th scope="col" className={styles.th}>
-                LIKES
-              </th>
-              <th scope="col" className={styles.th}>
-                VIEW
-              </th>
-              <th scope="col" className={styles.th}>
-                PLAY
-              </th>
-            </tr>
-          </thead>
-
-          <ResultLine
-            title={dummyResultLines[0].title}
-            author={dummyResultLines[0].author}
-            likes={dummyResultLines[0].likes}
-            view={dummyResultLines[0].view}
-          />
-          <ResultLine
-            title={dummyResultLines[1].title}
-            author={dummyResultLines[1].author}
-            likes={dummyResultLines[1].likes}
-            view={dummyResultLines[1].view}
-          />
-          <ResultLine
-            title={dummyResultLines[2].title}
-            author={dummyResultLines[2].author}
-            likes={dummyResultLines[2].likes}
-            view={dummyResultLines[2].view}
-          />
-        </table>
+  return key === 'strawberry moon' ? (
+    <div data-testid="SearchResultPage" className="flex justify-center">
+      <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
+        <h2 className="mt-8 pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
+          SEARCH RESULT PAGE
+        </h2>
+        <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
+          <table className="px-0 table-fixed w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className={styles.th}>
+                  TITLE
+                </th>
+                <th scope="col" className={styles.th}>
+                  AUTHOR
+                </th>
+                <th scope="col" className={styles.th}>
+                  <FontAwesomeIcon icon={faPlay} />
+                </th>
+                <th scope="col" className={styles.th}>
+                  <FontAwesomeIcon icon={faHeart} />
+                </th>
+                <th scope="col" className={'sr-only ' + styles.th}>
+                  PLAY
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ResultLine
+                title={dummyResultLines[0].title}
+                author={dummyResultLines[0].author}
+                likes={dummyResultLines[0].likes}
+                view={dummyResultLines[0].view}
+              />
+              <ResultLine
+                title={dummyResultLines[1].title}
+                author={dummyResultLines[1].author}
+                likes={dummyResultLines[1].likes}
+                view={dummyResultLines[1].view}
+              />
+              <ResultLine
+                title={dummyResultLines[2].title}
+                author={dummyResultLines[2].author}
+                likes={dummyResultLines[2].likes}
+                view={dummyResultLines[2].view}
+              />
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <br></br>
     </div>
   ) : (
-    <div>
+    <div data-testid="SearchResultPage">
       <div data-testid="Album" className="flex flex-col items-center w-full">
         <br></br>
         <br></br>
@@ -92,7 +95,7 @@ export default function SearchResultPage(props: Props) {
           src={AlbumImage}
           width="150"
           height="150"
-          alt="Album image"
+          alt="Album"
         />
         <br></br>
         <div className="px-4 py-1 mx-auto space-y-1 overflow-hidden border-2 border-black-500 border-opacity-50 rounded-lg">

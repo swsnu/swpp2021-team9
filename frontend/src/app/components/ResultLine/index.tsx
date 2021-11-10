@@ -4,6 +4,9 @@ import { Component, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Song, Profile } from 'utils/urls';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+
 interface Props {
   title: string;
   author: string;
@@ -56,38 +59,46 @@ export default function ResultLine(props: Props) {
   };
 
   return (
-    <div data-testid="ResultLine" className="flex flex-row items-center w-full">
-      <br></br>
-      <br></br>
-      <form onSubmit={onLineClicked}>
-        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
-          <td className="text-lg font-semibold">{props.title}</td>
-        </button>
-      </form>
+    <tr data-testid="ResultLine" className="hover:bg-gray-100 cursor-pointer">
+      <td
+        onClick={onLineClicked}
+        className="py-2 text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.title}
+      </td>
 
-      <form onSubmit={onAuthorClicked}>
-        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
-          <td className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
-            {props.author}
-          </td>
+      <td className="flex font-md font-medium whitespace-nowrap text-center">
+        <button className="self-stretch flex-grow" onClick={onLineClicked} />
+        <span
+          onClick={onAuthorClicked}
+          className="px-3 my-2 rounded-lg hover:bg-gray-300"
+        >
+          {props.author}
+        </span>
+        <button className="self-stretch flex-grow" onClick={onLineClicked} />
+      </td>
+
+      <td
+        onClick={onLineClicked}
+        className="text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.view}
+      </td>
+
+      <td
+        onClick={onLineClicked}
+        className="py-2 text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.likes}
+      </td>
+
+      <td className="flex whitespace-nowrap text-center">
+        <button className="self-stretch flex-grow" onClick={onLineClicked} />
+        <button onClick={onPlayClicked} className="py-2 text-lg font-semibold">
+          <FontAwesomeIcon icon={faPlay} />
         </button>
-      </form>
-      <form>
-        <td className="flex px-10 whitespace-nowrap">
-          <p className="text-lg font-semibold">{props.view}</p>
-        </td>
-      </form>
-      <form>
-        <td className="px-20 py-2 font-bold whitespace-nowrap text-center">
-          <p className="text-lg font-semibold">{props.likes}</p>
-        </td>
-      </form>
-      <form onSubmit={onPlayClicked}>
-        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
-          <td className="text-lg font-semibold">Play</td>
-        </button>
-      </form>
-      <br></br>
-    </div>
+        <button className="self-stretch flex-grow" onClick={onLineClicked} />
+      </td>
+    </tr>
   );
 }
