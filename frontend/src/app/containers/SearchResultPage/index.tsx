@@ -1,11 +1,9 @@
-import React, { Component, useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
-import Album from '../../components/Album/index';
 import AlbumImage from '../../components/Album/AlbumImage.png';
 import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
-import Search from '../../components/Search/index';
 import { dummyResultLines } from './dummy';
 
 export type Props = {
@@ -33,10 +31,10 @@ export default function SearchResultPage(props: Props) {
     history.push(CreateSong());
   };
 
-  return props.hasresult ? (
+  return !props.hasresult ? (
     <div>
       <br></br>
-      <h2 className="pl-4 sm:pl-0 text-left text-sm font-bold text-gray-600 tracking-wider">
+      <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
         SEARCH RESULT PAGE
       </h2>
       <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
@@ -46,7 +44,7 @@ export default function SearchResultPage(props: Props) {
               <th scope="col" className={styles.th}>
                 TITLE
               </th>
-              <th scope="col" className={styles.th + ' w-1/2 sm:w-2/3'}>
+              <th scope="col" className={styles.th}>
                 AUTHOR
               </th>
               <th scope="col" className={styles.th}>
@@ -67,7 +65,6 @@ export default function SearchResultPage(props: Props) {
               likes={dummyResultLines[0].likes}
               view={dummyResultLines[0].view}
             />
-
             <ResultLine
               title={dummyResultLines[1].title}
               author={dummyResultLines[1].author}

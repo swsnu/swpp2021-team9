@@ -1,4 +1,4 @@
-import PlayerBar from 'app/wrapper/PlayerBar';
+import Player from 'app/wrapper/PlayerBar';
 import * as React from 'react';
 import { Component, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -35,8 +35,7 @@ export default function ResultLine(props: Props) {
     e.preventDefault();
     console.log(Form);
     //player = Player.getInstance();
-    //player.addSong(song);
-    //Playerbar.onPlayButtonClicked();
+    //player.setTrack(song);
   };
 
   return (
@@ -48,17 +47,18 @@ export default function ResultLine(props: Props) {
           <td className="text-lg font-semibold">{props.title}</td>
         </button>
       </form>
+
       <form onSubmit={onAuthorClicked}>
         <button className="px-3 py-2 font-bold whitespace-nowrap text-center">
-          <td className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
+          <div className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
             {props.author}
-          </td>
+          </div>
         </button>
       </form>
       <form>
-        <td className="flex px-3 whitespace-nowrap">
+        <div className="flex px-3 whitespace-nowrap">
           <p className="text-lg font-semibold">{props.view}</p>
-        </td>
+        </div>
       </form>
       <form>
         <div className="px-3 py-2 font-bold whitespace-nowrap text-center">

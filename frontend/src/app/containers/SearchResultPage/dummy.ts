@@ -12,7 +12,7 @@ export const dummyResultLines = [
     likes: 324,
   },
   {
-    title: 'Sugartown',
+    title: 'Strawberry Moons',
     author: 'Sarah Parker',
     view: 230,
     likes: 32,

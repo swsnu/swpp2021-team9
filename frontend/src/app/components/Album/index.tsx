@@ -42,14 +42,14 @@ export default function Album(props: Props) {
     e.preventDefault();
     console.log(Form);
     //player = Player.getInstance();
-    //player.addSong(song)
-    //player.play();
+    //player.setTrack(song)
   };
 
   return (
     <div data-testid="Album" className="flex flex-col items-center w-full">
       <br></br>
       <br></br>
+
       <form onSubmit={onTitleClicked}>
         <button className="text-lg font-medium leading-6 text-gray-900 font-semibold">
           {props.title}
