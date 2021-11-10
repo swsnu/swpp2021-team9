@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "6.4.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.36",
+    "@fortawesome/free-solid-svg-icons": "5.15.4",
+    "@fortawesome/react-fontawesome": "0.1.16",
+    "@headlessui/react": "1.4.2",
     "@reduxjs/toolkit": "1.6.0",
-    "@testing-library/jest-dom": "5.14.1",
-    "@testing-library/react": "12.1.2",
     "@types/fontfaceobserver": "0.0.6",
     "@types/jest": "26.0.23",
     "@types/node": "14.6.4",
@@ -62,6 +64,9 @@
   },
   "devDependencies": {
     "@testing-library/dom": "8.10.1",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "12.1.2",
+    "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "13.5.0",
     "autoprefixer": "^9",
     "enzyme": "3.11.0",
