@@ -11,7 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import Waveform from './Waveform';
-
+import { useHistory } from 'react-router-dom';
+import { Song } from 'utils/urls';
 export interface Props {}
 
 const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
@@ -29,6 +30,8 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
 };
 
 export default function CreateCoverRecordPage(props: Props) {
+  const history = useHistory();
+
   const [isVideo, setIsVideo] = useState(false);
   const [isYoutubeLink, setIsYoutubeLink] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -48,7 +51,7 @@ export default function CreateCoverRecordPage(props: Props) {
     setIsVideo(!isVideo);
   };
 
-  const handleRecording = () => {
+  const onRecordClicked = () => {
     if (isRecording) {
       stopRecording();
     } else {
@@ -57,9 +60,14 @@ export default function CreateCoverRecordPage(props: Props) {
     setIsRecording(!isRecording);
     console.log(mediaBlobUrl);
   };
-  // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  // var analyser = audioCtx.createAnalyser();
 
+  const onCancelClicked = e => {
+    // 임시 구현
+    // TODO
+    // song id를 route params로 받아와서 사용해야할 듯.
+    e.preventDefault();
+    history.push(Song(0));
+  };
   return (
     <div
       data-testid="CreateCoverRecordPage"
@@ -85,7 +93,7 @@ export default function CreateCoverRecordPage(props: Props) {
             </button>
             <button
               className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-              onClick={handleRecording}
+              onClick={onRecordClicked}
             >
               {isRecording ? (
                 <FontAwesomeIcon icon={faStopCircle} pulse color="red" />
@@ -123,6 +131,7 @@ export default function CreateCoverRecordPage(props: Props) {
       >
         <button
           type="button"
+          onClick={onCancelClicked}
           className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-red-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
         >
           Cancel

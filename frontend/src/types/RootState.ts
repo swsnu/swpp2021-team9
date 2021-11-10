@@ -1,5 +1,7 @@
 import { MainState } from 'app/containers/MainPage/slice';
+import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
 // import { ProfileState } from 'app/containers/ProfilePage/slice';
+// import { CreateCover } from '../utils/urls';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -8,5 +10,6 @@ import { MainState } from 'app/containers/MainPage/slice';
 */
 export interface RootState {
   main?: MainState;
+  createCover?: CreateCoverState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
