@@ -54,6 +54,7 @@
 .Content {
     position: relative;
     align-self: stretch;
+    padding-bottom: 80px;
 }
 
 .PlayerBar {
