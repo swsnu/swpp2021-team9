@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
-
+import { faPlay, faPause, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const formWaveSurferOptions = ref => ({
   container: ref,
   waveColor: '#eee',
@@ -92,31 +93,51 @@ export default function Waveform({ url }) {
   };
 
   return (
-    <div>
-      <div id="waveform" className="relative" ref={waveformRef} />
-      <div className="controls">
-        <button onClick={handlePlayPause}>{'Play / Pause'}</button>
-        <input
-          type="range"
-          id="volume"
-          name="volume"
-          min="0.01"
-          max="1"
-          step=".025"
-          onChange={onVolumeChange}
-          defaultValue={volume}
-        />
-        <label htmlFor="volume">Volume</label>
+    <div className="flex flex-col">
+      <div id="waveform" className="relative border-4" ref={waveformRef} />
+      <div className="inline-flex p-1 space-x-20 justify-center items-center">
+        <button onClick={handlePlayPause}>
+          <FontAwesomeIcon icon={faPlay} />
+          {' / '}
+          <FontAwesomeIcon icon={faPause} />
+        </button>
+        <div className="inline-flex space-x-2">
+          <input
+            type="range"
+            id="volume"
+            name="volume"
+            min="0.01"
+            max="1"
+            step="0.01"
+            onChange={onVolumeChange}
+            defaultValue={volume}
+          />
+          <label htmlFor="volume">
+            <FontAwesomeIcon icon={faVolumeUp} />
+          </label>
+        </div>
       </div>
-      <div className="space-x-3">
-        <button type="button" onClick={() => getCurrentTime(true)}>
-          {`Set Start`}
+      <div className="mt-10 space-x-20">
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 "
+          type="button"
+          onClick={() => getCurrentTime(true)}
+        >
+          Set Start
         </button>
-        <button type="button" onClick={() => getCurrentTime(false)}>
-          {`Set End`}
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          type="button"
+          onClick={() => getCurrentTime(false)}
+        >
+          Set End
         </button>
-        <button type="button" onClick={() => playSelectedRegion()}>
-          play selected Region
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          type="button"
+          onClick={() => playSelectedRegion()}
+        >
+          Play Selected Region
         </button>
       </div>
     </div>

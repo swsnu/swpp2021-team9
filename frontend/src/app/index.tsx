@@ -53,12 +53,12 @@ export function App() {
             <Route exact path={url.Song(':id')} component={SongPage} />
             <Route
               exact
-              path={url.CreateCover(1)}
+              path={url.CreateCover('record')}
               component={CreateCoverRecordPage}
             />
             <Route
               exact
-              path={url.CreateCover(2)}
+              path={url.CreateCover('info')}
               component={CreateCoverInfoPage}
             />
             <Route exact path={url.Song(':id')} component={CoverPage} />
