@@ -79,7 +79,7 @@ export default function CreateCoverRecordPage(props: Props) {
   ) => {
     e.preventDefault();
     dispatch(actions.setAudioURL(mediaBlobUrl));
-    history.push(CreateCover(2));
+    history.push(CreateCover('info'));
   };
 
   return (
