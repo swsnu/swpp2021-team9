@@ -3,8 +3,7 @@ import { Component, useState } from 'react';
 import '../Album/Album.css';
 import { useHistory } from 'react-router-dom';
 import { Song } from 'utils/urls';
-import Player from '../SimplePlayer/index';
-//import SongInfo from '../../../../src/types/types';
+import Player from 'app/helper/Player';
 
 interface Props {
   id: number;
@@ -14,6 +13,22 @@ interface Props {
 }
 
 export default function Album(props: Props) {
+  const [player] = useState(Player.getInstance());
+  const [track, setTrack] = useState<TrackInfo>();
+
+  const songexample: SongInfo = {
+    title: '',
+    singer: '',
+    category: '',
+    reference: '',
+    description: '',
+  };
+  const trackexample: TrackInfo = {
+    song: songexample,
+    sources: ['hello', 'world'],
+    like: false,
+  };
+
   const history = useHistory();
 
   const [Form, setForm] = useState({
@@ -23,15 +38,6 @@ export default function Album(props: Props) {
     thumbnail: '',
   });
 
-  /*
-  const song:SongInfo = {
-    title:'',
-    singer:'',
-    category:'',
-    reference:'',
-    description:'',
-  }
-*/
   const onTitleClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
@@ -41,8 +47,7 @@ export default function Album(props: Props) {
   const onPlayClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
-    //player = Player.getInstance();
-    //player.setTrack(song)
+    player.setTrack(trackexample);
   };
 
   return (

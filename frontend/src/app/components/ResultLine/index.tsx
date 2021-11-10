@@ -1,4 +1,4 @@
-import Player from 'app/wrapper/PlayerBar';
+import Player from 'app/helper/Player';
 import * as React from 'react';
 import { Component, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -9,9 +9,27 @@ interface Props {
   author: string;
   view: number;
   likes: number;
+  //songexample : SongInfo;
+  //trackexample : TrackInfo;
 }
 
 export default function ResultLine(props: Props) {
+  const [player] = useState(Player.getInstance());
+  const [track, setTrack] = useState<TrackInfo>();
+
+  const songexample: SongInfo = {
+    title: '',
+    singer: '',
+    category: '',
+    reference: '',
+    description: '',
+  };
+  const trackexample: TrackInfo = {
+    song: songexample,
+    sources: ['hello', 'world'],
+    like: false,
+  };
+
   const history = useHistory();
 
   const [Form, setForm] = useState({
@@ -34,8 +52,7 @@ export default function ResultLine(props: Props) {
   const onPlayClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
-    //player = Player.getInstance();
-    //player.setTrack(song);
+    player.setTrack(trackexample);
   };
 
   return (
@@ -43,31 +60,31 @@ export default function ResultLine(props: Props) {
       <br></br>
       <br></br>
       <form onSubmit={onLineClicked}>
-        <button className="px-3 py-2 font-bold whitespace-nowrap text-center">
+        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
           <td className="text-lg font-semibold">{props.title}</td>
         </button>
       </form>
 
       <form onSubmit={onAuthorClicked}>
-        <button className="px-3 py-2 font-bold whitespace-nowrap text-center">
-          <div className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
+        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
+          <td className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
             {props.author}
-          </div>
+          </td>
         </button>
       </form>
       <form>
-        <div className="flex px-3 whitespace-nowrap">
+        <td className="flex px-10 whitespace-nowrap">
           <p className="text-lg font-semibold">{props.view}</p>
-        </div>
+        </td>
       </form>
       <form>
-        <div className="px-3 py-2 font-bold whitespace-nowrap text-center">
+        <td className="px-20 py-2 font-bold whitespace-nowrap text-center">
           <p className="text-lg font-semibold">{props.likes}</p>
-        </div>
+        </td>
       </form>
       <form onSubmit={onPlayClicked}>
-        <button className="px-3 py-2 font-bold whitespace-nowrap text-center">
-          <p className="text-lg font-semibold">Play</p>
+        <button className="px-20 py-2 font-bold whitespace-nowrap text-center">
+          <td className="text-lg font-semibold">Play</td>
         </button>
       </form>
       <br></br>

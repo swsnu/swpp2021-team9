@@ -70,3 +70,10 @@ type TrackInfo = {
   sources: string[];
   like: boolean;
 };
+
+type ResultLine = {
+  title: string;
+  author: string;
+  view: number;
+  likes: number;
+};

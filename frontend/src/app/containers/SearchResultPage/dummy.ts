@@ -1,20 +1,20 @@
 export const dummyResultLines = [
   {
     title: 'strawberry moon',
-    author: '아이유',
+    author: 'jenny',
     view: 1034,
     likes: 426,
   },
   {
-    title: 'Strawberry Moon',
-    author: 'TWICE(트와이스)',
+    title: 'strawberry muun',
+    author: 'henry',
     view: 1020,
     likes: 324,
   },
   {
-    title: 'Strawberry Moons',
-    author: 'Sarah Parker',
-    view: 230,
-    likes: 32,
+    title: 'strawberry boom',
+    author: 'betty',
+    view: 1023,
+    likes: 302,
   },
 ];

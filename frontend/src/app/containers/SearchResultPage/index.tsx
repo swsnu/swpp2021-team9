@@ -12,15 +12,13 @@ export type Props = {
 
 export default function SearchResultPage(props: Props) {
   const styles = {
-    th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
+    th: 'px-0 py-1 text-center text-xs font-small text-gray-500 tracking-wider',
   };
 
   const { search } = useLocation();
   const query = useMemo(() => new URLSearchParams(search), [search]);
   const key = query.get('key') ?? '';
   console.log(key);
-
-  if (key == 'strawberry moon') props.hasresult = true;
 
   const [Form, setForm] = useState({});
   const history = useHistory();
@@ -31,14 +29,14 @@ export default function SearchResultPage(props: Props) {
     history.push(CreateSong());
   };
 
-  return !props.hasresult ? (
+  return key == 'strawberry moon' ? (
     <div>
       <br></br>
       <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
         SEARCH RESULT PAGE
       </h2>
-      <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
-        <table className="table-fixed w-full">
+      <div className="mt-2 shadow border-b border-gray-200 sm:rounded-lg">
+        <table className="px-0 table-fixed w-full">
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className={styles.th}>
@@ -58,27 +56,25 @@ export default function SearchResultPage(props: Props) {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            <ResultLine
-              title={dummyResultLines[0].title}
-              author={dummyResultLines[0].author}
-              likes={dummyResultLines[0].likes}
-              view={dummyResultLines[0].view}
-            />
-            <ResultLine
-              title={dummyResultLines[1].title}
-              author={dummyResultLines[1].author}
-              likes={dummyResultLines[1].likes}
-              view={dummyResultLines[1].view}
-            />
 
-            <ResultLine
-              title={dummyResultLines[2].title}
-              author={dummyResultLines[2].author}
-              likes={dummyResultLines[2].likes}
-              view={dummyResultLines[2].view}
-            />
-          </tbody>
+          <ResultLine
+            title={dummyResultLines[0].title}
+            author={dummyResultLines[0].author}
+            likes={dummyResultLines[0].likes}
+            view={dummyResultLines[0].view}
+          />
+          <ResultLine
+            title={dummyResultLines[1].title}
+            author={dummyResultLines[1].author}
+            likes={dummyResultLines[1].likes}
+            view={dummyResultLines[1].view}
+          />
+          <ResultLine
+            title={dummyResultLines[2].title}
+            author={dummyResultLines[2].author}
+            likes={dummyResultLines[2].likes}
+            view={dummyResultLines[2].view}
+          />
         </table>
       </div>
 
@@ -87,6 +83,9 @@ export default function SearchResultPage(props: Props) {
   ) : (
     <div>
       <div data-testid="Album" className="flex flex-col items-center w-full">
+        <br></br>
+        <br></br>
+        <br></br>
         <br></br>
         <img
           className="rounded-full border border-gray-100 shadow-sm"
