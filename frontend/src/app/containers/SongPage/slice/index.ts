@@ -63,6 +63,20 @@ const slice = createSlice({
       );
       state.current = null;
     },
+    getCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
+      nextItemID = 0;
+      state.combination = [];
+      action.payload.forEach(cover => {
+        if (!cover) return;
+
+        const newItem: CombinationItem = {
+          id: nextItemID++,
+          instrument: cover.instrument,
+          cover: cover,
+        };
+        state.combination.push(newItem);
+      });
+    },
     addCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
       action.payload.forEach(cover => {
         if (!cover) return;

@@ -20,7 +20,7 @@ export default function TopCombination(props: Props) {
 
   const onClickGet = (combination: Combination) => {
     dispatch(
-      actions.addCovers(
+      actions.getCovers(
         combination.covers.map(id =>
           props.covers.find(cover => cover.id === id),
         ),
