@@ -3,28 +3,35 @@ import { Component, useState } from 'react';
 import '../Album/Album.css';
 import { useHistory } from 'react-router-dom';
 import { Song } from 'utils/urls';
-import Playerbar from '../SimplePlayer/index';
+import Player from '../SimplePlayer/index';
+//import SongInfo from '../../../../src/types/types';
 
 interface Props {
   id: number;
   title: string;
   singer: string;
   thumbnail: string | undefined;
-  //play:string|undefined,
-  //onTitleClicked: Function,
-  //onPlayClicked: Function
 }
-
-//const onPlayClicked = ()=>{//Resume or pause playing the song}
 
 export default function Album(props: Props) {
   const history = useHistory();
 
   const [Form, setForm] = useState({
+    id: '',
     title: '',
     singer: '',
+    thumbnail: '',
   });
 
+  /*
+  const song:SongInfo = {
+    title:'',
+    singer:'',
+    category:'',
+    reference:'',
+    description:'',
+  }
+*/
   const onTitleClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
@@ -34,7 +41,9 @@ export default function Album(props: Props) {
   const onPlayClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
-    //Playerbar.onPlayButtonClicked();
+    //player = Player.getInstance();
+    //player.addSong(song)
+    //player.play();
   };
 
   return (
@@ -42,7 +51,7 @@ export default function Album(props: Props) {
       <br></br>
       <br></br>
       <form onSubmit={onTitleClicked}>
-        <button className="text-lg font-medium leading-6 text-gray-900">
+        <button className="text-lg font-medium leading-6 text-gray-900 font-semibold">
           {props.title}
           <br></br> {props.singer}
         </button>
