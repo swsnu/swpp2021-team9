@@ -1,0 +1,133 @@
+.Wrapper {
+    min-height: 100%;
+    min-width: 100%;
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Header {
+    display: flex;
+    background-color:#FBFBFD;
+    height: 48px;
+    flex-direction: row;
+    align-self:stretch;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.Header .logo {
+    flex-shrink: 0;
+    padding-left: 40px;
+    flex-basis: 25%;
+    justify-content: flex-start;
+}
+
+.Header .searchWrapper {
+    flex-shrink: 1;
+    flex-basis: 500px;
+}
+
+.Header .sign {
+    display: flex;
+    padding-right: 40px;
+    flex-shrink: 0;
+    flex-basis: 25%;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.Header .sign .button {
+    background-color: #111B47;
+    margin-left: 16px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    width: 120px;
+    height: 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.Content {
+    position: relative;
+    align-self: stretch;
+}
+
+.PlayerBar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color:#AAAAAA;
+    height: 80px;
+    width: 100%;
+    flex-direction: row;
+    align-self:stretch;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.PlayerBar .info {
+    flex-basis: 25%;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.PlayerBar .text {
+    padding: 8px;
+    border-width: 1px;
+    border-color: black;
+}
+
+.PlayerBar .svgButton {
+    margin-left: 16px;
+}
+
+
+.PlayerBar .controller {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.PlayerBar .controller .svgButton {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.PlayerBar .progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.PlayerBar .progress .progressCenter{
+	width: 100%;
+	height: 4px;
+	background-color: #bbbbbb;
+}
+
+.PlayerBar .progress .progressCenter:hover{
+	height: 6px;
+	cursor: pointer;
+}
+
+.PlayerBar .progress .progressBar{
+	width: 0px;
+	height: 6px;
+	background-color: #0f0f0f;
+}
+
+.PlayerBar .timer {
+    flex-basis: 25%;
+    text-align: end;
+    margin-right: 40px;
+}
