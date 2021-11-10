@@ -55,7 +55,7 @@ export default function ResultLine(props: Props) {
   const onPlayClicked = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
-    player.setTrack(trackexample);
+    player.setIndex(0);
   };
 
   return (

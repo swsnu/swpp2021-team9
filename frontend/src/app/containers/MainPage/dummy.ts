@@ -8,9 +8,9 @@ import image5 from '../../components/Album/AlbumImage5.jpg';
 export const dummyAlbums = [
   {
     id: 0,
-    title: 'Savage',
-    singer: 'aespa',
-    thumbnail: image0,
+    title: '신호등',
+    singer: '이무진',
+    thumbnail: image2,
   },
   {
     id: 1,
@@ -20,9 +20,9 @@ export const dummyAlbums = [
   },
   {
     id: 2,
-    title: '신호등',
-    singer: '이무진',
-    thumbnail: image2,
+    title: 'Savage',
+    singer: 'aespa',
+    thumbnail: image0,
   },
   {
     id: 3,

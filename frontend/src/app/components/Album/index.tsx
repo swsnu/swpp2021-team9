@@ -63,7 +63,7 @@ export default function Album(props: Props) {
       </form>
       <br></br>
       <img
-        className="rounded-full border border-gray-100 shadow-sm AlbumImage"
+        className="rounded-full border border-gray-100 shadow-sm"
         src={props.thumbnail}
         width="150"
         height="150"
