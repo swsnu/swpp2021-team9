@@ -1,13 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import CustomPlayer from './CustomPlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faMicrophoneAlt } from '@fortawesome/free-solid-svg-icons';
-export type Props = {};
+import {
+  faUpload,
+  faMicrophoneAlt,
+  faVideoSlash,
+  faVideo,
+  faCircle,
+  faStopCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import { useReactMediaRecorder } from 'react-media-recorder';
+import Waveform from './Waveform';
+
+export interface Props {}
+
+const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+  if (!stream) {
+    return null;
+  }
+  return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+};
 
 export default function CreateCoverRecordPage(props: Props) {
+  const [isVideo, setIsVideo] = useState(false);
   const [isYoutubeLink, setIsYoutubeLink] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const {
+    status,
+    startRecording,
+    stopRecording,
+    mediaBlobUrl,
+    previewStream,
+    previewAudioStream,
+  } = useReactMediaRecorder({ video: isVideo });
+
+  const handleVideoStatus = () => {
+    setIsVideo(!isVideo);
+  };
+
+  const handleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+    setIsRecording(!isRecording);
+    console.log(mediaBlobUrl);
+  };
+  // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // var analyser = audioCtx.createAnalyser();
+
   return (
     <div
       data-testid="CreateCoverRecordPage"
@@ -17,10 +69,57 @@ export default function CreateCoverRecordPage(props: Props) {
       {isYoutubeLink ? <CustomPlayer /> : null}
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
-
+      {isRecordingEnabled ? (
+        <div className="flex flex-col justify-center items-center space-y-4">
+          <h2 className="p-2">Recording Status: {status}</h2>
+          <div className="space-x-3">
+            <button
+              className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+              onClick={handleVideoStatus}
+            >
+              {isVideo ? (
+                <FontAwesomeIcon icon={faVideo} />
+              ) : (
+                <FontAwesomeIcon icon={faVideoSlash} />
+              )}
+            </button>
+            <button
+              className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+              onClick={handleRecording}
+            >
+              {isRecording ? (
+                <FontAwesomeIcon icon={faStopCircle} pulse color="red" />
+              ) : (
+                <FontAwesomeIcon icon={faCircle} color="red" />
+              )}
+            </button>
+          </div>
+          {/* <button onClick={handleStopRecording}>Stop Recording</button> */}
+          {isVideo ? (
+            <video
+              id={'video'}
+              src={mediaBlobUrl ? mediaBlobUrl : undefined}
+              controls
+              autoPlay
+            />
+          ) : // <audio
+          //   id={'song'}
+          //   src={mediaBlobUrl ? mediaBlobUrl : undefined}
+          //   controls
+          //   autoPlay
+          // />
+          mediaBlobUrl ? (
+            <Waveform url={mediaBlobUrl} />
+          ) : null}
+          {isRecording && isVideo ? (
+            <VideoPreview stream={previewStream} />
+          ) : null}
+        </div>
+      ) : null}
+      {isUploading ? <input type="file" id="upload" /> : null}
       <div
         data-testid="CreateCoverButtons"
-        className="py-6 flex flex-row w-full space-x-96 justify-center	"
+        className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
       >
         <button
           type="button"
@@ -29,8 +128,11 @@ export default function CreateCoverRecordPage(props: Props) {
           Cancel
         </button>
 
-        <div className="flex flex-row space-x-40">
-          <button className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 ">
+        <div className="flex flex-row lg:space-x-40 md:space-x-20 sm:space-x-10">
+          <button
+            onClick={() => setIsUploading(!isUploading)}
+            className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          >
             <FontAwesomeIcon
               className="justify-center items-center p-1 font-large rounded-md"
               icon={faUpload}
@@ -38,11 +140,15 @@ export default function CreateCoverRecordPage(props: Props) {
               size={'3x'}
             />
           </button>
-          <button className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 ">
+          <button
+            className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 "
+            onClick={() => setIsRecordingEnabled(!isRecordingEnabled)}
+          >
             <FontAwesomeIcon
               className="justify-center items-center font-large rounded-md "
               icon={faMicrophoneAlt}
               size={'3x'}
+              spin={isRecordingEnabled}
             />
           </button>
         </div>

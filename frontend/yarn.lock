@@ -12321,6 +12321,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-media-recorder@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/react-media-recorder/-/react-media-recorder-1.6.2.tgz#eb90d12b5ea952ec27186297404d1ebaa4aca8d4"
+  integrity sha512-bQsY8K8/Opvi9nmohEhgsVtWkGiAO5dWEPh0e02m0Xn/HIHaD9PoBzk2kQmwRW+jL/12Hamuw4VdQvlW6A/L1A==
+
 react-player@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.9.0.tgz#ef7fe7073434087565f00ff219824e1e02c4b046"
@@ -15295,6 +15300,11 @@ watchpack@^2.2.0:
   dependencies:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
+
+wavesurfer.js@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-5.2.0.tgz#efae107b5b561e9bfe3fffc50e6158136a17643e"
+  integrity sha512-SkPlTXfvKy+ZnEA7f7g7jn6iQg5/8mAvWpVV5vRbIS/FF9TB2ak9J7VayQfzfshOLW/CqccTiN6DDR/fZA902g==
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
