@@ -23,6 +23,10 @@ code {
     monospace;
 }
 
+button {
+  user-select: none;
+}
+
 input,
 textarea {
   border-width: 1px;
@@ -35,4 +39,26 @@ textarea {
 
 select {
   border-width: 1px;
+}
+
+.scroll-simple::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+.scroll-simple::-webkit-scrollbar-track {
+  background: gainsboro;
+  border-radius: 3px;
+}
+
+/* Handle */
+.scroll-simple::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+.scroll-simple::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
