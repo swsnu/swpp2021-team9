@@ -46,3 +46,27 @@ interface User {
   followings: number[];
   instruments: number[];
 }
+
+type UserInfo = {
+  id: number;
+  username: string;
+};
+
+type PlayInfo = {
+  covers: string[];
+  song: SongInfo;
+};
+
+type SongInfo = {
+  title: string;
+  singer: string;
+  category: string;
+  reference: string;
+  description: string;
+};
+
+type TrackInfo = {
+  song: SongInfo;
+  sources: string[];
+  like: boolean;
+};
