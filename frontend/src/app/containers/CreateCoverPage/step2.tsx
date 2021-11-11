@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Song } from 'utils/urls';
+import { useDispatch } from 'react-redux';
+import { useCreateCoverSlice } from './slice';
 
 export type Props = {};
 
+export interface CoverForm {
+  title: string;
+  category: string;
+  tags: string[];
+  instrumentType: string;
+  description: string;
+}
+
+const initialForm: CoverForm = {
+  title: '',
+  category: '0',
+  tags: [],
+  instrumentType: '',
+  description: '',
+};
+
 export default function CreateCoverInfoPage(props: Props) {
   const history = useHistory();
-  const [Form, setForm] = useState({
-    title: '',
-    category: '0',
-    instrumentType: '',
-    tags: [],
-    description: '',
-  });
+  const dispatch = useDispatch();
+  const { actions } = useCreateCoverSlice();
+
+  const [Form, setForm] = useState(initialForm);
+  const [tagInput, setTagInput] = useState<string>('');
 
   const categories = ['Pop', 'Rock', 'Hip-hop', 'Jazz'];
 
@@ -25,9 +41,17 @@ export default function CreateCoverInfoPage(props: Props) {
     setForm({ ...Form, [key]: e.currentTarget.value });
   };
 
+  const onKeyPress = e => {
+    if (e.key === 'Enter') {
+      setForm({ ...Form, tags: [...Form.tags, tagInput] });
+      setTagInput('');
+    }
+  };
+
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
+    dispatch(actions.setInfo(Form));
     history.push(Song(0));
   };
 
@@ -41,6 +65,7 @@ export default function CreateCoverInfoPage(props: Props) {
     label: 'block text-sm font-medium text-gray-700',
     input:
       'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md',
+    tag: 'text-sm font-medium',
   };
 
   return (
@@ -110,12 +135,18 @@ export default function CreateCoverInfoPage(props: Props) {
                 <label htmlFor="tags" className={styles.label}>
                   Tags (optional)
                 </label>
+                <text className={styles.tag}>
+                  {Form.tags.map(tag => {
+                    return `#${tag} `;
+                  })}
+                </text>
                 <input
                   type="text"
-                  name="tags"
+                  name="tagInput"
                   id="tags"
-                  value={Form.tags}
-                  onChange={e => onChangeForm(e, 'tags')}
+                  value={tagInput}
+                  onChange={e => setTagInput(e.target.value)}
+                  onKeyPress={onKeyPress}
                   className={styles.input}
                 />
               </div>

@@ -15,26 +15,14 @@ import { useHistory } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
+import VideoPreview from 'app/components/CreateCover/VideoPreview';
 export interface Props {}
-
-const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
-    }
-  }, [stream]);
-  if (!stream) {
-    return null;
-  }
-  return <video ref={videoRef} width={500} height={500} autoPlay controls />;
-};
 
 export default function CreateCoverRecordPage(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
+
   const [isVideo, setIsVideo] = useState(false);
   const [isYoutubeLink, setIsYoutubeLink] = useState(true);
   // const [isUploaded, setIsUploaded] = useState(false);

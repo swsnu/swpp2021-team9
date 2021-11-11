@@ -4,7 +4,7 @@ import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import { faPlay, faPause, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { WaveformSetButton } from 'app/components/CreateCover';
+import WaveformSetButton from 'app/components/CreateCover/WaveformSetButton';
 const formWaveSurferOptions = ref => ({
   container: ref,
   waveColor: '#eee',
