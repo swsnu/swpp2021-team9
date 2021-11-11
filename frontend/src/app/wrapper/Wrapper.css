@@ -1,43 +1,7 @@
-.PlayerBar {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background-color: #aaaaaa;
-  height: 80px;
-  width: 100%;
-  flex-direction: row;
-  align-self: stretch;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.info {
-  flex-basis: 25%;
-  margin-left: 40px;
-  display: flex;
-  flex-direction: row;
-}
-
-.text {
-  padding: 8px;
-  border-width: 1px;
-  border-color: black;
-}
-
-.svgButton {
-  margin-left: 16px;
-}
-
 .controller {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.controller .svgButton {
-  margin-left: 4px;
-  margin-right: 4px;
 }
 
 .progress {
@@ -65,10 +29,4 @@
   width: 0px;
   height: 6px;
   background-color: #0f0f0f;
-}
-
-.timer {
-  flex-basis: 25%;
-  text-align: end;
-  margin-right: 40px;
 }

@@ -69,7 +69,7 @@ export default function Wrapper(props: Props) {
         onProfileClicked={onProfileClicked}
         onLogoClicked={onLogoClicked}
       />
-      <div className="relative self-stretch pt-4 pb-20">{props.children}</div>
+      <div className="relative self-stretch pt-4 pb-16">{props.children}</div>
       <PlayerBar />
     </div>
   );

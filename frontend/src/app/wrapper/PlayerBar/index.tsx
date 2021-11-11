@@ -7,6 +7,15 @@ import { ReactComponent as PauseSvg } from 'res/pause-button.svg';
 import { ReactComponent as LikeOutlined } from 'res/thumb_up_black_outlined.svg';
 import { ReactComponent as LikeFilled } from 'res/thumb_up_black_filled.svg';
 import loadingGif from 'res/loading.gif';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHeart,
+  faPlay,
+  faPause,
+  faStepBackward,
+  faStepForward,
+} from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faEmptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 import Player from 'app/helper/Player';
 import { useInterval } from 'app/helper/Hooks';
@@ -109,41 +118,66 @@ export default function PlayerBar(props: Props) {
   return (
     <div
       data-testid="PlayerBar"
-      className="fixed bottom-0 left-0 h-20 w-full self-stretch flex items-center justify-between bg-gray-200"
+      className="fixed bottom-0 left-0 h-16 pt-1 px-4 sm:px-8 w-full self-stretch flex items-center justify-between bg-gray-100"
     >
-      <div className="info">
-        <div className="text">
+      <div className="h-full py-2 flex flex-none items-center">
+        <div className="px-2 py-1 font-semibold border-2 border-black rounded-full">
           {track
             ? `${track.song.title} - ${track.song.singer}`
-            : 'Selete Music'}
+            : 'Select Music'}
         </div>
-        <button className="svgButton" onClick={onLikeClicked}>
-          {track?.like ? <LikeFilled /> : <LikeOutlined />}
+        <button
+          className="h-full mx-2 px-2 text-xl outline-none"
+          onClick={onLikeClicked}
+        >
+          {track?.like ? (
+            <FontAwesomeIcon icon={faHeart} className="text-red-500" />
+          ) : (
+            <FontAwesomeIcon icon={faEmptyHeart} className="text-red-400" />
+          )}
         </button>
       </div>
-      <div className="controller">
-        <button className="svgButton" id="prev-button" onClick={onPrevClicked}>
-          <PrevSvg className="svgButton" />
+      <div className="flex h-full py-2 justify-center items-stretch text-xl">
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="prev-button"
+          onClick={onPrevClicked}
+        >
+          <FontAwesomeIcon icon={faStepBackward} />
         </button>
-        <button className="svgButton" id="play-button" onClick={onPlayClicked}>
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="play-button"
+          onClick={onPlayClicked}
+        >
           {status === 'loading' ? (
             <img style={{ width: '28px' }} src={loadingGif} alt="Loading" />
           ) : status === 'playing' ? (
-            <PauseSvg />
+            <FontAwesomeIcon icon={faPause} />
           ) : (
-            <PlaySvg />
+            <FontAwesomeIcon icon={faPlay} />
           )}
         </button>
-        <button className="svgButton" id="next-button" onClick={onNextClicked}>
-          <NextSvg className="svgButton" />
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="next-button"
+          onClick={onNextClicked}
+        >
+          <FontAwesomeIcon icon={faStepForward} />
         </button>
       </div>
-      <div className="timer">
+      <div className="flex-none text-right text-gray-600 font-medium">
         {`${formatMinute(currLength)} / ${formatMinute(length)}`}
       </div>
-      <div ref={progress} className="progress">
-        <div className="progressCenter" onClick={e => onProgressClick(e)}>
-          <div ref={bar} className="progressBar"></div>
+      <div
+        ref={progress}
+        className="absolute left-0 top-0 w-full flex justify-evenly items-center"
+      >
+        <div
+          className="w-full h-1.5 bg-gray-300 hover:h-2.5 cursor-pointer"
+          onClick={e => onProgressClick(e)}
+        >
+          <div ref={bar} className="w-0 h-full bg-indigo-500"></div>
         </div>
       </div>
     </div>
