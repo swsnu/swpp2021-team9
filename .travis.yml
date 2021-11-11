@@ -15,7 +15,7 @@ jobs:
       install:
         - source ~/virtualenv/python3.7/bin/activate
         - pip install -r backend/requirements.txt
-        - pip install overalls
+        - pip install coveralls
         - cd frontend
         - yarn install
         - yarn global add coveralls
