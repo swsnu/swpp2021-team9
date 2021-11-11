@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import CustomPlayer from 'app/components/CreateCover/CustomPlayer';
+import YoutubePlayer from 'app/components/CreateCover/YoutubePlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUpload,
@@ -88,7 +88,7 @@ export default function CreateCoverRecordPage(props: Props) {
       className="flex flex-col items-center"
     >
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
-      {isYoutubeLink ? <CustomPlayer /> : null}
+      {isYoutubeLink ? <YoutubePlayer /> : null}
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (
@@ -116,7 +116,6 @@ export default function CreateCoverRecordPage(props: Props) {
               )}
             </button>
           </div>
-          {/* <button onClick={handleStopRecording}>Stop Recording</button> */}
           {isVideo ? (
             <video
               id={'video'}
@@ -124,13 +123,7 @@ export default function CreateCoverRecordPage(props: Props) {
               controls
               autoPlay
             />
-          ) : // <audio
-          //   id={'song'}
-          //   src={mediaBlobUrl ? mediaBlobUrl : undefined}
-          //   controls
-          //   autoPlay
-          // />
-          mediaBlobUrl ? (
+          ) : mediaBlobUrl ? (
             <Waveform url={mediaBlobUrl} />
           ) : null}
           {isRecording && isVideo ? (
