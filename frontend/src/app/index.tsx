@@ -18,11 +18,7 @@ import SearchResultPage from './containers/SearchResultPage';
 import SongPage from './containers/SongPage';
 import CreateSongPage from './containers/CreateSongPage';
 import CoverPage from './containers/CoverPage';
-import {
-  CreateCoverRecordPage,
-  CreateCoverPreviewPage,
-  CreateCoverInfoPage,
-} from './containers/CreateCoverPage';
+import { CreateCoverRecordPage } from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
 import * as url from 'utils/urls';

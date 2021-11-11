@@ -4,6 +4,7 @@ import {
   InjectReducerParams,
   RootStateKeyType,
 } from 'utils/types/injector-typings';
+import { selectSlice } from './selectors';
 
 jest.mock('utils/redux-injectors', () => {
   const originalModule = jest.requireActual('utils/redux-injectors');
@@ -28,4 +29,9 @@ test('should add', () => {
   expect(
     useMainSlice().reducer(stateInit, mainActions.addAlbum('TEST')),
   ).toEqual(stateChanged);
+});
+
+test('return init when state is null', () => {
+  const selector = selectSlice({});
+  expect(selector).toBe(initialState);
 });
