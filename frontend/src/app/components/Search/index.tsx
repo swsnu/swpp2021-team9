@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState, useCallback } from 'react';
-import { ReactComponent as SearchSvg } from 'res/search-icon.svg';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   onSearchClicked?: (key: string) => void;
@@ -33,9 +35,9 @@ export default function Search({ onSearchClicked }: Props) {
         type="submit"
         data-testid="submit"
         onClick={handleClick}
-        className="px-3 border-2 border-gray-300 rounded-r-md text-center text-white text-xl"
+        className="px-3 border-2 border-gray-300 rounded-r-md text-center text-gray-400 text-base"
       >
-        <SearchSvg />
+        <FontAwesomeIcon icon={faSearch} />
       </button>
     </div>
   );
