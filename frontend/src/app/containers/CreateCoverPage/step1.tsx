@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import CustomPlayer from './CustomPlayer';
+import CustomPlayer from 'app/components/CreateCover/CustomPlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUpload,
@@ -10,7 +10,7 @@ import {
   faStopCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { useReactMediaRecorder } from 'react-media-recorder';
-import Waveform from './Waveform';
+import Waveform from 'app/containers/CreateCoverPage/Waveform';
 import { useHistory } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
