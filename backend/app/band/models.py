@@ -59,7 +59,7 @@ class Cover(models.Model):
     :field tags: The 'CoverTag's of this cover
     :field likes: The 'User's who likes this cover.
     :field views: The view count for this cover
-    :field combination: The 'CoverTag's of this cover
+    :field combination: The 'Combination' this cover was made to / null if there was no combination
     """
     audio = models.FileField(upload_to='cover_audio')
     title: str = models.CharField(max_length=50, db_column='title')
