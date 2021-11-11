@@ -1,11 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-import { ReactComponent as PrevSvg } from 'res/prev-button.svg';
-import { ReactComponent as NextSvg } from 'res/next-button.svg';
-import { ReactComponent as PlaySvg } from 'res/play-button.svg';
-import { ReactComponent as PauseSvg } from 'res/pause-button.svg';
-import { ReactComponent as LikeOutlined } from 'res/thumb_up_black_outlined.svg';
-import { ReactComponent as LikeFilled } from 'res/thumb_up_black_filled.svg';
 import loadingGif from 'res/loading.gif';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {

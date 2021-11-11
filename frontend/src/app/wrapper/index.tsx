@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import './Wrapper.css';
 import Header from './Header';
 import PlayerBar from './PlayerBar';
 import { selectWrapper } from './slice/selectors';
