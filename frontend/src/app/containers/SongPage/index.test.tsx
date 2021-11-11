@@ -6,17 +6,17 @@ import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
+import { Song } from 'utils/urls';
 
 const store = configureAppStore();
 
 function setup() {
-  const path = '/song/1';
   const page = (
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} component={SongPage} />
-          <Redirect to={path} />
+          <Route path={Song(':id')} component={SongPage} />
+          <Redirect to={Song(0)} />
         </Switch>
       </BrowserRouter>
     </Provider>
