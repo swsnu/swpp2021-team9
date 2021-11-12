@@ -49,7 +49,6 @@ export default function CreateCoverRecordPage(props: Props) {
       startRecording();
     }
     setIsRecording(!isRecording);
-    console.log(mediaBlobUrl);
   };
 
   const onCancelClicked = (
@@ -76,7 +75,9 @@ export default function CreateCoverRecordPage(props: Props) {
       className="flex flex-col items-center"
     >
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
-      {isYoutubeLink ? <YoutubePlayer /> : null}
+      {/* {isYoutubeLink ? <YoutubePlayer /> : null} */}
+      {/* tmp TODO*/}
+      <YoutubePlayer />
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (
@@ -84,6 +85,7 @@ export default function CreateCoverRecordPage(props: Props) {
           <h2 className="p-2">Recording Status: {status}</h2>
           <div className="space-x-3">
             <button
+              data-testid="handle-video"
               className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
               onClick={handleVideoStatus}
             >
@@ -94,6 +96,7 @@ export default function CreateCoverRecordPage(props: Props) {
               )}
             </button>
             <button
+              data-testid="rec-btn"
               className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
               onClick={onRecordClicked}
             >
@@ -125,6 +128,7 @@ export default function CreateCoverRecordPage(props: Props) {
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
       >
         <button
+          data-testid="cancel-btn"
           type="button"
           onClick={onCancelClicked}
           className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-red-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
@@ -134,6 +138,7 @@ export default function CreateCoverRecordPage(props: Props) {
 
         <div className="flex flex-row lg:space-x-40 md:space-x-20 sm:space-x-10">
           <button
+            data-testid="upload-btn"
             onClick={() => setIsUploading(!isUploading)}
             className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
           >
@@ -145,6 +150,7 @@ export default function CreateCoverRecordPage(props: Props) {
             />
           </button>
           <button
+            data-testid="rec-enable-btn"
             className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 "
             onClick={() => setIsRecordingEnabled(!isRecordingEnabled)}
           >
@@ -157,6 +163,7 @@ export default function CreateCoverRecordPage(props: Props) {
           </button>
         </div>
         <button
+          data-testid="next-btn"
           type="button"
           onClick={e => onNextClicked(e)}
           disabled={!mediaBlobUrl}
