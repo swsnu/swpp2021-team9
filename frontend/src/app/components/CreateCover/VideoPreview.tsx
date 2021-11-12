@@ -11,7 +11,16 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
   if (!stream) {
     return null;
   }
-  return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+  return (
+    <video
+      data-testid="video-preview"
+      ref={videoRef}
+      width={500}
+      height={500}
+      autoPlay
+      controls
+    />
+  );
 };
 
 export default VideoPreview;

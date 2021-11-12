@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import ReactPlayer from 'react-player';
 interface Props {}
 
@@ -138,7 +138,7 @@ export default function CustomPlayer({}: Props) {
   // };
 
   return (
-    <div>
+    <div data-testid="youtube-player">
       <ReactPlayer
         ref={player}
         className={'shadow border'}
