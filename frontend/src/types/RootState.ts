@@ -1,4 +1,3 @@
-import { MainState } from 'app/containers/MainPage/slice';
 import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
 import { SongState } from 'app/containers/SongPage/slice';
 import { WrapperState } from 'app/wrapper/slice';
@@ -11,7 +10,6 @@ import { WrapperState } from 'app/wrapper/slice';
   You have to declare them here manually
 */
 export interface RootState {
-  main?: MainState;
   createCover?: CreateCoverState;
   song?: SongState;
   wrapper?: WrapperState;
