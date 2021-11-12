@@ -27,7 +27,7 @@ export default function CreateSongPage(props: Props) {
 
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(Form);
+    // console.log(Form);
     history.push(Song(0));
   };
 
