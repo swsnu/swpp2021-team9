@@ -14,7 +14,7 @@ import * as Search from 'app/components/Search';
 const store = configureAppStore();
 
 function setup() {
-  const path = '/searchresult';
+  const path = '/';
   const page = (
     <Provider store={store}>
       <BrowserRouter>

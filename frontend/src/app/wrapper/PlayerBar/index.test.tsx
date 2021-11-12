@@ -15,20 +15,3 @@ test('should render', () => {
   expect(nextButton).toBeTruthy();
   expect(prevButton).toBeTruthy();
 });
-
-test('should handle play button', () => {
-  jest.mock('app/helper/Player', () => {
-    return {
-      paused: false,
-    };
-  });
-  const { container } = render(<PlayerBar />);
-
-  const playButton = container.querySelector('#play-button');
-  const nextButton = container.querySelector('#next-button');
-  const prevButton = container.querySelector('#prev-button');
-
-  fireEvent.click(playButton!);
-
-  // expect(player.paused).toBe(false);
-});

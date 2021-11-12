@@ -29,22 +29,6 @@ export default function PlayerBar(props: Props) {
   useEffect(() => {
     player.onStatusChange = newStatus => setStatus(newStatus);
     player.onTrackChanged = newTrack => setTrack(newTrack);
-
-    const trackList: TrackInfo[] = [];
-    mockPlaylist.forEach(v => {
-      trackList.push({
-        song: {
-          title: v.name,
-          singer: v.artist,
-          category: 'category',
-          reference: 'ref',
-          description: 'des',
-        },
-        sources: [v.source],
-        like: false,
-      });
-    });
-    player.setTracks(trackList);
   }, [player]);
 
   const onPlayClicked = useCallback(() => {
