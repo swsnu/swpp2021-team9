@@ -6,7 +6,14 @@ import AlbumImage from '../Album/AlbumImage.png';
 
 test('should render', () => {
   render(
-    <Album id={0} thumbnail={AlbumImage} title="Album1" singer="Singer1" />,
+    <Album
+      id={0}
+      thumbnail={AlbumImage}
+      title="Album1"
+      singer="Singer1"
+      onTitleClicked={() => {}}
+      onPlayClicked={() => {}}
+    />,
   );
   expect(screen.getByTestId('Album')).toBeTruthy();
 });

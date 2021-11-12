@@ -14,7 +14,7 @@ export default function Album(props: Props) {
   return (
     <div
       data-testid="Album"
-      className="flex flex-col items-center w-full col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2"
+      className="flex flex-col items-center w-full col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2"
     >
       <button
         onClick={props.onTitleClicked}
