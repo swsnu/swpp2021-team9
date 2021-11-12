@@ -31,15 +31,15 @@ export default function TopCombination(props: Props) {
   const renderCoverButtons = (covers: number[]) => {
     return covers.map(id => {
       const cover = props.covers.find(cover => cover.id === id);
-      return cover ? (
-        <button
-          key={id}
-          className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
-        >
-          {cover.title}
-        </button>
-      ) : (
-        <div key={id}></div>
+      return (
+        cover && (
+          <button
+            key={id}
+            className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
+          >
+            {cover.title}
+          </button>
+        )
       );
     });
   };
@@ -54,33 +54,38 @@ export default function TopCombination(props: Props) {
           <tr key={combination.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
+              data-testid="getButton"
               onClick={() => onClickGet(combination)}
             >
               {index + 1}
             </td>
-            <td className="flex relative px-3 whitespace-nowrap">
+            <td className="flex relative whitespace-nowrap">
               <ul className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
                 {renderCoverButtons(combination.covers)}
               </ul>
               <button
                 className="self-stretch flex-grow"
+                data-testid="getButton"
                 onClick={() => onClickGet(combination)}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
+              data-testid="getButton"
               onClick={() => onClickGet(combination)}
             >
               {combination.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
+              data-testid="getButton"
               onClick={() => onClickGet(combination)}
             >
               {combination.likes}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-sm font-medium"
+              data-testid="getButton"
               onClick={() => onClickGet(combination)}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">

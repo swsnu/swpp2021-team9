@@ -1,15 +1,15 @@
 import { render, fireEvent } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
 import { Provider } from 'react-redux';
-import { dummyCombinations, dummyCovers } from './dummy';
-import TopCombination from './TopCombination';
+import { dummyCovers } from './dummy';
+import TopCover from './TopCover';
 
 const store = configureAppStore();
 
 function setup() {
   const page = render(
     <Provider store={store}>
-      <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
+      <TopCover covers={dummyCovers} />
     </Provider>,
   );
   const getButtons = page.queryAllByTestId('getButton');
@@ -25,11 +25,11 @@ test('click get buttons', () => {
   });
 });
 
-test('render when no combinations', () => {
+test('render when no covers', () => {
   const page = render(
     <Provider store={store}>
-      <TopCombination combinations={[]} covers={dummyCovers} />
+      <TopCover covers={[]} />
     </Provider>,
   );
-  expect(page.getByText('There are no combinations yet.')).toBeTruthy();
+  expect(page.getByText('There are no covers yet.')).toBeTruthy();
 });

@@ -96,7 +96,7 @@ const slice = createSlice({
   },
 });
 
-export const { actions: songActions } = slice;
+export const { actions: songActions, reducer: songReducer } = slice;
 
 export const useSongSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
