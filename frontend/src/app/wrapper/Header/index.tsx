@@ -29,6 +29,7 @@ export default function Header(props: Props) {
       className="flex self-stretch items-center justify-between h-12 px-4 bg-gray-100"
     >
       <div
+        id="logo_button"
         onClick={props.onLogoClicked}
         className="sr-only sm:not-sr-only flex-none sm:mx-4 justify-start"
       >

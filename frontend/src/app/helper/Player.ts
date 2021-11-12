@@ -28,7 +28,6 @@ export default class Player extends TrackPlayer {
       this.index = idx;
       this.setTrack(this.tracks[idx]);
       this.onTrackChanged?.(this.tracks[idx]);
-      console.log(this.tracks[idx]);
     } else {
       throw Error(
         `Out of index of tracks idx: ${idx}, length: ${this.tracks.length}`,
@@ -47,7 +46,7 @@ export default class Player extends TrackPlayer {
 
   addTrack(track: TrackInfo) {
     this.tracks.splice(this.index, 0, track);
-    this.setIndex(this.index);
+    this.setIndex(this.index + 1);
   }
 
   playNext() {

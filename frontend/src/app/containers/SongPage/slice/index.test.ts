@@ -1,4 +1,4 @@
-import { initialState, SongState, useSongSlice, songActions } from './index';
+import { initialState, useSongSlice } from './index';
 
 import {
   InjectReducerParams,

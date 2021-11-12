@@ -5,7 +5,7 @@ import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
-import CreateCoverRecordPage, { Props } from './step1';
+import CreateCoverRecordPage from './step1';
 
 const store = configureAppStore();
 

@@ -6,7 +6,6 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
@@ -19,8 +18,8 @@ import SongPage from './containers/SongPage';
 import CreateSongPage from './containers/CreateSongPage';
 import CoverPage from './containers/CoverPage';
 import {
-  CreateCoverRecordPage,
   CreateCoverInfoPage,
+  CreateCoverRecordPage,
 } from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
