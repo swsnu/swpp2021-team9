@@ -19,7 +19,7 @@ interface Props {
 export default function Wrapper(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const player = React.useMemo(() => Player.getInstance(), []);
-  const { actions, reducer } = useWrapperSlice();
+  useWrapperSlice();
   const history = useHistory();
   const wrapperState = useSelector(selectWrapper);
 
@@ -49,6 +49,7 @@ export default function Wrapper(props: Props) {
 
   const onSearchClicked = useCallback(
     (key: string) => {
+      console.log(key);
       if (key === '') return;
       history.push({
         pathname: url.SearchResult(),

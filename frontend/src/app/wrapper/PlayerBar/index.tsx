@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
 import loadingGif from 'res/loading.gif';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,12 +13,11 @@ import { faHeart as faEmptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 import Player from 'app/helper/Player';
 import { useInterval } from 'app/helper/Hooks';
-import mockPlaylist from 'app/helper/mockPlayList';
 
 interface Props {}
 
 export default function PlayerBar(props: Props) {
-  const [player] = useState(Player.getInstance());
+  const player = useMemo(() => Player.getInstance(), []);
   const [currLength, setCurrLength] = useState(0);
   const [length, setLength] = useState(0);
   const [status, setStatus] = useState('');
@@ -32,7 +31,6 @@ export default function PlayerBar(props: Props) {
   }, [player]);
 
   const onPlayClicked = useCallback(() => {
-    console.log('onPlayClicked');
     if (player.isPaused()) {
       player.play();
     } else {
@@ -41,17 +39,14 @@ export default function PlayerBar(props: Props) {
   }, [player]);
 
   const onPrevClicked = useCallback(() => {
-    console.log('onPrevClicked');
     player.playPrev();
   }, [player]);
 
   const onNextClicked = useCallback(() => {
-    console.log('onNextClicked');
     player.playNext();
   }, [player]);
 
   const onLikeClicked = useCallback(() => {
-    console.log('onLikeClicked');
     if (track) {
       const newTrack = { ...track, like: !track?.like };
       setTrack(newTrack);
@@ -64,11 +59,8 @@ export default function PlayerBar(props: Props) {
     setLength(Math.ceil(duration));
     setCurrLength(Math.ceil(currentTime));
     const currnetPercent = (currentTime / duration) * 100;
-    if (bar.current != null) {
-      bar.current.style.width = currnetPercent + '%';
-    }
+    bar.current!.style.width = currnetPercent + '%';
     if (currentTime === duration) {
-      console.log('Finish Play this song');
       player.playNext();
     }
   }, [player]);
@@ -106,12 +98,21 @@ export default function PlayerBar(props: Props) {
         </div>
         <button
           className="h-full mx-2 px-2 text-xl outline-none"
+          id="like-button"
           onClick={onLikeClicked}
         >
           {track?.like ? (
-            <FontAwesomeIcon icon={faHeart} className="text-red-500" />
+            <FontAwesomeIcon
+              data-testid="likeIcon"
+              icon={faHeart}
+              className="text-red-500"
+            />
           ) : (
-            <FontAwesomeIcon icon={faEmptyHeart} className="text-red-400" />
+            <FontAwesomeIcon
+              data-testid="unLikeIcon"
+              icon={faEmptyHeart}
+              className="text-red-400"
+            />
           )}
         </button>
       </div>
@@ -129,11 +130,16 @@ export default function PlayerBar(props: Props) {
           onClick={onPlayClicked}
         >
           {status === 'loading' ? (
-            <img style={{ width: '28px' }} src={loadingGif} alt="Loading" />
+            <img
+              data-testid="loadingIcon"
+              style={{ width: '28px' }}
+              src={loadingGif}
+              alt="Loading"
+            />
           ) : status === 'playing' ? (
-            <FontAwesomeIcon icon={faPause} />
+            <FontAwesomeIcon data-testid="pauseIcon" icon={faPause} />
           ) : (
-            <FontAwesomeIcon icon={faPlay} />
+            <FontAwesomeIcon data-testid="playIcon" icon={faPlay} />
           )}
         </button>
         <button
@@ -152,10 +158,15 @@ export default function PlayerBar(props: Props) {
         className="absolute left-0 top-0 w-full flex justify-evenly items-center"
       >
         <div
+          data-testid="progressBox"
           className="w-full h-1.5 bg-gray-300 hover:h-2.5 cursor-pointer"
-          onClick={e => onProgressClick(e)}
+          onClick={onProgressClick}
         >
-          <div ref={bar} className="w-0 h-full bg-indigo-500"></div>
+          <div
+            data-testid="progressFill"
+            ref={bar}
+            className="w-0 h-full bg-indigo-500"
+          ></div>
         </div>
       </div>
     </div>
