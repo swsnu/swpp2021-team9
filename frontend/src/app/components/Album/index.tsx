@@ -1,85 +1,51 @@
-import * as React from 'react';
-import { Component, useState } from 'react';
+import React from 'react';
 import '../Album/Album.css';
-import { useHistory } from 'react-router-dom';
-import { Song } from 'utils/urls';
-import Player from 'app/helper/Player';
 
 interface Props {
   id: number;
   title: string;
   singer: string;
   thumbnail: string | undefined;
+  onClickTitle: () => void;
+  onClickPlay: () => void;
 }
 
 export default function Album(props: Props) {
-  const [player] = useState(Player.getInstance());
-  const [track, setTrack] = useState<TrackInfo>();
-
-  const songexample: SongInfo = {
-    title: '',
-    singer: '',
-    category: '',
-    reference: '',
-    description: '',
-  };
-  const trackexample: TrackInfo = {
-    song: songexample,
-    sources: ['hello', 'world'],
-    like: false,
-  };
-
-  const history = useHistory();
-
-  const [Form, setForm] = useState({
-    id: '',
-    title: '',
-    singer: '',
-    thumbnail: '',
-  });
-
-  const onTitleClicked = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(Form);
-    history.push(Song(props.id));
-  };
-
-  const onPlayClicked = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(Form);
-    player.setIndex(0);
-  };
-
   return (
-    <div data-testid="Album" className="flex flex-col items-center w-full">
-      <br></br>
-      <br></br>
-
-      <form onSubmit={onTitleClicked}>
-        <button className="text-lg font-medium leading-6 text-gray-900 font-semibold">
+    <div
+      data-testid="Album"
+      className="flex flex-col items-center w-full col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2"
+    >
+      <button
+        onClick={props.onClickTitle}
+        className="w-full text-gray-900 font-semibold"
+      >
+        <h2 className="text-lg whitespace-nowrap overflow-hidden overflow-ellipsis">
           {props.title}
-          <br></br> {props.singer}
-        </button>
-      </form>
+        </h2>
+        <div className="text-md whitespace-nowrap overflow-hidden overflow-ellipsis">
+          {props.singer}
+        </div>
+      </button>
+
       <br></br>
       <img
         className="rounded-full border border-gray-100 shadow-sm"
         src={props.thumbnail}
         width="150"
         height="150"
-        alt="Album image"
+        alt="Album"
       />
       <br></br>
-      <form onSubmit={onPlayClicked}>
-        <div className="px-4 py-3 text-left sm:px-6">
-          <button
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Play
-          </button>
-        </div>
-      </form>
+      <div className="px-4 pt-3 text-left sm:px-6">
+        <button
+          type="submit"
+          onClick={props.onClickPlay}
+          className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700"
+        >
+          Play
+        </button>
+      </div>
       <br></br>
       <br></br>
     </div>
