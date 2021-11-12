@@ -5,7 +5,7 @@ import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
-import SignUpPage, { Props } from '.';
+import SignUpPage from '.';
 
 const store = configureAppStore();
 
