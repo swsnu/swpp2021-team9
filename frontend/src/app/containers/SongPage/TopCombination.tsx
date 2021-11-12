@@ -58,7 +58,7 @@ export default function TopCombination(props: Props) {
             >
               {index + 1}
             </td>
-            <td className="flex px-3 whitespace-nowrap">
+            <td className="flex relative px-3 whitespace-nowrap">
               <ul className="flex my-0.5 py-2 gap-1 overflow-x-auto scroll-simple">
                 {renderCoverButtons(combination.covers)}
               </ul>
