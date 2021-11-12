@@ -49,7 +49,6 @@ export default function Wrapper(props: Props) {
 
   const onSearchClicked = useCallback(
     (key: string) => {
-      console.log(key);
       if (key === '') return;
       history.push({
         pathname: url.SearchResult(),

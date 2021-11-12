@@ -90,8 +90,8 @@ export default function PlayerBar(props: Props) {
       data-testid="PlayerBar"
       className="fixed bottom-0 left-0 h-16 pt-1 px-4 sm:px-8 w-full self-stretch flex items-center justify-between bg-gray-100"
     >
-      <div className="h-full py-2 flex flex-none items-center">
-        <div className="px-2 py-1 font-semibold border-2 border-black rounded-full">
+      <div id="info" className="h-full py-2 flex w-6/12 items-center">
+        <div className="px-2 py-1 font-semibold border-2 border-black rounded-lg">
           {track
             ? `${track.song.title} - ${track.song.singer}`
             : 'Select Music'}
@@ -116,7 +116,10 @@ export default function PlayerBar(props: Props) {
           )}
         </button>
       </div>
-      <div className="flex h-full py-2 justify-center items-stretch text-xl">
+      <div
+        id="controller"
+        className="flex h-full py-2 justify-center items-stretch text-xl"
+      >
         <button
           className="mx-1 sm:mx-3 px-2 outline-none"
           id="prev-button"
@@ -150,7 +153,7 @@ export default function PlayerBar(props: Props) {
           <FontAwesomeIcon icon={faStepForward} />
         </button>
       </div>
-      <div className="flex-none text-right text-gray-600 font-medium">
+      <div id="timer" className="text-right w-6/12 text-gray-600 font-medium">
         {`${formatMinute(currLength)} / ${formatMinute(length)}`}
       </div>
       <div
