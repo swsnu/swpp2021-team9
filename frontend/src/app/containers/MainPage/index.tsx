@@ -23,8 +23,8 @@ export default function MainPage(props: Props) {
           title={album.title}
           singer={album.singer}
           thumbnail={album.thumbnail}
-          onTitleClicked={() => history.push(Song(album.id))}
-          onPlayClicked={() => player.setIndex(0)} // TODO: play the corresponding song
+          onClickTitle={() => history.push(Song(album.id))}
+          onClickPlay={() => player.setIndex(0)} // TODO: play the corresponding song
         />
       ))}
 

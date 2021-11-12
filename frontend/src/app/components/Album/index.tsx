@@ -6,8 +6,8 @@ interface Props {
   title: string;
   singer: string;
   thumbnail: string | undefined;
-  onTitleClicked: () => void;
-  onPlayClicked: () => void;
+  onClickTitle: () => void;
+  onClickPlay: () => void;
 }
 
 export default function Album(props: Props) {
@@ -17,7 +17,7 @@ export default function Album(props: Props) {
       className="flex flex-col items-center w-full col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2"
     >
       <button
-        onClick={props.onTitleClicked}
+        onClick={props.onClickTitle}
         className="w-full text-gray-900 font-semibold"
       >
         <h2 className="text-lg whitespace-nowrap overflow-hidden overflow-ellipsis">
@@ -40,7 +40,7 @@ export default function Album(props: Props) {
       <div className="px-4 pt-3 text-left sm:px-6">
         <button
           type="submit"
-          onClick={props.onPlayClicked}
+          onClick={props.onClickPlay}
           className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700"
         >
           Play

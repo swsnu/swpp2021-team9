@@ -11,8 +11,8 @@ test('should render', () => {
       thumbnail={AlbumImage}
       title="Album1"
       singer="Singer1"
-      onTitleClicked={() => {}}
-      onPlayClicked={() => {}}
+      onClickTitle={() => {}}
+      onClickPlay={() => {}}
     />,
   );
   expect(screen.getByTestId('Album')).toBeTruthy();
