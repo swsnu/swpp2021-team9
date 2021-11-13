@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { SagaInjectionModes, useInjectSaga } from 'redux-injectors';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer } from 'utils/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import coverPageSaga from './saga';
 
 /* --- STATE --- */
@@ -20,18 +19,15 @@ const slice = createSlice({
   initialState,
   reducers: {
     loadingCoverResponse(state, action: PayloadAction<any>) {
-      console.log('loadingCoverResponse', action, state.coverResponse);
-      state.coverResponse.loading = true;
+      state.coverResponse = { loading: true };
       return state;
     },
     successCoverResponse(state, action: PayloadAction<CoverResponse>) {
-      console.log('successCoverResponse', action, state.coverResponse);
       state.coverResponse.loading = false;
       state.coverResponse.data = action.payload;
       return state;
     },
     errorCoverResponse(state, action: PayloadAction<string>) {
-      console.log('errorCoverResponse', action, state.coverResponse);
       state.coverResponse.loading = false;
       state.coverResponse.error = action.payload;
       return state;
