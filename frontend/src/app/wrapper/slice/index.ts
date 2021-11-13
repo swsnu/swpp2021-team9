@@ -1,35 +1,28 @@
-import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 
 /* --- STATE --- */
-export interface MainState {
+export interface WrapperState {
   name: string;
-  albums: string[];
+  user?: UserInfo;
+  currentPlaying?: PlayInfo;
 } // state 형식 정의
 
-export const initialState: MainState = {
-  name: 'main',
-  albums: [''],
+export const initialState: WrapperState = {
+  name: 'wrapper',
+  user: undefined,
+  currentPlaying: undefined,
 };
 
 const slice = createSlice({
-  name: 'main', // 이 이름을 types/RootState.ts에 써놓아야 함
+  name: 'wrapper', // 이 이름을 types/RootState.ts에 써놓아야 함
   initialState,
-  reducers: {
-    someAction(state, action: PayloadAction<any>) {
-      return state;
-    },
-    addAlbum(state, action: PayloadAction<string>) {
-      state.albums.push(action.payload);
-      return state;
-    },
-  },
+  reducers: {},
 });
 
-export const { actions: mainActions } = slice;
+export const { actions: wrapperActions, reducer } = slice;
 
-export const useMainSlice = () => {
+export const useWrapperSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions, reducer: slice.reducer };
 };

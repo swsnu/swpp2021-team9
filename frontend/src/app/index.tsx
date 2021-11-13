@@ -6,7 +6,6 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
@@ -18,7 +17,10 @@ import SearchResultPage from './containers/SearchResultPage';
 import SongPage from './containers/SongPage';
 import CreateSongPage from './containers/CreateSongPage';
 import CoverPage from './containers/CoverPage';
-import { CreateCoverRecordPage } from './containers/CreateCoverPage';
+import {
+  CreateCoverInfoPage,
+  CreateCoverRecordPage,
+} from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
 import * as url from 'utils/urls';
@@ -50,8 +52,13 @@ export function App() {
             <Route exact path={url.Song(':id')} component={SongPage} />
             <Route
               exact
-              path={url.CreateCover()}
+              path={url.CreateCover('record')}
               component={CreateCoverRecordPage}
+            />
+            <Route
+              exact
+              path={url.CreateCover('info')}
+              component={CreateCoverInfoPage}
             />
             <Route exact path={url.Song(':id')} component={CoverPage} />
             <Route exact path={url.Profile(':id')} component={ProfilePage} />

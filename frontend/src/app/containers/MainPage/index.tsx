@@ -1,14 +1,52 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { useHistory } from 'react-router';
-import { useMainSlice } from './slice';
-import { useDispatch } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import Album from '../../components/Album/index';
+import { dummyAlbums } from './dummy';
+import Player from 'app/helper/Player';
+import { Song } from 'utils/urls';
 
 export type Props = {};
+
 export default function MainPage(props: Props) {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const { actions } = useMainSlice();
+  const player = useMemo(() => Player.getInstance(), []);
 
-  return <div data-testid="MainPage">Main</div>;
+  const songexample: SongInfo = {
+    title: '',
+    singer: '',
+    category: '',
+    reference: '',
+    description: '',
+  };
+  const trackexample: TrackInfo = {
+    song: songexample,
+    sources: ['hello', 'world'],
+    like: false,
+  };
+
+  return (
+    <div
+      data-testid="MainPage"
+      className="items-center overflow-hidden grid grid-cols-12"
+    >
+      {dummyAlbums.map(album => (
+        <Album
+          key={album.id}
+          id={album.id}
+          title={album.title}
+          singer={album.singer}
+          thumbnail={album.thumbnail}
+          onClickTitle={() => history.push(Song(album.id))}
+          onClickPlay={() => {}}
+          //player.addTrack(trackexample)
+          //player.setIndex(album.id)
+          //} // TODO: play the corresponding song
+        />
+      ))}
+
+      <div className="flex">
+        <p></p>
+      </div>
+    </div>
+  );
 }
