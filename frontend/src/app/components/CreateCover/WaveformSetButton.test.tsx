@@ -8,10 +8,6 @@ describe('<WaveformSetButton />', () => {
     mockGetCurrentTime = jest.fn();
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
   it('should render set button properly', () => {
     render(
       <WaveformSetButton
@@ -24,7 +20,6 @@ describe('<WaveformSetButton />', () => {
 
     const button = screen.getByTestId('waveform-set-button');
     fireEvent.click(button);
-    expect(button).toBeTruthy();
     expect(mockGetCurrentTime).toHaveBeenCalledTimes(1);
     expect(mockSetIsClicked).toHaveBeenCalledTimes(1);
   });
