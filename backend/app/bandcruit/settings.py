@@ -10,11 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
+import json
+from json.decoder import JSONDecodeError
 from pathlib import Path
-
-import os, json
-from django.core import exceptions
-from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,17 +24,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: Get secret key from secrets.json file
 secret_file = os.path.join(BASE_DIR, 'secrets.json')
-with open(secret_file) as f:
-    secrets = json.loads(f.read())
+try:
+    with open(secret_file) as f:
+        secrets = json.loads(f.read())
+except (FileNotFoundError, JSONDecodeError):
+    secrets = {}
 
-def get_secret(setting, secrets=secrets):
+def get_secret(setting, fallback):
     try:
         return secrets[setting]
     except KeyError:
-        error_msg = "Set the {} environment variable". format(setting)
-        raise ImproperlyConfigured(error_msg)
+        return fallback
 
-SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = get_secret("SECRET_KEY", "ASDFG")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -53,7 +54,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'band',
+    'user',
 ]
+
+
+# Use Custom User as default user
+AUTH_USER_MODEL = 'user.CustomUser'
+
+
+# To use Auto Field id
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,3 +146,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
