@@ -5,6 +5,8 @@ import AlbumImage from '../../components/Album/AlbumImage.png';
 import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
 import { dummyResultLines } from './dummy';
+import { Song, Profile } from 'utils/urls';
+import Player from 'app/helper/Player';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +34,10 @@ export default function SearchResultPage(props: Props) {
     history.push(CreateSong());
   };
 
-  return key === 'strawberry moon' ? (
+  const [player] = useState(Player.getInstance());
+  //props.hasresult = (key==='strawberry moon')
+
+  return props.hasresult ? (
     <div data-testid="SearchResultPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
@@ -60,24 +65,19 @@ export default function SearchResultPage(props: Props) {
               </tr>
             </thead>
             <tbody>
-              <ResultLine
-                title={dummyResultLines[0].title}
-                author={dummyResultLines[0].author}
-                likes={dummyResultLines[0].likes}
-                view={dummyResultLines[0].view}
-              />
-              <ResultLine
-                title={dummyResultLines[1].title}
-                author={dummyResultLines[1].author}
-                likes={dummyResultLines[1].likes}
-                view={dummyResultLines[1].view}
-              />
-              <ResultLine
-                title={dummyResultLines[2].title}
-                author={dummyResultLines[2].author}
-                likes={dummyResultLines[2].likes}
-                view={dummyResultLines[2].view}
-              />
+              {dummyResultLines.map(resultline => (
+                <ResultLine
+                  key={resultline.title}
+                  title={resultline.title}
+                  author={resultline.author}
+                  view={resultline.view}
+                  likes={resultline.likes}
+                  onLineClicked={() => history.push(Song(0))}
+                  onAuthorClicked={() => history.push(Profile(0))}
+                  //onPlayClicked = {()=>player.setIndex(0)}
+                  onPlayClicked={() => {}}
+                />
+              ))}
             </tbody>
           </table>
         </div>
@@ -116,3 +116,33 @@ export default function SearchResultPage(props: Props) {
     </div>
   );
 }
+
+/*
+<ResultLine
+                title={dummyResultLines[0].title}
+                author={dummyResultLines[0].author}
+                likes={dummyResultLines[0].likes}
+                view={dummyResultLines[0].view}
+                onLineClicked={()=>history.push(Song(0))}
+                onAuthorClicked = {()=>history.push(Profile(0))}
+                onPlayClicked = {()=>player.setIndex(0)}
+              />
+              <ResultLine
+                title={dummyResultLines[1].title}
+                author={dummyResultLines[1].author}
+                likes={dummyResultLines[1].likes}
+                view={dummyResultLines[1].view}
+                onLineClicked={()=>history.push(Song(0))}
+                onAuthorClicked = {()=>history.push(Profile(0))}
+                onPlayClicked = {()=>player.setIndex(0)}
+              />
+              <ResultLine
+                title={dummyResultLines[2].title}
+                author={dummyResultLines[2].author}
+                likes={dummyResultLines[2].likes}
+                view={dummyResultLines[2].view}
+                onLineClicked={()=>history.push(Song(0))}
+                onAuthorClicked = {()=>history.push(Profile(0))}
+                onPlayClicked = {()=>player.setIndex(0)}
+              />
+              */

@@ -10,6 +10,9 @@ test('should render', () => {
       author="Mock_Author"
       view={100}
       likes={1000}
+      onLineClicked={() => {}}
+      onAuthorClicked={() => {}}
+      onPlayClicked={() => {}}
     />,
   );
   expect(screen.getByTestId('ResultLine')).toBeTruthy();
