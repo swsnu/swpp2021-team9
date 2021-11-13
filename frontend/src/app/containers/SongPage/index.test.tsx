@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, MemoryRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
@@ -7,9 +7,6 @@ import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song, Main, CreateCover } from 'utils/urls';
-import { dummyInstruments } from './dummy';
-import { Props as AddCoverButtonProps } from './CombinationArea/AddCoverButton';
-import { useSongSlice } from './slice';
 
 const store = configureAppStore();
 

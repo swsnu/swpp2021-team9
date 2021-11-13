@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, MemoryRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
-import { fireEvent, waitFor } from '@testing-library/dom';
+import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
-import { Song, Main, CreateCover } from 'utils/urls';
+import { Song } from 'utils/urls';
 import { dummyInstruments } from './dummy';
 import { Props as InstrumentDropdownProps } from 'app/components/Dropdown/InstrumentDropdown';
 import { Props as CoverDropdownProps } from 'app/components/Dropdown/CoverDropdown';
-import { useSongSlice } from './slice';
 
 const store = configureAppStore();
 
