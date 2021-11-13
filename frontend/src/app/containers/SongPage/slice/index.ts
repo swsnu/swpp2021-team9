@@ -66,24 +66,9 @@ const slice = createSlice({
     getCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
       nextItemID = 0;
       state.combination = [];
+      state.current = null;
       action.payload.forEach(cover => {
         if (!cover) return;
-
-        const newItem: CombinationItem = {
-          id: nextItemID++,
-          instrument: cover.instrument,
-          cover: cover,
-        };
-        state.combination.push(newItem);
-      });
-    },
-    addCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
-      action.payload.forEach(cover => {
-        if (!cover) return;
-        const alreadyExist = state.combination.find(
-          item => item.cover && item.cover.id === cover.id,
-        );
-        if (alreadyExist) return;
 
         const newItem: CombinationItem = {
           id: nextItemID++,
