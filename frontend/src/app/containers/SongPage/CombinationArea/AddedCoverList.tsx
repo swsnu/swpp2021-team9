@@ -24,7 +24,7 @@ export default function AddedCoverList(props: Props) {
     >
       {combination.length > 0 ? (
         combination.map(item => (
-          <li key={item.id}>
+          <li key={item.id} data-testid="AddedCoverListItem">
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button

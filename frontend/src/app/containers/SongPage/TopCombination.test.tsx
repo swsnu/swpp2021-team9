@@ -12,7 +12,7 @@ function setup() {
       <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
     </Provider>,
   );
-  const getButtons = page.queryAllByTestId('getButton');
+  const getButtons = page.queryAllByTestId('combinationGetButton');
   return { page, getButtons };
 }
 

@@ -54,7 +54,7 @@ export default function TopCombination(props: Props) {
           <tr key={combination.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="combinationGetButton"
               onClick={() => onClickGet(combination)}
             >
               {index + 1}
@@ -65,27 +65,27 @@ export default function TopCombination(props: Props) {
               </ul>
               <button
                 className="self-stretch flex-grow"
-                data-testid="getButton"
+                data-testid="combinationGetButton"
                 onClick={() => onClickGet(combination)}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="combinationGetButton"
               onClick={() => onClickGet(combination)}
             >
               {combination.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="combinationGetButton"
               onClick={() => onClickGet(combination)}
             >
               {combination.likes}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-sm font-medium"
-              data-testid="getButton"
+              data-testid="combinationGetButton"
               onClick={() => onClickGet(combination)}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">

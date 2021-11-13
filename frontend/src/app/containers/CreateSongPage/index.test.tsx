@@ -6,7 +6,6 @@ import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { configureAppStore } from 'store/configureStore';
 import CreateSongPage from '.';
-import { Song } from 'utils/urls';
 
 const store = configureAppStore();
 

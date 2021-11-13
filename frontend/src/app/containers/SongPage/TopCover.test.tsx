@@ -12,7 +12,7 @@ function setup() {
       <TopCover covers={dummyCovers} />
     </Provider>,
   );
-  const getButtons = page.queryAllByTestId('getButton');
+  const getButtons = page.queryAllByTestId('CoverGetButton');
   return { page, getButtons };
 }
 

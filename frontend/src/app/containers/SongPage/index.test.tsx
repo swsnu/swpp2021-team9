@@ -1,31 +1,72 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import { Provider, useDispatch } from 'react-redux';
+import { Switch, Route, Redirect, MemoryRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
-import { Song } from 'utils/urls';
+import { Song, Main, CreateCover } from 'utils/urls';
+import { dummyInstruments } from './dummy';
+import { Props as AddCoverButtonProps } from './CombinationArea/AddCoverButton';
+import { useSongSlice } from './slice';
 
 const store = configureAppStore();
 
+const mockHistoryPush = jest.fn().mockImplementation(string => {});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
+
 function setup() {
-  const page = (
+  jest.clearAllMocks();
+
+  const page = render(
     <Provider store={store}>
-      <BrowserRouter>
+      <MemoryRouter>
         <Switch>
           <Route path={Song(':id')} component={SongPage} />
           <Redirect to={Song(0)} />
         </Switch>
-      </BrowserRouter>
-    </Provider>
+      </MemoryRouter>
+    </Provider>,
   );
   return { page };
 }
 
 test('should render', () => {
   const { page } = setup();
+  expect(page.getByTestId('SongPage')).toBeTruthy();
+});
+
+test('should alert if page does not exist', async () => {
+  jest.spyOn(window, 'alert').mockImplementation((message?: string) => {
+    return null;
+  });
+
+  const page = (
+    <Provider store={store}>
+      <MemoryRouter>
+        <Switch>
+          <Route path={Song(':id')} component={SongPage} />
+          <Redirect to={Song('wrongURL')} />
+        </Switch>
+      </MemoryRouter>
+    </Provider>
+  );
   render(page);
-  expect(screen.getByTestId('SongPage')).toBeTruthy();
+
+  await waitFor(() => {
+    expect(mockHistoryPush).toBeCalledWith(Main());
+  });
+});
+
+test('record button test', () => {
+  const { page } = setup();
+  const recordButton = page.getByText('REC');
+  fireEvent.click(recordButton);
+  expect(mockHistoryPush).toBeCalledWith(CreateCover('record'));
 });

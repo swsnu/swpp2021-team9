@@ -20,7 +20,6 @@ export default function InstrumentDropDown(props: Props) {
 
   return (
     <Transition
-      as={Fragment}
       enter="transition ease-out duration-100"
       enterFrom="transform opacity-0 scale-95"
       enterTo="transform opacity-100 scale-100"
@@ -40,7 +39,7 @@ export default function InstrumentDropDown(props: Props) {
                   <div className="ml-1 mr-2 w-6 text-lg text-center text-gray-700">
                     <FontAwesomeIcon icon={getIcon(instrument.icon)} />
                   </div>
-                  {instrument.name}
+                  <span>{instrument.name}</span>
                 </button>
               )}
             </Menu.Item>

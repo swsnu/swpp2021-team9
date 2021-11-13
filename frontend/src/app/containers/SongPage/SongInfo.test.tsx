@@ -1,5 +1,4 @@
 import { render, fireEvent } from '@testing-library/react';
-import { Song } from 'utils/urls';
 import SongInfo from './SongInfo';
 
 const dummySong: Song = {

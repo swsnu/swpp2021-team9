@@ -27,14 +27,14 @@ export default function TopCover(props: Props) {
           <tr key={cover.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               {index + 1}
             </td>
             <td
               className="px-3 py-2 text-sm font-medium whitespace-nowrap text-center text-gray-600"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               {'User ' + cover.user}
@@ -45,13 +45,13 @@ export default function TopCover(props: Props) {
               </button>
               <button
                 className="self-stretch flex-grow"
-                data-testid="getButton"
+                data-testid="CoverGetButton"
                 onClick={() => dispatch(actions.editCurrent(cover))}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               <ul className="flex flex-wrap gap-1">
@@ -67,21 +67,21 @@ export default function TopCover(props: Props) {
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               {cover.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               {cover.likes}
             </td>
             <td
               className="whitespace-nowrap text-sm text-center font-medium sr-only sm:not-sr-only sm:px-3 sm:py-2"
-              data-testid="getButton"
+              data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">
