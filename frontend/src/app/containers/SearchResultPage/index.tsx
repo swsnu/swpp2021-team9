@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export type Props = {
-  hasresult: boolean;
+  hasResult: boolean;
 };
 
 export default function SearchResultPage(props: Props) {
@@ -37,7 +37,7 @@ export default function SearchResultPage(props: Props) {
   const [player] = useState(Player.getInstance());
   //props.hasresult = (key==='strawberry moon')
 
-  return props.hasresult ? (
+  return props.hasResult ? (
     <div data-testid="SearchResultPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
@@ -51,7 +51,7 @@ export default function SearchResultPage(props: Props) {
                   TITLE
                 </th>
                 <th scope="col" className={styles.th}>
-                  AUTHOR
+                  SINGER
                 </th>
                 <th scope="col" className={styles.th}>
                   <FontAwesomeIcon icon={faPlay} />
@@ -69,12 +69,11 @@ export default function SearchResultPage(props: Props) {
                 <ResultLine
                   key={resultline.title}
                   title={resultline.title}
-                  author={resultline.author}
+                  singer={resultline.singer}
                   view={resultline.view}
                   likes={resultline.likes}
                   onLineClicked={() => history.push(Song(0))}
-                  onAuthorClicked={() => history.push(Profile(0))}
-                  //onPlayClicked = {()=>player.setIndex(0)}
+                  onSingerClicked={() => history.push(Profile(0))}
                   onPlayClicked={() => {}}
                 />
               ))}
@@ -116,33 +115,3 @@ export default function SearchResultPage(props: Props) {
     </div>
   );
 }
-
-/*
-<ResultLine
-                title={dummyResultLines[0].title}
-                author={dummyResultLines[0].author}
-                likes={dummyResultLines[0].likes}
-                view={dummyResultLines[0].view}
-                onLineClicked={()=>history.push(Song(0))}
-                onAuthorClicked = {()=>history.push(Profile(0))}
-                onPlayClicked = {()=>player.setIndex(0)}
-              />
-              <ResultLine
-                title={dummyResultLines[1].title}
-                author={dummyResultLines[1].author}
-                likes={dummyResultLines[1].likes}
-                view={dummyResultLines[1].view}
-                onLineClicked={()=>history.push(Song(0))}
-                onAuthorClicked = {()=>history.push(Profile(0))}
-                onPlayClicked = {()=>player.setIndex(0)}
-              />
-              <ResultLine
-                title={dummyResultLines[2].title}
-                author={dummyResultLines[2].author}
-                likes={dummyResultLines[2].likes}
-                view={dummyResultLines[2].view}
-                onLineClicked={()=>history.push(Song(0))}
-                onAuthorClicked = {()=>history.push(Profile(0))}
-                onPlayClicked = {()=>player.setIndex(0)}
-              />
-              */

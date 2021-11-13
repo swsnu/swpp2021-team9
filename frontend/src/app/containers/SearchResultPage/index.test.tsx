@@ -36,15 +36,13 @@ function setup() {
     </Provider>,
   );
 
-  //const title = page.getAllByTestId('Title') as HTMLDataElement;
-  const addsongbutton = page.getByText(
+  const addSongButton = page.getByText(
     'Create New Song Page?',
   ) as HTMLButtonElement;
 
   return {
     page,
-    //title,
-    addsongbutton,
+    addSongButton,
   };
 }
 
@@ -83,7 +81,7 @@ test('should render', () => {
 
 test('should handle add song button correctly', () => {
   const set = setup();
-  fireEvent.click(set.addsongbutton);
+  fireEvent.click(set.addSongButton);
   expect(mockHistoryPush).toBeTruthy();
 });
 

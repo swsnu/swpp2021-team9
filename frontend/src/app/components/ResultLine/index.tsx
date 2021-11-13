@@ -9,43 +9,15 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   title: string;
-  author: string;
+  singer: string;
   view: number;
   likes: number;
   onLineClicked: () => void;
-  onAuthorClicked: () => void;
+  onSingerClicked: () => void;
   onPlayClicked: () => void;
 }
 
 export default function ResultLine(props: Props) {
-  /*
-  const [player] = useState(Player.getInstance());
-
-  const history = useHistory();
-
-  const [Form, setForm] = useState({
-    title: '',
-    singer: '',
-  });
-
-  const onLineClicked = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(Form);
-    history.push(Song(0));
-  };
-
-  const onAuthorClicked = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(Form);
-    history.push(Profile(0));
-  };
-
-  const onPlayClicked = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(Form);
-    player.setIndex(0);
-  };
-  */
   return (
     <div>
       <tr data-testid="ResultLine" className="hover:bg-gray-100 cursor-pointer">
@@ -64,10 +36,10 @@ export default function ResultLine(props: Props) {
           />
           <span
             data-testid="Author"
-            onClick={props.onAuthorClicked}
+            onClick={props.onSingerClicked}
             className="px-3 my-2 rounded-lg hover:bg-gray-300"
           >
-            {props.author}
+            {props.singer}
           </span>
           <button
             className="self-stretch flex-grow"

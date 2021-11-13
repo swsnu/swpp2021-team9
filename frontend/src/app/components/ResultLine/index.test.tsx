@@ -7,11 +7,11 @@ test('should render', () => {
   render(
     <ResultLine
       title="Mock_Title"
-      author="Mock_Author"
+      singer="Mock_Author"
       view={100}
       likes={1000}
       onLineClicked={() => {}}
-      onAuthorClicked={() => {}}
+      onSingerClicked={() => {}}
       onPlayClicked={() => {}}
     />,
   );
