@@ -5,7 +5,7 @@ import { useLocation } from 'react-router';
 import { render } from '@testing-library/react';
 import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
-import SearchResultPage, { Props } from '.';
+import SearchResultPage from '.';
 
 const store = configureAppStore();
 
