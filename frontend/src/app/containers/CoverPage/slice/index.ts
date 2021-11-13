@@ -24,14 +24,16 @@ const slice = createSlice({
       state.coverResponse.loading = true;
       return state;
     },
-    successCoverResponse(state, action: PayloadAction<any>) {
+    successCoverResponse(state, action: PayloadAction<CoverResponse>) {
       console.log('successCoverResponse', action, state.coverResponse);
       state.coverResponse.loading = false;
+      state.coverResponse.data = action.payload;
       return state;
     },
-    errorCoverResponse(state, action: PayloadAction<any>) {
+    errorCoverResponse(state, action: PayloadAction<string>) {
       console.log('errorCoverResponse', action, state.coverResponse);
       state.coverResponse.loading = false;
+      state.coverResponse.error = action.payload;
       return state;
     },
   },

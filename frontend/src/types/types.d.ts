@@ -56,6 +56,7 @@ interface CoverResponse {
     username: string;
     photo: string;
   };
+  category: string;
   song: Song;
   description: string;
   tags: string[];

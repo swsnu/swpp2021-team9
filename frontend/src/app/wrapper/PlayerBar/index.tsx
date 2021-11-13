@@ -121,24 +121,19 @@ export default function PlayerBar(props: Props) {
         className="flex h-full py-2 justify-center items-stretch text-xl"
       >
         <button
-          className="mx-1 sm:mx-3 px-2 outline-none"
+          className="mx-2 w-8 outline-none"
           id="prev-button"
           onClick={onPrevClicked}
         >
           <FontAwesomeIcon icon={faStepBackward} />
         </button>
         <button
-          className="mx-1 sm:mx-3 px-2 outline-none"
+          className="mx-2 w-8 outline-none"
           id="play-button"
           onClick={onPlayClicked}
         >
           {status === 'loading' ? (
-            <img
-              data-testid="loadingIcon"
-              style={{ width: '28px' }}
-              src={loadingGif}
-              alt="Loading"
-            />
+            <img data-testid="loadingIcon" src={loadingGif} alt="Loading" />
           ) : status === 'playing' ? (
             <FontAwesomeIcon data-testid="pauseIcon" icon={faPause} />
           ) : (
@@ -146,7 +141,7 @@ export default function PlayerBar(props: Props) {
           )}
         </button>
         <button
-          className="mx-1 sm:mx-3 px-2 outline-none"
+          className="mx-2 w-8 outline-none"
           id="next-button"
           onClick={onNextClicked}
         >
