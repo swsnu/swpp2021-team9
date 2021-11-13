@@ -5,7 +5,7 @@ import AlbumImage from '../../components/Album/AlbumImage.png';
 import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
 import { dummyResultLines } from './dummy';
-import { Song, Profile } from 'utils/urls';
+import { Song } from 'utils/urls';
 import Player from 'app/helper/Player';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,16 +23,18 @@ export default function SearchResultPage(props: Props) {
   const { search } = useLocation();
   const query = useMemo(() => new URLSearchParams(search), [search]);
   const key = query.get('key') ?? '';
+  console.log(key);
 
   const [Form, setForm] = useState({});
   const history = useHistory();
 
   const onAddSongClicked = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(Form);
     history.push(CreateSong());
   };
 
-  const [player] = useState(Player.getInstance());
+  const player = useMemo(() => Player.getInstance(), []);
   //props.hasresult = (key==='strawberry moon')
 
   return props.hasResult ? (

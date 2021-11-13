@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Album from '../../components/Album/index';
 import { dummyAlbums } from './dummy';
@@ -9,7 +9,7 @@ export type Props = {};
 
 export default function MainPage(props: Props) {
   const history = useHistory();
-  const [player] = useState(Player.getInstance());
+  const player = useMemo(() => Player.getInstance(), []);
 
   const songexample: SongInfo = {
     title: '',

@@ -8,7 +8,6 @@ import MainPage from '.';
 
 const store = configureAppStore();
 
-//let player = Player.getInstance();
 const mockHistoryPush = jest.fn();
 
 jest.mock('react-router-dom', () => ({
