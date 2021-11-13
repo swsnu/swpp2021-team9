@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import Album from '.';
-import { Provider } from 'react-redux';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import AlbumImage from '../Album/AlbumImage.png';
 

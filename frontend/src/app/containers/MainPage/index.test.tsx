@@ -3,11 +3,8 @@ import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import { render, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import MainPage from '.';
-import Player from 'app/helper/Player';
 
 const store = configureAppStore();
 

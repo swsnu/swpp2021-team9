@@ -23,14 +23,12 @@ export default function SearchResultPage(props: Props) {
   const { search } = useLocation();
   const query = useMemo(() => new URLSearchParams(search), [search]);
   const key = query.get('key') ?? '';
-  console.log(key);
 
   const [Form, setForm] = useState({});
   const history = useHistory();
 
   const onAddSongClicked = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(Form);
     history.push(CreateSong());
   };
 

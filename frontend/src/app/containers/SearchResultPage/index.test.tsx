@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import { useLocation } from 'react-router';
 import { render } from '@testing-library/react';
-import { fireEvent, screen } from '@testing-library/dom';
+import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SearchResultPage from '.';
 
