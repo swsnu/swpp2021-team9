@@ -63,13 +63,12 @@ const slice = createSlice({
       );
       state.current = null;
     },
-    addCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
+    getCovers(state, action: PayloadAction<(Cover | undefined)[]>) {
+      nextItemID = 0;
+      state.combination = [];
+      state.current = null;
       action.payload.forEach(cover => {
         if (!cover) return;
-        const alreadyExist = state.combination.find(
-          item => item.cover && item.cover.id === cover.id,
-        );
-        if (alreadyExist) return;
 
         const newItem: CombinationItem = {
           id: nextItemID++,
@@ -82,7 +81,7 @@ const slice = createSlice({
   },
 });
 
-export const { actions: songActions } = slice;
+export const { actions: songActions, reducer: songReducer } = slice;
 
 export const useSongSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
