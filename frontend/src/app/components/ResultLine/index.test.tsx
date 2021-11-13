@@ -11,7 +11,6 @@ test('should render', () => {
       view={100}
       likes={1000}
       onLineClicked={() => {}}
-      onSingerClicked={() => {}}
       onPlayClicked={() => {}}
     />,
   );

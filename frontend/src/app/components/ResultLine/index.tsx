@@ -13,72 +13,65 @@ interface Props {
   view: number;
   likes: number;
   onLineClicked: () => void;
-  onSingerClicked: () => void;
   onPlayClicked: () => void;
 }
 
 export default function ResultLine(props: Props) {
   return (
-    <div>
-      <tr data-testid="ResultLine" className="hover:bg-gray-100 cursor-pointer">
-        <td
-          data-testid="Title"
+    <tr data-testid="ResultLine" className="hover:bg-gray-100 cursor-pointer">
+      <td
+        data-testid="Title"
+        onClick={props.onLineClicked}
+        className="py-2 text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.title}
+      </td>
+
+      <td className="flex font-md font-medium whitespace-nowrap text-center">
+        <button
+          className="self-stretch flex-grow"
           onClick={props.onLineClicked}
-          className="py-2 text-md font-medium whitespace-nowrap text-center"
-        >
-          {props.title}
-        </td>
-
-        <td className="flex font-md font-medium whitespace-nowrap text-center">
-          <button
-            className="self-stretch flex-grow"
-            onClick={props.onLineClicked}
-          />
-          <span
-            data-testid="Author"
-            onClick={props.onSingerClicked}
-            className="px-3 my-2 rounded-lg hover:bg-gray-300"
-          >
-            {props.singer}
-          </span>
-          <button
-            className="self-stretch flex-grow"
-            onClick={props.onLineClicked}
-          />
-        </td>
-
-        <td
+        />
+        <span data-testid="Singer" className="px-3 my-2 rounded-lg">
+          {props.singer}
+        </span>
+        <button
+          className="self-stretch flex-grow"
           onClick={props.onLineClicked}
-          className="text-md font-medium whitespace-nowrap text-center"
-        >
-          {props.view}
-        </td>
+        />
+      </td>
 
-        <td
+      <td
+        onClick={props.onLineClicked}
+        className="text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.view}
+      </td>
+
+      <td
+        onClick={props.onLineClicked}
+        className="py-2 text-md font-medium whitespace-nowrap text-center"
+      >
+        {props.likes}
+      </td>
+
+      <td className="flex whitespace-nowrap text-center">
+        <button
+          className="self-stretch flex-grow"
           onClick={props.onLineClicked}
-          className="py-2 text-md font-medium whitespace-nowrap text-center"
+        />
+        <button
+          data-testid="Play"
+          onClick={props.onPlayClicked}
+          className="py-2 text-lg font-semibold"
         >
-          {props.likes}
-        </td>
-
-        <td className="flex whitespace-nowrap text-center">
-          <button
-            className="self-stretch flex-grow"
-            onClick={props.onLineClicked}
-          />
-          <button
-            data-testid="Play"
-            onClick={props.onPlayClicked}
-            className="py-2 text-lg font-semibold"
-          >
-            <FontAwesomeIcon icon={faPlay} />
-          </button>
-          <button
-            className="self-stretch flex-grow"
-            onClick={props.onLineClicked}
-          />
-        </td>
-      </tr>
-    </div>
+          <FontAwesomeIcon icon={faPlay} />
+        </button>
+        <button
+          className="self-stretch flex-grow"
+          onClick={props.onLineClicked}
+        />
+      </td>
+    </tr>
   );
 }

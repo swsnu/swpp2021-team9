@@ -73,7 +73,6 @@ export default function SearchResultPage(props: Props) {
                   view={resultline.view}
                   likes={resultline.likes}
                   onLineClicked={() => history.push(Song(0))}
-                  onSingerClicked={() => history.push(Profile(0))}
                   onPlayClicked={() => {}}
                 />
               ))}

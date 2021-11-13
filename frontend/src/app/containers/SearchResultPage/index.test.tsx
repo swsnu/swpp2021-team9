@@ -28,7 +28,7 @@ function setup() {
         <Switch>
           <Route
             path={path}
-            render={() => <SearchResultPage hasresult={false} />}
+            render={() => <SearchResultPage hasResult={false} />}
           />
           <Redirect to={path} />
         </Switch>
@@ -56,7 +56,7 @@ function setup2() {
         <Switch>
           <Route
             path={path}
-            render={() => <SearchResultPage hasresult={true} />}
+            render={() => <SearchResultPage hasResult={true} />}
           />
           <Redirect to={path} />
         </Switch>
