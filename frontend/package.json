@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "6.4.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
+    "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.1.16",
     "@headlessui/react": "1.4.2",
@@ -71,6 +72,7 @@
     "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "13.5.0",
+    "@types/enzyme": "3.10.10",
     "autoprefixer": "^9",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-17-updated": "1.0.2",

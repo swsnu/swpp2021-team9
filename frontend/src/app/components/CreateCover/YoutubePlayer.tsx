@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import ReactPlayer from 'react-player';
 interface Props {}
 
-export default function CustomPlayer({}: Props) {
+export default function YoutubePlayer(props: Props) {
   const player = useRef<any>(null);
   // const [url, setUrl] = useState<String | null>(null);
   // const [pip, setPip] = useState(false);

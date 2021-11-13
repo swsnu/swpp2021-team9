@@ -33,14 +33,14 @@ export default class TrackPlayer {
     this.track = track;
     this.audios = [];
     this.setStatus('loading');
-    this.track.sources.forEach(async (source, idx) => {
+    this.track.sources.forEach((source, idx) => {
       const audio = new Audio();
       this.audios.push(audio);
       audio.src = source;
-      audio.load();
       audio.addEventListener('canplay', () => {
         this.checkLoading();
       });
+      audio.load();
     });
   }
 
@@ -50,7 +50,6 @@ export default class TrackPlayer {
 
   play() {
     if (this.getMinReadyState() < 3) {
-      console.log('not ready', this.getMinReadyState());
       this.setStatus('loading');
       return false;
     }
@@ -62,11 +61,12 @@ export default class TrackPlayer {
           const promise = audio.play();
           promise.catch(() => this.setStatus('pause'));
         }
-        console.log(audio.readyState);
       });
+      this.setStatus('playing');
+      return true;
+    } else {
+      return false;
     }
-    this.setStatus('playing');
-    return true;
   }
 
   pause() {

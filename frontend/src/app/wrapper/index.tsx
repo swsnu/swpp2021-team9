@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import './Wrapper.css';
 import Header from './Header';
 import PlayerBar from './PlayerBar';
 import { selectWrapper } from './slice/selectors';
 import { useWrapperSlice } from './slice';
 
 import * as url from 'utils/urls';
+import mockPlaylist from 'app/helper/mockPlayList';
+import Player from 'app/helper/Player';
 
 interface Props {
   children?: React.ReactChild | React.ReactChild[];
@@ -17,11 +18,30 @@ interface Props {
 
 export default function Wrapper(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { actions, reducer } = useWrapperSlice();
+  const player = React.useMemo(() => Player.getInstance(), []);
+  useWrapperSlice();
   const history = useHistory();
   const wrapperState = useSelector(selectWrapper);
 
   const user = wrapperState.user;
+
+  useEffect(() => {
+    const trackList: TrackInfo[] = [];
+    mockPlaylist.forEach(v => {
+      trackList.push({
+        song: {
+          title: v.name,
+          singer: v.artist,
+          category: 'category',
+          reference: 'ref',
+          description: 'des',
+        },
+        sources: [v.source],
+        like: false,
+      });
+    });
+    player.setTracks(trackList);
+  }, [player]);
 
   const onLogoClicked = useCallback(() => {
     history.push(url.Main());
@@ -29,11 +49,11 @@ export default function Wrapper(props: Props) {
 
   const onSearchClicked = useCallback(
     (key: string) => {
+      if (key === '') return;
       history.push({
         pathname: url.SearchResult(),
         search: `?key=${key}`,
       });
-      console.log('onSearchClicked', key);
     },
     [history],
   );
@@ -55,7 +75,10 @@ export default function Wrapper(props: Props) {
   }, [history, user]);
 
   return (
-    <div className="Wrapper" data-testid="Wrapper">
+    <div
+      data-testid="Wrapper"
+      className="min-w-full min-h-full flex flex-col justify-between"
+    >
       <Header
         user={user}
         onSearchClicked={onSearchClicked}
@@ -65,7 +88,7 @@ export default function Wrapper(props: Props) {
         onProfileClicked={onProfileClicked}
         onLogoClicked={onLogoClicked}
       />
-      <div className="Content">{props.children}</div>
+      <div className="relative self-stretch pt-4 pb-16">{props.children}</div>
       <PlayerBar />
     </div>
   );

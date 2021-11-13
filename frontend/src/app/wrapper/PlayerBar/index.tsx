@@ -1,21 +1,23 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
-import { ReactComponent as PrevSvg } from 'res/prev-button.svg';
-import { ReactComponent as NextSvg } from 'res/next-button.svg';
-import { ReactComponent as PlaySvg } from 'res/play-button.svg';
-import { ReactComponent as PauseSvg } from 'res/pause-button.svg';
-import { ReactComponent as LikeOutlined } from 'res/thumb_up_black_outlined.svg';
-import { ReactComponent as LikeFilled } from 'res/thumb_up_black_filled.svg';
 import loadingGif from 'res/loading.gif';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHeart,
+  faPlay,
+  faPause,
+  faStepBackward,
+  faStepForward,
+} from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faEmptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 import Player from 'app/helper/Player';
 import { useInterval } from 'app/helper/Hooks';
-import mockPlaylist from 'app/helper/mockPlayList';
 
 interface Props {}
 
 export default function PlayerBar(props: Props) {
-  const [player] = useState(Player.getInstance());
+  const player = useMemo(() => Player.getInstance(), []);
   const [currLength, setCurrLength] = useState(0);
   const [length, setLength] = useState(0);
   const [status, setStatus] = useState('');
@@ -26,26 +28,9 @@ export default function PlayerBar(props: Props) {
   useEffect(() => {
     player.onStatusChange = newStatus => setStatus(newStatus);
     player.onTrackChanged = newTrack => setTrack(newTrack);
-
-    const trackList: TrackInfo[] = [];
-    mockPlaylist.forEach(v => {
-      trackList.push({
-        song: {
-          title: v.name,
-          singer: v.artist,
-          category: 'category',
-          reference: 'ref',
-          description: 'des',
-        },
-        sources: [v.source],
-        like: false,
-      });
-    });
-    player.setTracks(trackList);
   }, [player]);
 
   const onPlayClicked = useCallback(() => {
-    console.log('onPlayClicked');
     if (player.isPaused()) {
       player.play();
     } else {
@@ -54,17 +39,14 @@ export default function PlayerBar(props: Props) {
   }, [player]);
 
   const onPrevClicked = useCallback(() => {
-    console.log('onPrevClicked');
     player.playPrev();
   }, [player]);
 
   const onNextClicked = useCallback(() => {
-    console.log('onNextClicked');
     player.playNext();
   }, [player]);
 
   const onLikeClicked = useCallback(() => {
-    console.log('onLikeClicked');
     if (track) {
       const newTrack = { ...track, like: !track?.like };
       setTrack(newTrack);
@@ -77,11 +59,8 @@ export default function PlayerBar(props: Props) {
     setLength(Math.ceil(duration));
     setCurrLength(Math.ceil(currentTime));
     const currnetPercent = (currentTime / duration) * 100;
-    if (bar.current != null) {
-      bar.current.style.width = currnetPercent + '%';
-    }
+    bar.current!.style.width = currnetPercent + '%';
     if (currentTime === duration) {
-      console.log('Finish Play this song');
       player.playNext();
     }
   }, [player]);
@@ -107,40 +86,90 @@ export default function PlayerBar(props: Props) {
   useInterval(updateProgress, 1000);
 
   return (
-    <div data-testid="PlayerBar" className="PlayerBar">
-      <div className="info">
-        <div className="text">
+    <div
+      data-testid="PlayerBar"
+      className="fixed bottom-0 left-0 h-16 pt-1 px-4 sm:px-8 w-full self-stretch flex items-center justify-between bg-gray-100"
+    >
+      <div id="info" className="h-full py-2 flex w-6/12 items-center">
+        <div className="px-2 py-1 font-semibold border-2 border-black rounded-lg">
           {track
             ? `${track.song.title} - ${track.song.singer}`
-            : 'Selete Music'}
+            : 'Select Music'}
         </div>
-        <button className="svgButton" onClick={onLikeClicked}>
-          {track?.like ? <LikeFilled /> : <LikeOutlined />}
-        </button>
-      </div>
-      <div className="controller">
-        <button className="svgButton" id="prev-button" onClick={onPrevClicked}>
-          <PrevSvg className="svgButton" />
-        </button>
-        <button className="svgButton" id="play-button" onClick={onPlayClicked}>
-          {status === 'loading' ? (
-            <img style={{ width: '28px' }} src={loadingGif} alt="Loading" />
-          ) : status === 'playing' ? (
-            <PauseSvg />
+        <button
+          className="h-full mx-2 px-2 text-xl outline-none"
+          id="like-button"
+          onClick={onLikeClicked}
+        >
+          {track?.like ? (
+            <FontAwesomeIcon
+              data-testid="likeIcon"
+              icon={faHeart}
+              className="text-red-500"
+            />
           ) : (
-            <PlaySvg />
+            <FontAwesomeIcon
+              data-testid="unLikeIcon"
+              icon={faEmptyHeart}
+              className="text-red-400"
+            />
           )}
         </button>
-        <button className="svgButton" id="next-button" onClick={onNextClicked}>
-          <NextSvg className="svgButton" />
+      </div>
+      <div
+        id="controller"
+        className="flex h-full py-2 justify-center items-stretch text-xl"
+      >
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="prev-button"
+          onClick={onPrevClicked}
+        >
+          <FontAwesomeIcon icon={faStepBackward} />
+        </button>
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="play-button"
+          onClick={onPlayClicked}
+        >
+          {status === 'loading' ? (
+            <img
+              data-testid="loadingIcon"
+              style={{ width: '28px' }}
+              src={loadingGif}
+              alt="Loading"
+            />
+          ) : status === 'playing' ? (
+            <FontAwesomeIcon data-testid="pauseIcon" icon={faPause} />
+          ) : (
+            <FontAwesomeIcon data-testid="playIcon" icon={faPlay} />
+          )}
+        </button>
+        <button
+          className="mx-1 sm:mx-3 px-2 outline-none"
+          id="next-button"
+          onClick={onNextClicked}
+        >
+          <FontAwesomeIcon icon={faStepForward} />
         </button>
       </div>
-      <div className="timer">
+      <div id="timer" className="text-right w-6/12 text-gray-600 font-medium">
         {`${formatMinute(currLength)} / ${formatMinute(length)}`}
       </div>
-      <div ref={progress} className="progress">
-        <div className="progressCenter" onClick={e => onProgressClick(e)}>
-          <div ref={bar} className="progressBar"></div>
+      <div
+        ref={progress}
+        className="absolute left-0 top-0 w-full flex justify-evenly items-center"
+      >
+        <div
+          data-testid="progressBox"
+          className="w-full h-1.5 bg-gray-300 hover:h-2.5 cursor-pointer"
+          onClick={onProgressClick}
+        >
+          <div
+            data-testid="progressFill"
+            ref={bar}
+            className="w-0 h-full bg-indigo-500"
+          ></div>
         </div>
       </div>
     </div>
