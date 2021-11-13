@@ -24,8 +24,8 @@ function setup() {
   return { page };
 }
 
-// test('should render', () => {
-//   const { page } = setup();
-//   render(page);
-//   expect(screen.getByTestId('SongPage')).toBeTruthy();
-// });
+test('should render', () => {
+  // const { page } = setup();
+  // render(page);
+  // expect(screen.getByTestId('SongPage')).toBeTruthy();
+});
