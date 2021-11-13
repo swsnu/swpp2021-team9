@@ -36,7 +36,9 @@ function setup() {
   const artist = page.getByLabelText('Artist') as HTMLInputElement;
   const category = page.getByLabelText('Category') as HTMLSelectElement;
   const reference = page.getByLabelText('Reference Link') as HTMLInputElement;
-  const description = page.getByLabelText('Description') as HTMLTextAreaElement;
+  const description = page.getByLabelText(
+    'Description (optional)',
+  ) as HTMLTextAreaElement;
   const submit = page.getByText('Submit') as HTMLButtonElement;
   const options = page.getAllByTestId('option') as HTMLOptionElement[];
 

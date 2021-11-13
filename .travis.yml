@@ -2,18 +2,9 @@
 dist: bionic
 jobs:
   include:
-    - language: python
-      python: "3.7.9"
-      install:
-        - cd backend
-        - pip install -r requirements.txt
-      script: 
-        - pylint app
-        - cd app
-        - coverage run --source='.' manage.py test
-        - coverage xml
     - language: node_js
       node_js: 14
+      python: "3.7.9"
       addons:
         sonarcloud:
           organization: "swsnu"
@@ -22,9 +13,20 @@ jobs:
       before-install:
         - npm install -g yarn
       install:
+        - source ~/virtualenv/python3.7/bin/activate
+        - pip install -r backend/requirements.txt
+        - pip install coveralls
         - cd frontend
         - yarn install
+        - yarn global add coveralls
+        - gem install coveralls-lcov
+        - cd ..
       script:
-        - ./node_modules/.bin/eslint src
+        - cd frontend && ./node_modules/.bin/eslint src
         - yarn test --coverage --watchAll=false
-        - cd .. && sonar-scanner
+        - coveralls-lcov -v -n coverage/lcov.info > coverage.json
+        - cd ../backend && pylint app
+        - cd app && coverage run --source='.' manage.py test
+        - coverage xml
+        - coveralls --merge=../../frontend/coverage.json
+        - cd ../../ && sonar-scanner

@@ -31,7 +31,7 @@ export default class Player extends TrackPlayer {
       console.log(this.tracks[idx]);
     } else {
       throw Error(
-        `Out of index of tracks idx: ${idx}, lenth: ${this.tracks.length}`,
+        `Out of index of tracks idx: ${idx}, length: ${this.tracks.length}`,
       );
     }
   }
