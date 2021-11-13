@@ -64,13 +64,11 @@ function setup2() {
     </Provider>,
   );
   const title = page.getAllByTestId('Title')[0] as HTMLDataElement;
-  const author = page.getAllByTestId('Author')[0] as HTMLButtonElement;
   const play = page.getAllByTestId('Play')[0] as HTMLButtonElement;
 
   return {
     page,
     title,
-    author,
     play,
   };
 }
@@ -88,12 +86,6 @@ test('should handle add song button correctly', () => {
 test('should handle title button correctly', () => {
   const set2 = setup2();
   fireEvent.click(set2.title);
-  expect(mockHistoryPush).toBeTruthy();
-});
-
-test('should handle author button correctly', () => {
-  const set2 = setup2();
-  fireEvent.click(set2.author);
   expect(mockHistoryPush).toBeTruthy();
 });
 
