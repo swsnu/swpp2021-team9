@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Album from '../../components/Album/index';
 import { dummyAlbums } from './dummy';
@@ -9,7 +9,20 @@ export type Props = {};
 
 export default function MainPage(props: Props) {
   const history = useHistory();
-  const [player] = useState(Player.getInstance());
+  const player = useMemo(() => Player.getInstance(), []);
+
+  const songexample: SongInfo = {
+    title: '',
+    singer: '',
+    category: '',
+    reference: '',
+    description: '',
+  };
+  const trackexample: TrackInfo = {
+    song: songexample,
+    sources: ['hello', 'world'],
+    like: false,
+  };
 
   return (
     <div
@@ -24,7 +37,10 @@ export default function MainPage(props: Props) {
           singer={album.singer}
           thumbnail={album.thumbnail}
           onClickTitle={() => history.push(Song(album.id))}
-          onClickPlay={() => player.setIndex(0)} // TODO: play the corresponding song
+          onClickPlay={() => {}}
+          //player.addTrack(trackexample)
+          //player.setIndex(album.id)
+          //} // TODO: play the corresponding song
         />
       ))}
 

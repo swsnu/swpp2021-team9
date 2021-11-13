@@ -5,12 +5,14 @@ import AlbumImage from '../../components/Album/AlbumImage.png';
 import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
 import { dummyResultLines } from './dummy';
+import { Song } from 'utils/urls';
+import Player from 'app/helper/Player';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export type Props = {
-  hasresult: boolean;
+  hasResult: boolean;
 };
 
 export default function SearchResultPage(props: Props) {
@@ -32,7 +34,10 @@ export default function SearchResultPage(props: Props) {
     history.push(CreateSong());
   };
 
-  return key === 'strawberry moon' ? (
+  const player = useMemo(() => Player.getInstance(), []);
+  //props.hasresult = (key==='strawberry moon')
+
+  return props.hasResult ? (
     <div data-testid="SearchResultPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         <h2 className="pl-5 sm:pl-0 text-left text-m font-bold text-gray-600 tracking-wider">
@@ -46,7 +51,7 @@ export default function SearchResultPage(props: Props) {
                   TITLE
                 </th>
                 <th scope="col" className={styles.th}>
-                  AUTHOR
+                  SINGER
                 </th>
                 <th scope="col" className={styles.th}>
                   <FontAwesomeIcon icon={faPlay} />
@@ -60,24 +65,17 @@ export default function SearchResultPage(props: Props) {
               </tr>
             </thead>
             <tbody>
-              <ResultLine
-                title={dummyResultLines[0].title}
-                author={dummyResultLines[0].author}
-                likes={dummyResultLines[0].likes}
-                view={dummyResultLines[0].view}
-              />
-              <ResultLine
-                title={dummyResultLines[1].title}
-                author={dummyResultLines[1].author}
-                likes={dummyResultLines[1].likes}
-                view={dummyResultLines[1].view}
-              />
-              <ResultLine
-                title={dummyResultLines[2].title}
-                author={dummyResultLines[2].author}
-                likes={dummyResultLines[2].likes}
-                view={dummyResultLines[2].view}
-              />
+              {dummyResultLines.map(resultline => (
+                <ResultLine
+                  key={resultline.title}
+                  title={resultline.title}
+                  singer={resultline.singer}
+                  view={resultline.view}
+                  likes={resultline.likes}
+                  onLineClicked={() => history.push(Song(0))}
+                  onPlayClicked={() => {}}
+                />
+              ))}
             </tbody>
           </table>
         </div>

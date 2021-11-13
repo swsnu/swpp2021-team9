@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor.js';
 import { faPlay, faPause, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import WaveformSetButton from 'app/components/CreateCover/WaveformSetButton';
 const formWaveSurferOptions = ref => ({
   container: ref,
   waveColor: '#eee',
@@ -39,6 +40,8 @@ export default function Waveform({ url }) {
   const [volume, setVolume] = useState(0.5);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const [isSetStartClicked, setIsSetStartClicked] = useState(false);
+  const [isSetEndClicked, setIsSetEndClicked] = useState(false);
   // create new WaveSurfer instance
   // On component mount and when url changes
   useEffect(() => {
@@ -68,16 +71,21 @@ export default function Waveform({ url }) {
     setPlay(!playing);
     wavesurfer.current.playPause();
   };
-  const getCurrentTime = (isStart: boolean) => {
-    const currTime = wavesurfer.current.getCurrentTime();
-    console.log('getCurrentTime', currTime);
-    if (isStart) {
-      setStartTime(currTime);
-      wavesurfer.current.cursor.showCursor();
-    } else {
-      setEndTime(currTime);
-    }
-  };
+
+  const getCurrentTime = useCallback(
+    (isStart: boolean) => {
+      const currTime = wavesurfer.current.getCurrentTime();
+      console.log('getCurrentTime', currTime);
+      if (isStart) {
+        setStartTime(currTime);
+        wavesurfer.current.cursor.showCursor();
+      } else {
+        setEndTime(currTime);
+      }
+    },
+    [isSetStartClicked, isSetEndClicked],
+  );
+
   const onVolumeChange = e => {
     const { target } = e;
     const newVolume = +target.value;
@@ -93,7 +101,7 @@ export default function Waveform({ url }) {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex relative flex-col">
       <div id="waveform" className="relative border-4" ref={waveformRef} />
       <div className="inline-flex p-1 space-x-20 justify-center items-center">
         <button onClick={handlePlayPause}>
@@ -117,21 +125,22 @@ export default function Waveform({ url }) {
           </label>
         </div>
       </div>
+
       <div className="mt-10 space-x-20">
-        <button
-          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300 "
-          type="button"
-          onClick={() => getCurrentTime(true)}
-        >
-          Set Start
-        </button>
-        <button
-          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-          type="button"
-          onClick={() => getCurrentTime(false)}
-        >
-          Set End
-        </button>
+        {/* 버튼 컴포넌트 */}
+        <WaveformSetButton
+          msg={'Set Start'}
+          isStart={true}
+          setIsClicked={setIsSetStartClicked}
+          getCurrentTime={getCurrentTime}
+        />
+        <WaveformSetButton
+          msg={'Set End'}
+          isStart={false}
+          setIsClicked={setIsSetEndClicked}
+          getCurrentTime={getCurrentTime}
+        />
+
         <button
           className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
           type="button"
