@@ -11,13 +11,11 @@ type CoverInfo = {
 };
 
 export interface CreateCoverState {
-  name: string;
   audioURL: string | null;
   info: {};
 }
 
 export const initialState: CreateCoverState = {
-  name: 'createCover',
   audioURL: null,
   info: {},
 };

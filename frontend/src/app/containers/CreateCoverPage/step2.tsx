@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Song } from 'utils/urls';
+import { useDispatch } from 'react-redux';
+import { useCreateCoverSlice } from './slice';
 
 export type Props = {};
 
+export interface CoverForm {
+  title: string;
+  category: string;
+  tags: string[];
+  instrumentType: string;
+  description: string;
+}
+
+const initialForm: CoverForm = {
+  title: '',
+  category: '0',
+  tags: [],
+  instrumentType: '',
+  description: '',
+};
+
 export default function CreateCoverInfoPage(props: Props) {
   const history = useHistory();
-  const [Form, setForm] = useState({
-    title: '',
-    category: '0',
-    instrumentType: '',
-    tags: [],
-    description: '',
-  });
+  const dispatch = useDispatch();
+  const { actions } = useCreateCoverSlice();
+
+  const [Form, setForm] = useState(initialForm);
+  const [tagInput, setTagInput] = useState<string>('');
 
   const categories = ['Pop', 'Rock', 'Hip-hop', 'Jazz'];
 
@@ -25,9 +41,17 @@ export default function CreateCoverInfoPage(props: Props) {
     setForm({ ...Form, [key]: e.currentTarget.value });
   };
 
+  const onKeyPress = e => {
+    if (e.key === 'Enter') {
+      setForm({ ...Form, tags: [...Form.tags, tagInput] });
+      setTagInput('');
+    }
+  };
+
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(Form);
+    dispatch(actions.setInfo(Form));
     history.push(Song(0));
   };
 
@@ -41,10 +65,14 @@ export default function CreateCoverInfoPage(props: Props) {
     label: 'block text-sm font-medium text-gray-700',
     input:
       'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md',
+    tag: 'text-sm font-medium',
   };
 
   return (
-    <div data-testid="CreateSongPage" className="flex flex-col items-center">
+    <div
+      data-testid="CreateCoverInfoPage"
+      className="flex flex-col items-center"
+    >
       <h3 className="text-lg font-medium leading-6 text-gray-900">
         Cover's Detail Information.
       </h3>
@@ -54,6 +82,7 @@ export default function CreateCoverInfoPage(props: Props) {
 
       <div className="w-full sm:w-3/4 max-w-screen-md m-5">
         <form
+          data-testid="form"
           onSubmit={onSubmitForm}
           className="shadow border overflow-hidden sm:rounded-md"
         >
@@ -64,6 +93,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   Title
                 </label>
                 <input
+                  data-testid="title"
                   type="text"
                   name="title"
                   id="title"
@@ -78,6 +108,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   Category
                 </label>
                 <select
+                  data-testid="select"
                   name="category"
                   id="category"
                   value={Form.category}
@@ -85,7 +116,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   className="mt-1 block w-full py-1 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
                   {categories.map((item, index) => (
-                    <option data-testid="option" value={index} key={index}>
+                    <option value={index} key={index}>
                       {item}
                     </option>
                   ))}
@@ -97,6 +128,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   Instrument Type
                 </label>
                 <input
+                  data-testid="instrument"
                   type="text"
                   name="instrumentType"
                   id="instrumentType"
@@ -110,12 +142,19 @@ export default function CreateCoverInfoPage(props: Props) {
                 <label htmlFor="tags" className={styles.label}>
                   Tags (optional)
                 </label>
+                <p className={styles.tag}>
+                  {Form.tags.map(tag => {
+                    return `#${tag} `;
+                  })}
+                </p>
                 <input
+                  data-testid="tag-input"
                   type="text"
-                  name="tags"
-                  id="tags"
-                  value={Form.tags}
-                  onChange={e => onChangeForm(e, 'tags')}
+                  name="tagInput"
+                  id="tagInput"
+                  value={tagInput}
+                  onChange={e => setTagInput(e.target.value)}
+                  onKeyPress={onKeyPress}
                   className={styles.input}
                 />
               </div>
@@ -125,6 +164,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   Description (optional)
                 </label>
                 <textarea
+                  data-testid="description"
                   name="description"
                   id="description"
                   rows={5}
@@ -137,6 +177,7 @@ export default function CreateCoverInfoPage(props: Props) {
           </div>
           <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button
+              data-testid="submit-btn"
               type="submit"
               disabled={submitDisabled()}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
