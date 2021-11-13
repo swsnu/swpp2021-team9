@@ -11,10 +11,12 @@ import { WrapperState } from './slice';
 
 import * as Search from 'app/components/Search';
 
+jest.mock('app/helper/TrackPlayer');
+
 const store = configureAppStore();
 
 function setup() {
-  const path = '/searchresult';
+  const path = '/';
   const page = (
     <Provider store={store}>
       <BrowserRouter>
@@ -30,7 +32,7 @@ function setup() {
 
 describe('index', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   test('should render', () => {
@@ -68,7 +70,7 @@ describe('index', () => {
     fireEvent.click(profileButton!);
   });
 
-  test('should render signin and signup buttons when not logged in', () => {
+  test('should render signin and signup buttons when not logged in and logo', () => {
     jest.spyOn(console, 'log').mockImplementation();
     const mockState: WrapperState = {
       name: 'wrapper',
@@ -82,34 +84,37 @@ describe('index', () => {
     const signUpButton = container.querySelector('#signup_button');
     const signOutButton = container.querySelector('#signout_button');
     const profileButton = container.querySelector('#profile_button');
+    const logoButton = container.querySelector('#logo_button');
 
     expect(screen.getByTestId('Wrapper')).toBeTruthy();
     expect(signInButton).toBeTruthy();
     expect(signUpButton).toBeTruthy();
     expect(signOutButton).toBeNull();
     expect(profileButton).toBeNull();
+    expect(logoButton).toBeTruthy();
 
     fireEvent.click(signInButton!);
     fireEvent.click(signUpButton!);
+    fireEvent.click(logoButton!);
   });
 
   test('should get search key when click search button', () => {
     jest.spyOn(console, 'log').mockImplementation();
-    jest.spyOn(Search, 'default').mockImplementation((props: any) => {
-      return (
-        <div>
-          <input type="text" data-testid="mockSearchTerm" />
-          <button data-testid="mockSubmit" onClick={props.onSearchClicked} />
-        </div>
-      );
-    });
+    const mockState: WrapperState = {
+      name: 'wrapper',
+    };
+    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+    useSelectorMock.mockReturnValue(mockState);
     const { page } = setup();
     const { getByTestId } = render(page);
 
-    const mockSearchButton = getByTestId('mockSubmit');
-    const mockSearchInput = getByTestId('mockSearchTerm');
+    const mockSearchButton = getByTestId('submit');
+    const mockSearchInput = getByTestId('searchTerm');
 
     fireEvent.change(mockSearchInput, { target: { value: 'SEARCH_KEY' } });
+    fireEvent.click(mockSearchButton);
+
+    fireEvent.change(mockSearchInput, { target: { value: '' } });
     fireEvent.click(mockSearchButton);
   });
 });
