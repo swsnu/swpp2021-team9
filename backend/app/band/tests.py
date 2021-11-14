@@ -4,7 +4,7 @@ Test codes for band app
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from .models import Combination, Instrument, Song, Cover
+from .models import Instrument, Song, Cover, Combination, CoverTag, CoverLog, CombinationLog
 
 
 # pylint: disable=C0114
