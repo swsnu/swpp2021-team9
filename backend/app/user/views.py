@@ -9,6 +9,9 @@ from django.views import View
 from .serializers import UserSerializer
 from .models import CustomUser
 
+# pylint: disable=W0613, R0201
+# temporarily disable unused-argument, no-self-use warning
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """ViewSet for user"""

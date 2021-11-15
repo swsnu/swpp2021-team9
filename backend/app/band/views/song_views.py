@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.views import View
 
+# pylint: disable=W0613, R0201
+# temporarily disable unused-argument, no-self-use warning
+
 
 class SongView(View):
     """song/"""

@@ -10,9 +10,6 @@ from band.serializers import InstrumentSerializer
 from band.models import Instrument
 
 
-# pylint: disable=R0901
-
-
 class InstrumentView(viewsets.ModelViewSet):
     """Viewset for instrument"""
 
