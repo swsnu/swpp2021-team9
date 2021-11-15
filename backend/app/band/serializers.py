@@ -15,7 +15,7 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Instrument
-        fields = ["name"]
+        fields = ["id", "name"]
 
 
 class SongSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,7 +23,7 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Song
-        fields = ["title", "singer", "category", "reference", "description"]
+        fields = ["id", "title", "singer", "category", "reference", "description"]
 
 
 class CoverSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,6 +32,7 @@ class CoverSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cover
         fields = [
+            "id",
             "audio",
             "title",
             "category",
@@ -51,4 +52,4 @@ class CombinationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Combination
-        fields = ["view", "song", "covers", "likes"]
+        fields = ["id", "view", "song", "covers", "likes"]
