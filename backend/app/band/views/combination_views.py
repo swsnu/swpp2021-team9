@@ -2,30 +2,33 @@
 combination views for band
 TODO ("implement")
 """
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound
+from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.views import View
 
 
-# combination/<int:songid>/
 class CombinationSong(View):
-    def get(self, request: HttpRequest):
+    """combination/<int:songid>/"""
+
+    def get(self, request: HttpRequest, songid: int):
         return HttpResponse(status=200)
 
-    def post(self, request: HttpRequest):
+    def post(self, request: HttpRequest, songid: int):
         return HttpResponse(status=201)
 
 
-# combination/info/<int:id>/
 class CombinationInfo(View):
-    def get(self, request: HttpRequest):
+    """combination/info/<int:id>/"""
+
+    def get(self, request: HttpRequest, id: int):
         return HttpResponse(status=200)
 
 
-# combination/like/<int:id>/
 class CombinationLike(View):
-    def get(self, request: HttpRequest):
+    """combination/like/<int:id>/"""
+
+    def get(self, request: HttpRequest, id: int):
         return HttpResponse(status=200)
 
-    def put(self, request: HttpRequest):
+    def put(self, request: HttpRequest, id: int):
         return HttpResponse(status=200)

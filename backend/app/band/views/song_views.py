@@ -2,13 +2,14 @@
 song views for band
 TODO ("implement")
 """
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.views import View
 
 
-# song/
-class Song(View):
+class SongView(View):
+    """song/"""
+
     def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
@@ -16,22 +17,25 @@ class Song(View):
         return HttpResponse(status=201)
 
 
-# song/main/
 class SongMain(View):
+    """song/main/"""
+
     def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 
-# song/search/
 class SongSearch(View):
-    def get(self, request: HttpRequest):
+    """song/search/<str:key>/"""
+
+    def get(self, request: HttpRequest, key: str):
         return HttpResponse(status=200)
 
 
-# song/
 class SongInfo(View):
-    def get(self, request: HttpRequest):
+    """song/info/<int:id>/"""
+
+    def get(self, request: HttpRequest, id: int):
         return HttpResponse(status=200)
 
-    def put(self, request: HttpRequest):
+    def put(self, request: HttpRequest, id: int):
         return HttpResponse(status=200)

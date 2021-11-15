@@ -2,12 +2,14 @@
 instrument views for band
 TODO ("implement")
 """
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
-from django.http.request import HttpRequest
-from django.views import View
+# from django.http import HttpResponse
+# from django.http.request import HttpRequest
+# from django.views import View
+from rest_framework import viewsets
+from band.serializers import InstrumentSerializer
+from band.models import Instrument
 
 
-# instrument/
-class Instrument(View):
-    def get(self, request: HttpRequest):
-        return HttpResponse(status=200)
+class InstrumentView(viewsets.ModelViewSet):
+    queryset = Instrument.objects.all()
+    serializer_class = InstrumentSerializer

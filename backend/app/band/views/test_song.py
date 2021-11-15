@@ -5,38 +5,42 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class CombinationTestCase(TestCase):
-    """Tests for combination"""
+class SongTestCase(TestCase):
+    """Tests for song"""
 
     def setUp(self):
         pass
 
-    def test_combination_song(self):
+    def test_song(self):
         client = Client(enforce_csrf_checks=True)
         response = client.get("/api/token/")
         csrftoken = response.cookies["csrftoken"].value
 
-        response = client.get("/api/combination/1/")
+        response = client.get("/api/song/")
         self.assertEqual(response.status_code, 200)
 
-        response = client.post("/api/combination/1/", {}, HTTP_X_CSRFTOKEN=csrftoken)
+        response = client.post("/api/song/", {}, HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
 
-    def test_combination_info(self):
+    def test_song_main(self):
         client = Client(enforce_csrf_checks=True)
 
-        response = client.get("/api/combination/info/1/")
+        response = client.get("/api/song/main/")
         self.assertEqual(response.status_code, 200)
 
-    def test_combination_like(self):
+    def test_song_search(self):
+        client = Client(enforce_csrf_checks=True)
+
+        response = client.get("/api/song/search/123/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_song_info(self):
         client = Client(enforce_csrf_checks=True)
         response = client.get("/api/token/")
         csrftoken = response.cookies["csrftoken"].value
 
-        response = client.get("/api/combination/like/1/")
+        response = client.get("/api/song/info/1/")
         self.assertEqual(response.status_code, 200)
 
-        response = client.put(
-            "/api/combination/like/1/", {}, HTTP_X_CSRFTOKEN=csrftoken
-        )
+        response = client.put("/api/song/info/1/", {}, HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 200)
