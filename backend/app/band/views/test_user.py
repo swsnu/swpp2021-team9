@@ -1,8 +1,4 @@
 from django.test import TestCase, Client
-from band.models import *
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 
 class SongTestCase(TestCase):

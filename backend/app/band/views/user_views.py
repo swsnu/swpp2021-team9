@@ -29,13 +29,13 @@ class UserSignout(View):
 
 
 class UserInfo(View):
-    """user/info/<int:id>/"""
+    """user/info/<int:user_id>/"""
 
-    def get(self, request: HttpRequest, id: int):
+    def get(self, request: HttpRequest, user_id: int):
         return HttpResponse(status=200)
 
-    def put(self, request: HttpRequest, id: int):
+    def put(self, request: HttpRequest, user_id: int):
         return HttpResponse(status=200)
 
-    def delete(self, request: HttpRequest, id: int):
+    def delete(self, request: HttpRequest, user_id: int):
         return HttpResponse(status=204)

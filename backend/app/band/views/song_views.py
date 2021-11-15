@@ -32,10 +32,10 @@ class SongSearch(View):
 
 
 class SongInfo(View):
-    """song/info/<int:id>/"""
+    """song/info/<int:song_id>/"""
 
-    def get(self, request: HttpRequest, id: int):
+    def get(self, request: HttpRequest, song_id: int):
         return HttpResponse(status=200)
 
-    def put(self, request: HttpRequest, id: int):
+    def put(self, request: HttpRequest, song_id: int):
         return HttpResponse(status=200)
