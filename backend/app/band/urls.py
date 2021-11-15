@@ -52,7 +52,7 @@ urlpatterns = [
     ),
     # song urls
     path("song/main/", song_views.SongMain.as_view(), name="song_main"),
-    path("song/search/<str:key>/", song_views.SongSearch.as_view(), name="song_search"),
+    path("song/search/", song_views.SongSearch.as_view(), name="song_search"),
     path("song/info/<int:song_id>/", song_views.SongInfo.as_view(), name="song_info"),
     path("song/", song_views.SongView.as_view(), name="song"),
 ]

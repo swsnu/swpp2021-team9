@@ -25,9 +25,9 @@ class SongMain(View):
 
 
 class SongSearch(View):
-    """song/search/<str:key>/"""
+    """song/search/?q=<str:key>/"""
 
-    def get(self, request: HttpRequest, key: str):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 

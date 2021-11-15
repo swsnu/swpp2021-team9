@@ -27,7 +27,7 @@ class SongTestCase(TestCase):
     def test_song_search(self):
         client = Client(enforce_csrf_checks=True)
 
-        response = client.get("/api/song/search/123/")
+        response = client.get("/api/song/search/?q=123/")
         self.assertEqual(response.status_code, 200)
 
     def test_song_info(self):
