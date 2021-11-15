@@ -4,26 +4,28 @@ TODO ("implement")
 """
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound
 from django.http.request import HttpRequest
-from django.views.decorators.http import require_http_methods
+from django.views import View
 
 
-@require_http_methods(['GET', 'POST'])
-def combination_song(request: HttpRequest):
-    if request.method == 'GET':
+# combination/<int:songid>/
+class CombinationSong(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'POST':
+
+    def post(self, request: HttpRequest):
         return HttpResponse(status=201)
 
 
-@require_http_methods(['GET'])
-def combination_info(request: HttpRequest):
-    if request.method == 'GET':
+# combination/info/<int:id>/
+class CombinationInfo(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 
-@require_http_methods(['GET', 'PUT'])
-def combination_like(request: HttpRequest):
-    if request.method == 'GET':
+# combination/like/<int:id>/
+class CombinationLike(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'PUT':
+
+    def put(self, request: HttpRequest):
         return HttpResponse(status=200)

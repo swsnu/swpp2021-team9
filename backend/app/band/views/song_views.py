@@ -4,32 +4,34 @@ TODO ("implement")
 """
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.http.request import HttpRequest
-from django.views.decorators.http import require_http_methods
+from django.views import View
 
 
-@require_http_methods(['GET', 'POST'])
-def song(request: HttpRequest):
-    if request.method == 'GET':
+# song/
+class Song(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'POST':
+
+    def post(self, request: HttpRequest):
         return HttpResponse(status=201)
 
 
-@require_http_methods(['GET'])
-def song_main(request: HttpRequest):
-    if request.method == 'GET':
+# song/main/
+class SongMain(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 
-@require_http_methods(['GET'])
-def song_search(request: HttpRequest):
-    if request.method == 'GET':
+# song/search/
+class SongSearch(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 
-@require_http_methods(['GET', 'PUT'])
-def song_info(request: HttpRequest):
-    if request.method == 'GET':
+# song/
+class SongInfo(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'PUT':
+
+    def put(self, request: HttpRequest):
         return HttpResponse(status=200)

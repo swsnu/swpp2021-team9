@@ -2,38 +2,42 @@
 cover views for band
 TODO ("implement")
 """
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound
 from django.http.request import HttpRequest
-from django.views.decorators.http import require_http_methods
+from django.views import View
 
 
-@require_http_methods(['GET', 'POST'])
-def cover_song(request: HttpRequest):
-    if request.method == 'GET':
+# cover/<int:songid>/
+class CoverSong(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'POST':
+
+    def post(self, request: HttpRequest):
         return HttpResponse(status=201)
 
 
-@require_http_methods(['GET'])
-def cover_song_instrument(request: HttpRequest):
-    if request.method == 'GET':
+# cover/<int:songid>/<int:instrumentid>/
+class CoverSongInstrument(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
 
 
-@require_http_methods(['GET', 'PUT', 'DELETE'])
-def cover_info(request: HttpRequest):
-    if request.method == 'GET':
+# cover/info/<int:id>/
+class CoverInfo(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'PUT':
+
+    def put(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'DELETE':
+
+    def delete(self, request: HttpRequest):
         return HttpResponse(status=204)
 
 
-@require_http_methods(['GET', 'PUT'])
-def cover_like(request: HttpRequest):
-    if request.method == 'GET':
+# cover/like/<int:id>/
+class CoverLike(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
-    elif request.method == 'PUT':
+
+    def put(self, request: HttpRequest):
         return HttpResponse(status=200)

@@ -4,10 +4,10 @@ TODO ("implement")
 """
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.http.request import HttpRequest
-from django.views.decorators.http import require_http_methods
+from django.views import View
 
 
-@require_http_methods(['GET'])
-def instrument(request: HttpRequest):
-    if request.method == 'GET':
+# instrument/
+class Instrument(View):
+    def get(self, request: HttpRequest):
         return HttpResponse(status=200)
