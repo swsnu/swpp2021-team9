@@ -44,11 +44,6 @@ export default function WavePlayer({ url }) {
     setPlay(false);
     const options = formWaveSurferOptions(waveformRef.current);
     wavesurfer.current = WaveSurfer.create(options);
-    wavesurfer.current.on('ready', function () {
-      // https://wavesurfer-js.org/docs/methods.html
-      wavesurfer.current.play();
-      setPlay(true);
-    });
     wavesurfer.current.load(url);
 
     // Removes events, elements and disconnects Web Audio nodes.

@@ -47,6 +47,7 @@ export default function CoverPage(props: Props) {
                 {cover.song.reference && (
                   <img
                     className="h-full w-full object-cover rounded-full text-center"
+                    // FIXME("need to use extract youtube thumnail link")
                     src={cover.song.reference}
                     alt="Loading Thumbnail..."
                   />

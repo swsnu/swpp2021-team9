@@ -31,18 +31,6 @@ describe('<WavePlayer />', () => {
     expect(container.querySelector('#waveform')).toBeTruthy();
   });
 
-  test('should get start when render', () => {
-    let onCallback: Function = () => {};
-    mockContent.on.mockImplementation((_state: string, callback: Function) => {
-      onCallback = callback;
-    });
-
-    const { container } = render(<WavePlayer url="URL" />);
-    expect(container.querySelector('#waveform')).toBeTruthy();
-    act(() => onCallback());
-    expect(mockContent.play).toBeCalledTimes(1);
-  });
-
   test('should buttons', () => {
     const { container, queryByTestId } = render(<WavePlayer url="URL" />);
     expect(container.querySelector('#waveform')).toBeTruthy();
