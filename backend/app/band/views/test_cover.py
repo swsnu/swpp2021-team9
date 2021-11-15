@@ -1,3 +1,6 @@
+"""
+Test codes for cover
+"""
 from django.test import TestCase, Client
 
 

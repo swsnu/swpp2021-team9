@@ -1,3 +1,7 @@
+"""Band urls
+Urls for band
+"""
+
 from django.urls import path
 from band.views import (
     token_views,

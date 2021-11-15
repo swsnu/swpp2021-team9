@@ -1,3 +1,6 @@
+"""
+Test codes for combination
+"""
 from django.test import TestCase, Client
 
 

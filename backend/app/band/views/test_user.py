@@ -1,3 +1,6 @@
+"""
+Test codes for user
+"""
 from django.test import TestCase, Client
 
 
