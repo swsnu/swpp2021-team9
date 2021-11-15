@@ -5,7 +5,6 @@ Urls for band
 from django.urls import path
 from band.views import (
     token_views,
-    user_views,
     instrument_views,
     cover_views,
     combination_views,
@@ -14,11 +13,6 @@ from band.views import (
 
 urlpatterns = [
     path("token/", token_views.token, name="token"),
-    # user urls
-    path("user/signup/", user_views.UserSignup.as_view(), name="user_signup"),
-    path("user/signin/", user_views.UserSignin.as_view(), name="user_signin"),
-    path("user/signout/", user_views.UserSignout.as_view(), name="user_signout"),
-    path("user/info/<int:user_id>/", user_views.UserInfo.as_view(), name="user_info"),
     # instrument urls
     path(
         "instrument/",

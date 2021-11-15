@@ -11,5 +11,7 @@ from band.models import Instrument
 
 
 class InstrumentView(viewsets.ModelViewSet):
+    """Viewset for instrument"""
+
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSerializer
