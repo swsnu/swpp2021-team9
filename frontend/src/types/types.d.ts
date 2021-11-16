@@ -83,6 +83,21 @@ interface User {
   instruments: number[];
 }
 
+interface CoverResponse {
+  id: number;
+  audio: string;
+  title: string;
+  user: {
+    id: number;
+    username: string;
+    photo: string;
+  };
+  category: string;
+  song: Song;
+  description: string;
+  tags: string[];
+}
+
 type UserInfo = {
   id: number;
   username: string;

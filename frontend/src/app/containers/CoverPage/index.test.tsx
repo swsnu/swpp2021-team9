@@ -1,15 +1,43 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import * as reactRedux from 'react-redux';
 
 import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CoverPage from '.';
+import { CoverState } from './slice';
+import { mockCoverResult } from './slice/saga';
+import * as urls from 'utils/urls';
 
 const store = configureAppStore();
 
-function setup() {
+const mockLoadingState: CoverState = {
+  name: 'cover',
+  coverResponse: { loading: true },
+};
+
+const mockSuccessState: CoverState = {
+  name: 'cover',
+  coverResponse: { loading: false, data: mockCoverResult },
+};
+
+const mockErrorState: CoverState = {
+  name: 'cover',
+  coverResponse: { loading: false, error: 'MOCK_ERROR' },
+};
+
+jest.mock('./WavePlayer', () => {
+  return {
+    __esModule: true,
+    default: () => <div />,
+  };
+});
+
+function setup(state: CoverState) {
+  const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+  useSelectorMock.mockReturnValue(state);
   const path = '/cover/1';
   const page = (
     <Provider store={store}>
@@ -24,8 +52,57 @@ function setup() {
   return { page };
 }
 
+const mockHistoryPush = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 test('should render', () => {
-  const { page } = setup();
+  const path = '/cover/1';
+  const page = (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route path={path} component={CoverPage} />
+          <Redirect to={path} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  );
   render(page);
   expect(screen.getByTestId('CoverPage')).toBeTruthy();
+});
+
+test('should handle buttons', () => {
+  const { page } = setup(mockSuccessState);
+  const { getByTestId } = render(page);
+
+  const songTitleButton = getByTestId('songTitle');
+  const usernameButton = getByTestId('usename');
+
+  expect(songTitleButton).toBeTruthy();
+  expect(usernameButton).toBeTruthy();
+
+  fireEvent.click(songTitleButton);
+  expect(mockHistoryPush).lastCalledWith(urls.Song(0));
+
+  fireEvent.click(usernameButton);
+  expect(mockHistoryPush).lastCalledWith(urls.Profile(0));
+});
+
+test('should show error statement', () => {
+  const { page } = setup(mockErrorState);
+  const { getByTestId } = render(page);
+
+  const errorStatement = getByTestId('errorStatement');
+
+  expect(errorStatement.textContent).toBe('error: MOCK_ERROR');
 });

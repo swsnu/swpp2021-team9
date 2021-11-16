@@ -50,6 +50,7 @@ export function App() {
             />
             <Route exact path={url.CreateSong()} component={CreateSongPage} />
             <Route exact path={url.Song(':id')} component={SongPage} />
+            <Route exact path={url.Cover(':id')} component={CoverPage} />
             <Route
               exact
               path={url.CreateCover('record')}
