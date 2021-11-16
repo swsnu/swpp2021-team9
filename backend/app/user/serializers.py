@@ -5,7 +5,7 @@ from rest_framework import serializers
 from .models import CustomUser
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """Serializer for user"""
 
     class Meta:

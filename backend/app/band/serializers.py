@@ -10,7 +10,7 @@ from .models import (
 )
 
 
-class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
+class InstrumentSerializer(serializers.ModelSerializer):
     """Serializer for insrument"""
 
     class Meta:
@@ -18,7 +18,7 @@ class InstrumentSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["id", "name"]
 
 
-class SongSerializer(serializers.HyperlinkedModelSerializer):
+class SongSerializer(serializers.ModelSerializer):
     """Serializer for song"""
 
     class Meta:
@@ -26,7 +26,7 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["id", "title", "singer", "category", "reference", "description"]
 
 
-class CoverSerializer(serializers.HyperlinkedModelSerializer):
+class CoverSerializer(serializers.ModelSerializer):
     """Serializer for cover"""
 
     class Meta:
@@ -47,7 +47,7 @@ class CoverSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class CombinationSerializer(serializers.HyperlinkedModelSerializer):
+class CombinationSerializer(serializers.ModelSerializer):
     """Serializer for combination"""
 
     class Meta:
