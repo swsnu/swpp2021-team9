@@ -14,28 +14,28 @@ class SongTestCase(TestCase):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/song/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
         response = client.post("/api/song/", {})
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 501)
 
     def test_song_main(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/song/main/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
     def test_song_search(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/song/search/?q=123/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
     def test_song_info(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/song/info/1/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
         response = client.put("/api/song/info/1/", {})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)

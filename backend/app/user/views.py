@@ -24,31 +24,31 @@ class UserSignup(View):
     """user/signup/"""
 
     def post(self, request: HttpRequest):
-        return HttpResponse(status=201)
+        return HttpResponse(status=501)
 
 
 class UserSignin(View):
     """user/signin/"""
 
     def post(self, request: HttpRequest):
-        return HttpResponse(status=204)
+        return HttpResponse(status=501)
 
 
 class UserSignout(View):
     """user/signout/"""
 
     def get(self, request: HttpRequest):
-        return HttpResponse(status=204)
+        return HttpResponse(status=501)
 
 
 class UserInfo(View):
     """user/info/<int:user_id>/"""
 
     def get(self, request: HttpRequest, user_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def put(self, request: HttpRequest, user_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def delete(self, request: HttpRequest, user_id: int):
-        return HttpResponse(status=204)
+        return HttpResponse(status=501)

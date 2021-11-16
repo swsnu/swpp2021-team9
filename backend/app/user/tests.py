@@ -67,28 +67,28 @@ class SongTestCase(TestCase):
         client = Client(enforce_csrf_checks=False)
 
         response = client.post("/api/user/signup/", {})
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 501)
 
     def test_user_signin(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.post("/api/user/signin/", {})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 501)
 
     def test_user_signout(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/user/signout/")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 501)
 
     def test_user_info(self):
         client = Client(enforce_csrf_checks=False)
 
         response = client.get("/api/user/info/1/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
         response = client.put("/api/user/info/1/", {})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 501)
 
         response = client.delete("/api/user/info/1/")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 501)

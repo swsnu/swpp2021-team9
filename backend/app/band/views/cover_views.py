@@ -14,37 +14,37 @@ class CoverSong(View):
     """cover/<int:song_id>/"""
 
     def get(self, request: HttpRequest, song_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def post(self, request: HttpRequest, song_id: int):
-        return HttpResponse(status=201)
+        return HttpResponse(status=501)
 
 
 class CoverSongInstrument(View):
     """cover/<int:song_id>/<int:instrument_id>/"""
 
     def get(self, request: HttpRequest, song_id: int, instrument_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
 
 class CoverInfo(View):
     """cover/info/<int:cover_id>/"""
 
     def get(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def put(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def delete(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=204)
+        return HttpResponse(status=501)
 
 
 class CoverLike(View):
     """cover/like/<int:cover_id>/"""
 
     def get(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def put(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)

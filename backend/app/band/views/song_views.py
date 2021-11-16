@@ -14,31 +14,31 @@ class SongView(View):
     """song/"""
 
     def get(self, request: HttpRequest):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def post(self, request: HttpRequest):
-        return HttpResponse(status=201)
+        return HttpResponse(status=501)
 
 
 class SongMain(View):
     """song/main/"""
 
     def get(self, request: HttpRequest):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
 
 class SongSearch(View):
     """song/search/?q=<str:key>/"""
 
     def get(self, request: HttpRequest):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
 
 class SongInfo(View):
     """song/info/<int:song_id>/"""
 
     def get(self, request: HttpRequest, song_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
 
     def put(self, request: HttpRequest, song_id: int):
-        return HttpResponse(status=200)
+        return HttpResponse(status=501)
