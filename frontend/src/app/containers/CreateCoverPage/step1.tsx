@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import YoutubePlayer from 'app/components/CreateCover/YoutubePlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -16,13 +16,18 @@ import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
 import VideoPreview from 'app/components/CreateCover/VideoPreview';
+import { SegmentComponent, WaveformView } from 'app/components/Peaks';
+import { Point, Segment } from 'peaks.js';
 export interface Props {}
+let audioContext = new AudioContext();
 
 export default function CreateCoverRecordPage(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
 
+  const [segments, setSegments] = useState<Segment[]>([]);
+  const [points, setPoints] = useState<Point[]>([]);
   const [isVideo, setIsVideo] = useState(false);
   const [isYoutubeLink, setIsYoutubeLink] = useState(true);
   // const [isUploaded, setIsUploaded] = useState(false);
@@ -68,6 +73,46 @@ export default function CreateCoverRecordPage(props: Props) {
     dispatch(actions.setAudioURL(mediaBlobUrl));
     history.push(CreateCover('info'));
   };
+  const renderSegments = () => {
+    const _segments = segments;
+
+    if (!_segments) {
+      return null;
+    }
+
+    if (_segments.length === 0) {
+      return null;
+    }
+
+    return (
+      <React.Fragment>
+        <h2>Segments</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Start time</th>
+              <th>End time</th>
+              <th>Label text</th>
+            </tr>
+          </thead>
+          <tbody>{renderSegmentRows(segments)}</tbody>
+        </table>
+      </React.Fragment>
+    );
+  };
+
+  const renderSegmentRows = (segments: Segment[]) => {
+    return segments.map(segment => (
+      <SegmentComponent
+        id={segment.id}
+        key={segment.id}
+        startTime={segment.startTime}
+        endTime={segment.endTime}
+        labelText={segment.labelText}
+      />
+    ));
+  };
 
   return (
     <div
@@ -107,22 +152,36 @@ export default function CreateCoverRecordPage(props: Props) {
               )}
             </button>
           </div>
-          {isVideo ? (
+        </div>
+      ) : null}
+      <div className="container flex-col justify-center items-center">
+        {isVideo ? (
+          <div className="flex justify-center">
             <video
               id={'video'}
               src={mediaBlobUrl ? mediaBlobUrl : undefined}
               controls
               autoPlay
             />
-          ) : mediaBlobUrl ? (
-            <Waveform url={mediaBlobUrl} />
-          ) : null}
-          {isRecording && isVideo ? (
-            <VideoPreview stream={previewStream} />
-          ) : null}
-        </div>
-      ) : null}
+          </div>
+        ) : mediaBlobUrl ? (
+          <WaveformView
+            audioUrl={mediaBlobUrl}
+            audioContentType={'audio/mpeg'}
+            // audioContext={audioContext}
+            setSegments={setSegments}
+            setPoints={setPoints}
+          />
+        ) : null}
+        {isRecording && isVideo ? (
+          <VideoPreview
+            className="flex justify-center"
+            stream={previewStream}
+          />
+        ) : null}
+      </div>
       {isUploading ? <input type="file" id="upload" /> : null}
+      {renderSegments()}
       <div
         data-testid="CreateCoverButtons"
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
