@@ -75,10 +75,16 @@ class Cover(models.Model):
     )
     song: Song = ForeignKey(Song, related_name="covers", on_delete=models.CASCADE)
     tags = ManyToManyField("CoverTag", db_table="Cover_Tags", blank=True)
-    likes = ManyToManyField(User, db_table="Cover_Likes", related_name="like_covers", blank=True)
+    likes = ManyToManyField(
+        User, db_table="Cover_Likes", related_name="like_covers", blank=True
+    )
     views: int = IntegerField(db_column="view", default=0)
     combination: "Combination" = ForeignKey(
-        "Combination", related_name="+", on_delete=models.SET_NULL, blank=True
+        "Combination",
+        related_name="+",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
