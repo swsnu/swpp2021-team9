@@ -146,5 +146,6 @@
         "statements": 90
       }
     }
-  }
+  },
+  "proxy": "http://localhost:8000/"
 }

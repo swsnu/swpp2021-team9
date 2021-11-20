@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Album from '../../components/Album/index';
-import { dummyAlbums } from './dummy';
+import { dummyAlbums } from 'api/dummy';
 import Player from 'app/helper/Player';
 import { Song } from 'utils/urls';
 

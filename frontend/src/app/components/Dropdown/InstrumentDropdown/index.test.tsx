@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/react';
 import { Menu } from '@headlessui/react';
 import InstrumentDropdown from '.';
-import { dummyInstruments } from 'app/containers/SongPage/dummy';
+import { dummyInstruments } from 'api/dummy';
 
 const onClickMenu = jest
   .fn()

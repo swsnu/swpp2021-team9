@@ -16,7 +16,7 @@ import {
   dummyCombinations,
   dummyCovers,
   dummyInstruments,
-} from './dummy';
+} from 'api/dummy';
 
 interface MatchParams {
   id?: string;

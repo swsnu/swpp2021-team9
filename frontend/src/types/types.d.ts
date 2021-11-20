@@ -24,19 +24,20 @@ interface Cover {
   title: string;
   category: string;
   description?: string;
-  user: number;
+  user: UserInfo;
   instrument: Instrument;
-  song: number;
+  song: Song;
   tags: string[];
   likes: number;
   views: number;
-  combination: number | null;
+  combinationId: number | null;
 }
 
 interface CoverForm {
   audio: string;
   songId: number;
   title: string;
+  category: string;
   description: string;
   tags: string[];
   combinationId: number;
@@ -83,24 +84,10 @@ interface User {
   instruments: number[];
 }
 
-interface CoverResponse {
-  id: number;
-  audio: string;
-  title: string;
-  user: {
-    id: number;
-    username: string;
-    photo: string;
-  };
-  category: string;
-  song: Song;
-  description: string;
-  tags: string[];
-}
-
 type UserInfo = {
   id: number;
   username: string;
+  photo?: string;
 };
 
 type PlayInfo = {
