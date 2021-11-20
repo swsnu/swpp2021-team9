@@ -88,7 +88,10 @@ class WaveformView extends Component<Props, State> {
     console.log('props', this.props);
     console.log('prevProps', prevProps);
     console.log(this.peaks);
-    // this.initPeaks();
+    if (!this.peaks) {
+      this.initPeaks();
+      return;
+    }
     const audioContext = new AudioContext();
     const options = {
       mediaUrl: this.props.audioUrl,

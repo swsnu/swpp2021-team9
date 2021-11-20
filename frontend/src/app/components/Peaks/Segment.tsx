@@ -1,4 +1,4 @@
-import { Segment, WaveformColor } from 'peaks.js';
+import { WaveformColor } from 'peaks.js';
 import React, { Component } from 'react';
 
 interface Props {
@@ -9,14 +9,11 @@ interface Props {
   labelText?: string;
   id?: string;
 }
-interface State {}
 
-class SegmentComponent extends Component<Props, State> {
-  state = {};
-
+class SegmentComponent extends Component<Props> {
   render() {
     return (
-      <tr>
+      <tr test-dataid="Segment">
         <td>{this.props.id}</td>
         <td>{this.props.startTime}</td>
         <td>{this.props.endTime}</td>

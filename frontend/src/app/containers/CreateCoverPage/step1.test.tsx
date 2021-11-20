@@ -12,7 +12,7 @@ jest.mock('../../components/CreateCover/YoutubePlayer', () => () => (
   <div>YoutubePlayer</div>
 ));
 
-jest.mock('./Waveform', () => () => <div>Wavefrom</div>);
+jest.mock('./WaveformView', () => () => <div>WavefromView</div>);
 
 function setup() {
   const path = '/';
