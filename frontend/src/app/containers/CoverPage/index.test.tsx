@@ -9,15 +9,14 @@ import CoverPage from '.';
 import { CoverState } from './slice';
 import { dummyCovers } from 'api/dummy';
 import * as urls from 'utils/urls';
-import { InjectSagaParams } from 'utils/types/injector-typings';
 import { api } from 'api/band';
 
 const store = configureAppStore();
 
-const mockLoadingState: CoverState = {
-  name: 'cover',
-  coverResponse: { loading: true },
-};
+// const mockLoadingState: CoverState = {
+//   name: 'cover',
+//   coverResponse: { loading: true },
+// };
 
 const mockSuccessState: CoverState = {
   name: 'cover',

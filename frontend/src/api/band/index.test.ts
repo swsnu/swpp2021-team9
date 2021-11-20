@@ -1,4 +1,3 @@
-import { dir } from 'console';
 import { apiClient } from './client';
 import { api } from './index';
 
