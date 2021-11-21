@@ -6,7 +6,7 @@ import { selectCombination, selectCurrent } from '../slice/selectors';
 import CoverDropdown from 'app/components/Dropdown/CoverDropdown';
 import { Menu } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getIcon } from 'utils/getIcon';
+import { getIcon } from 'utils/functions';
 
 export interface Props {}
 

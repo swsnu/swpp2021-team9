@@ -30,13 +30,13 @@ export default function Album(props: Props) {
       </button>
 
       <br></br>
-      <img
-        className="rounded-full border border-gray-100 shadow-sm"
-        src={props.thumbnail}
-        width="150"
-        height="150"
-        alt="Album"
-      />
+      <div className="block h-36 w-36 bg-gray-400 rounded-full shadow-md">
+        <img
+          className="h-full w-full object-cover rounded-full"
+          src={props.thumbnail}
+          alt="Album"
+        />
+      </div>
       <br></br>
       <div className="px-4 pt-3 text-left sm:px-6">
         <button

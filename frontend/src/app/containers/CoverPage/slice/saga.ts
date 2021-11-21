@@ -23,7 +23,7 @@ export const mockCoverResult = {
     title: 'SONG_TITLE',
     singer: 'SONG_SINGER',
     category: 'SONG_CATEGORY',
-    reference: 'SONG_REF',
+    reference: 'https://www.youtube.com/watch?v=SK6Sm2Ki9tI',
     description: 'SONG_DESC',
   },
   description: 'COVER_DESCRIPTION',

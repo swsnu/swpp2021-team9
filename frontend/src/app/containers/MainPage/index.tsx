@@ -4,6 +4,7 @@ import Album from '../../components/Album/index';
 import { dummyAlbums } from './dummy';
 import Player from 'app/helper/Player';
 import { Song } from 'utils/urls';
+import { getThumbnail } from 'utils/functions';
 
 export type Props = {};
 
@@ -35,7 +36,7 @@ export default function MainPage(props: Props) {
           id={album.id}
           title={album.title}
           singer={album.singer}
-          thumbnail={album.thumbnail}
+          thumbnail={getThumbnail(album.reference)}
           onClickTitle={() => history.push(Song(album.id))}
           onClickPlay={() => {}}
           //player.addTrack(trackexample)
