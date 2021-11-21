@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from band.tests.tools import set_up_data, make_cover_data
 
-from band.models import Combination, Instrument, Song, Cover, CoverTag
+from band.models import Combination, Instrument, Song, Cover
 
 
 # pylint: disable=C0114

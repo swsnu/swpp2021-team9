@@ -4,10 +4,9 @@ TODO ("implement")
 """
 from django.http import HttpResponse
 from django.http.request import HttpRequest
-from django.http.response import HttpResponseNotFound
 from django.views import View
 from rest_framework.response import Response
-from rest_framework import mixins, generics, status
+from rest_framework import mixins, generics
 
 from band.models import Cover
 from band.serializers import CoverSerializer

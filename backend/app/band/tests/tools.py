@@ -1,3 +1,6 @@
+""" testing tools
+tools for test band app
+"""
 from typing import List
 from django.contrib.auth import get_user_model
 from band.models import Combination, Instrument, Song, Cover, CoverTag
@@ -31,36 +34,52 @@ def make_cover_data(song_id: int, i: int):
     }
 
 
-def set_up_data():
+def make_instruments(name_list) -> List[Instrument]:
     instruments: List[Instrument] = []
-    cover_tags: List[CoverTag] = []
-    users: List[User] = []
-    songs: List[Song] = []
-    covers: List[Cover] = []
-
-    # make 5 instruments
-    for i_name in instrument_name_list:
-        instrument = Instrument(name=i_name)
+    for name in name_list:
+        instrument = Instrument(name=name)
         instrument.save()
         instruments.append(instrument)
+    return instruments
 
-    # make 10 cover tags
-    for i in range(10):
+
+def make_cover_tags(num: int) -> List[CoverTag]:
+    cover_tags: List[CoverTag] = []
+    for i in range(num):
         tag = CoverTag(name=f"COVER_TAG_{i}")
         tag.save()
         cover_tags.append(tag)
+    return cover_tags
 
-    # make 10 users
-    for i in range(10):
+
+def make_users(num: int) -> List[User]:
+    users: List[User] = []
+    for i in range(num):
         user = User.objects.create_user(**make_user_data(i))
         users.append(user)
+    return users
 
-    # make 10 songs
-    for i in range(10):
+
+def make_songs(num: int) -> List[Song]:
+    songs: List[Song] = []
+    for i in range(num):
         song_data = make_song_data(i)
         song = Song(**song_data)
         song.save()
         songs.append(song)
+    return songs
+
+
+def set_up_data():
+    """
+      This func makes 5 instrument, 10 coverTags, 10 users,
+    10 songs, 5 cover for each songs, combinations
+    """
+    instruments = make_instruments(instrument_name_list)
+    cover_tags = make_cover_tags(10)
+    users = make_users(10)
+    songs = make_songs(10)
+    covers: List[Cover] = []
 
     # make 5 cover for each Song
     for song in songs:

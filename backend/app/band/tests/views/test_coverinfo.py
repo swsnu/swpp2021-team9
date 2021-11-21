@@ -1,3 +1,6 @@
+"""
+Test codes for band cover info
+"""
 import json
 from django.test import TestCase, Client
 from rest_framework import status
@@ -7,6 +10,10 @@ from band.tests.tools import set_up_data
 
 
 class CoverInfoTestCase(TestCase):
+    """
+    TestCase Class for band app's cover info view
+    """
+
     @classmethod
     def setUpClass(cls):
         super(CoverInfoTestCase, cls).setUpClass()
@@ -16,14 +23,14 @@ class CoverInfoTestCase(TestCase):
         client = Client(enforce_csrf_checks=False)
 
         cover: Cover = Cover.objects.first()
-        laskCover: Cover = Cover.objects.all().order_by("-id").first()
+        last_cover: Cover = Cover.objects.all().order_by("-id").first()
 
         response = client.get(f"/api/cover/info/{cover.pk}/")
         self.assertEqual(
             response.status_code, status.HTTP_200_OK, "Success to get cover info"
         )
 
-        response = client.get(f"/api/cover/info/{laskCover.pk + 1}/")
+        response = client.get(f"/api/cover/info/{last_cover.pk + 1}/")
         self.assertEqual(
             response.status_code, status.HTTP_404_NOT_FOUND, "Not exist id"
         )
@@ -40,7 +47,6 @@ class CoverInfoTestCase(TestCase):
             content_type="application/json",
         )
         cover: Cover = Cover.objects.get(pk=cover.pk)
-        content = json.loads(response.content)
 
         self.assertEqual(
             response.status_code, status.HTTP_200_OK, "Success to put cover info"

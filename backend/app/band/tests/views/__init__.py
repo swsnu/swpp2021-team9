@@ -1,1 +1,3 @@
-from . import *
+""" __init__ for band.tests.views
+"""
+from . import test_coverinfo

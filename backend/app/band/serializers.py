@@ -1,8 +1,7 @@
 """ Band serializers
 DRF serializers for band
 """
-from django.utils.translation import override
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
 from user.serializers import UserSerializer
 from .models import (
@@ -47,8 +46,8 @@ class CoverSerializer(serializers.ModelSerializer):
     # override
     def update(self, instance, validated_data):
         instance: Cover = super().update(instance, validated_data)
-        if validated_data.get('tags_list') is not None:
-            tags = CoverTag.objects.filter(name__in=validated_data['tags_list'])
+        if validated_data.get("tags_list") is not None:
+            tags = CoverTag.objects.filter(name__in=validated_data["tags_list"])
             instance.tags.set(tags)
             instance.save()
         return instance
