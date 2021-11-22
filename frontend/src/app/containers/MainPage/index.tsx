@@ -18,6 +18,7 @@ export default function MainPage(props: Props) {
     reference: '',
     description: '',
   };
+
   const trackexample: TrackInfo = {
     song: songexample,
     sources: ['hello', 'world'],
@@ -38,9 +39,7 @@ export default function MainPage(props: Props) {
           thumbnail={album.thumbnail}
           onClickTitle={() => history.push(Song(album.id))}
           onClickPlay={() => {}}
-          //player.addTrack(trackexample)
-          //player.setIndex(album.id)
-          //} // TODO: play the corresponding song
+          // TODO
         />
       ))}
 
