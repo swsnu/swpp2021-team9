@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 import AlbumImage from '../../components/Album/AlbumImage.png';
 import { CreateSong } from 'utils/urls';
 import ResultLine from '../../components/ResultLine/index';
-import { dummyResultLines } from './dummy';
+import { dummyResultLines } from 'api/dummy';
 import { Song } from 'utils/urls';
 import Player from 'app/helper/Player';
 

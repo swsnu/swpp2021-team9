@@ -8,7 +8,7 @@ import WavePlayer from './WavePlayer';
 import * as urls from 'utils/urls';
 
 interface MatchParams {
-  id?: string;
+  id: string;
 }
 export interface Props extends RouteComponentProps<MatchParams> {}
 
@@ -19,8 +19,8 @@ export default function CoverPage(props: Props) {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(apiActions.loadCover.request('start load cover'));
-  }, [dispatch]);
+    dispatch(apiActions.loadCover.request(Number(props.match.params.id)));
+  }, [dispatch, props.match]);
 
   const onSingTitleClicked = useCallback(() => {
     const coverResponse = coverState.coverResponse;

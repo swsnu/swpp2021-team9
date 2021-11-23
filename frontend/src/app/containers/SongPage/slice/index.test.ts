@@ -1,5 +1,5 @@
 import { initialState, SongState, useSongSlice, songActions } from './index';
-import { dummyCovers } from '../dummy';
+import { dummyCovers } from 'api/dummy';
 
 import {
   InjectReducerParams,

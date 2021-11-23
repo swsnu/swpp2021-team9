@@ -1,9 +1,3 @@
-import Player from 'app/helper/Player';
-import * as React from 'react';
-import { Component, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Song, Profile } from 'utils/urls';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
