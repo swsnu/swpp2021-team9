@@ -1,5 +1,4 @@
 import mockPlaylist from './mockPlayList';
-import Player from './Player';
 import TrackPlayer from './TrackPlayer';
 
 const mockTrack: TrackInfo[] = mockPlaylist.map(v => {

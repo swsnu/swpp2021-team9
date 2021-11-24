@@ -6,7 +6,7 @@ import coverPageSaga from './saga';
 /* --- STATE --- */
 export interface CoverState {
   name: string;
-  coverResponse: AsyncStateType<CoverResponse>;
+  coverResponse: AsyncStateType<Cover>;
 } // state 형식 정의
 
 export const initialState: CoverState = {
@@ -22,7 +22,7 @@ const slice = createSlice({
       state.coverResponse = { loading: true };
       return state;
     },
-    successCoverResponse(state, action: PayloadAction<CoverResponse>) {
+    successCoverResponse(state, action: PayloadAction<Cover>) {
       state.coverResponse.loading = false;
       state.coverResponse.data = action.payload;
       return state;

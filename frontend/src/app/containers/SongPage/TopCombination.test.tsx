@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
 import { Provider } from 'react-redux';
-import { dummyCombinations, dummyCovers } from './dummy';
+import { dummyCombinations, dummyCovers } from 'api/dummy';
 import TopCombination from './TopCombination';
 
 const store = configureAppStore();

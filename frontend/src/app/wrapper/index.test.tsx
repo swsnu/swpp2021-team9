@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import * as reactRedux from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
@@ -8,8 +7,6 @@ import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import Wrapper from '.';
 import { WrapperState } from './slice';
-
-import * as Search from 'app/components/Search';
 
 jest.mock('app/helper/TrackPlayer');
 

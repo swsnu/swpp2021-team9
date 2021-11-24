@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import * as reactRedux from 'react-redux';
@@ -8,19 +7,20 @@ import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CoverPage from '.';
 import { CoverState } from './slice';
-import { mockCoverResult } from './slice/saga';
+import { dummyCovers } from 'api/dummy';
 import * as urls from 'utils/urls';
+import { api } from 'api/band';
 
 const store = configureAppStore();
 
-const mockLoadingState: CoverState = {
-  name: 'cover',
-  coverResponse: { loading: true },
-};
+// const mockLoadingState: CoverState = {
+//   name: 'cover',
+//   coverResponse: { loading: true },
+// };
 
 const mockSuccessState: CoverState = {
   name: 'cover',
-  coverResponse: { loading: false, data: mockCoverResult },
+  coverResponse: { loading: false, data: dummyCovers[0] },
 };
 
 const mockErrorState: CoverState = {
@@ -63,6 +63,12 @@ jest.mock('react-router-dom', () => ({
 
 afterEach(() => {
   jest.clearAllMocks();
+  api.getCoverInfo = jest.fn(
+    (coverId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCovers[coverId]);
+      }),
+  );
 });
 
 test('should render', () => {
