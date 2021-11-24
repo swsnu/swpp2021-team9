@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCombination, selectCurrent } from './slice/selectors';
 
 import { Main } from 'utils/urls';
-import { getThumbnail } from 'utils/functions';
+import { getThumbnail } from 'utils/imageTools';
 
 import SongInfo from './SongInfo';
 import TopCombination from './TopCombination';

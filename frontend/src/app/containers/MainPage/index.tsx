@@ -4,7 +4,7 @@ import Album from '../../components/Album/index';
 import { dummyAlbums } from './dummy';
 import Player from 'app/helper/Player';
 import { Song } from 'utils/urls';
-import { getThumbnail } from 'utils/functions';
+import { getThumbnail } from 'utils/imageTools';
 
 export type Props = {};
 

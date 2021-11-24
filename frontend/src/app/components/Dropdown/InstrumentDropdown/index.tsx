@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { getIcon } from 'utils/functions';
+import { getIcon } from 'utils/imageTools';
 
 export interface Props {
   instruments: Instrument[];

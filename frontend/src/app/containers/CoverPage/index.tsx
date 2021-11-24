@@ -6,7 +6,7 @@ import * as apiActions from 'api/actions';
 import { selectCover } from './slice/selectors';
 import WavePlayer from './WavePlayer';
 import * as urls from 'utils/urls';
-import { getThumbnail } from 'utils/functions';
+import { getThumbnail } from 'utils/imageTools';
 
 interface MatchParams {
   id?: string;
