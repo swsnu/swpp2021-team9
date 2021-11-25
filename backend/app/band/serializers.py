@@ -48,7 +48,6 @@ class CoverSerializer(serializers.ModelSerializer):
         song_id = validated_data.pop("song_id")
         validated_data["song"] = Song.objects.get(id=song_id)
 
-        print(validated_data)
         return super().create(validated_data)
 
     # override

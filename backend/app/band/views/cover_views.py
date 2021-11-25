@@ -27,6 +27,11 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
 
     def post(self, request: Request, song_id: int, *args, **kwargs):
         data = request.data.copy()
+        try:
+            Song.objects.get(id=song_id)
+        except Song.DoesNotExist as e:
+            return HttpResponseBadRequest(e)
+
         data["song_id"] = song_id
 
         if data.get("tags") is not None:
@@ -37,11 +42,7 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
 
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-
-        try:
-            serializer.save()
-        except Song.DoesNotExist as e:
-            return HttpResponseBadRequest(e)
+        serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
