@@ -89,11 +89,8 @@ export default function Waveform({ url }) {
   const onVolumeChange = e => {
     const { target } = e;
     const newVolume = +target.value;
-
-    if (newVolume) {
-      setVolume(newVolume);
-      wavesurfer.current.setVolume(newVolume || 1);
-    }
+    setVolume(newVolume);
+    wavesurfer.current.setVolume(newVolume || 1);
   };
 
   const playSelectedRegion = () => {
