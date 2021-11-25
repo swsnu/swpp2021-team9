@@ -1,4 +1,5 @@
 import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
+import { UserState } from 'app/containers/SignInPage/slice';
 import { SongState } from 'app/containers/SongPage/slice';
 import { WrapperState } from 'app/wrapper/slice';
 // import { ProfileState } from 'app/containers/ProfilePage/slice';
@@ -13,5 +14,6 @@ export interface RootState {
   createCover?: CreateCoverState;
   song?: SongState;
   wrapper?: WrapperState;
+  user?: UserState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

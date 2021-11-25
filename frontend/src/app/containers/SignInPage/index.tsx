@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Main } from 'utils/urls';
+import { useUserSlice } from './slice';
 
 export type Props = {
   email: string;
   password: string;
 };
 
-export default function SignUpPage(props: Props) {
+export default function SignInPage(props: Props) {
+  const dispatch = useDispatch();
+  const { actions } = useUserSlice();
+
   const history = useHistory();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -19,7 +24,7 @@ export default function SignUpPage(props: Props) {
       alert('Please enter password');
     } else {
       history.push(Main());
-      //dispatch(signin({ email, password }));
+      dispatch(actions.signin({ email, password }));
     }
   };
 
