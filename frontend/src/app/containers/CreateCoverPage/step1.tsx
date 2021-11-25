@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, ChangeEventHandler } from 'react';
 import YoutubePlayer from 'app/components/CreateCover/YoutubePlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,27 +10,29 @@ import {
   faStopCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { useReactMediaRecorder } from 'react-media-recorder';
-import Waveform from 'app/containers/CreateCoverPage/Waveform';
 import { useHistory } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
 import VideoPreview from 'app/components/CreateCover/VideoPreview';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
-import { Point, Segment } from 'peaks.js';
+import { Segment } from 'peaks.js';
 export interface Props {}
-let audioContext = new AudioContext();
 
 export default function CreateCoverRecordPage(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
-
+  const [selectedSegmentId, setSelectedSegmentId] = useState<
+    string | undefined
+  >('');
+  // const [file, setFile] = useState<any>(null);
+  const [isPlaySegmentClicked, setIsPlaySegmentClicked] =
+    useState<boolean>(false);
+  const [uploadUrl, setUploadUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
-  const [points, setPoints] = useState<Point[]>([]);
+  const [isSegmentListVisible, setIsSegmentListVisible] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
-  const [isYoutubeLink, setIsYoutubeLink] = useState(true);
-  // const [isUploaded, setIsUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -46,6 +48,22 @@ export default function CreateCoverRecordPage(props: Props) {
   const handleVideoStatus = () => {
     setIsVideo(!isVideo);
   };
+
+  useMemo(() => {
+    if (
+      isPlaySegmentClicked &&
+      selectedSegmentId &&
+      selectedSegmentId.length > 0
+    ) {
+      const Segs: Segment[] = segments.filter((seg: Segment) => {
+        if (seg.id === selectedSegmentId) return seg;
+      });
+      const seg: Segment = Segs[0];
+      const peaks = WaveformView.getPeaks();
+      peaks.player.playSegment(seg);
+    }
+    setIsPlaySegmentClicked(false);
+  }, [selectedSegmentId, isPlaySegmentClicked, segments]);
 
   const onRecordClicked = () => {
     if (isRecording) {
@@ -73,6 +91,19 @@ export default function CreateCoverRecordPage(props: Props) {
     dispatch(actions.setAudioURL(mediaBlobUrl));
     history.push(CreateCover('info'));
   };
+
+  const onChangeUpload: ChangeEventHandler<HTMLInputElement> = (e: any) => {
+    // let reader = new FileReader();
+    let file = e.target.files[0];
+    // reader.onloadend = () => {
+    //   setFile(file);
+    //   setUploadUrl(URL.createObjectURL(file));
+    // };
+
+    console.log(uploadUrl);
+    setUploadUrl(URL.createObjectURL(file));
+  };
+
   const renderSegments = () => {
     const _segments = segments;
 
@@ -85,7 +116,7 @@ export default function CreateCoverRecordPage(props: Props) {
     }
 
     return (
-      <React.Fragment>
+      <>
         <h2>Segments</h2>
         <table>
           <thead>
@@ -94,11 +125,12 @@ export default function CreateCoverRecordPage(props: Props) {
               <th>Start time</th>
               <th>End time</th>
               <th>Label text</th>
+              <th>Play</th>
             </tr>
           </thead>
           <tbody>{renderSegmentRows(segments)}</tbody>
         </table>
-      </React.Fragment>
+      </>
     );
   };
 
@@ -110,6 +142,8 @@ export default function CreateCoverRecordPage(props: Props) {
         startTime={segment.startTime}
         endTime={segment.endTime}
         labelText={segment.labelText}
+        setSelectedId={setSelectedSegmentId}
+        setIsPlaySegmentClicked={setIsPlaySegmentClicked}
       />
     ));
   };
@@ -122,7 +156,8 @@ export default function CreateCoverRecordPage(props: Props) {
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
       {/* {isYoutubeLink ? <YoutubePlayer /> : null} */}
       {/* tmp TODO*/}
-      <YoutubePlayer />
+      {/* https://soundcloud.com/tycho/tycho-awake */}
+      <YoutubePlayer url="https://www.youtube.com/watch?v=SK6Sm2Ki9tI" />
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (
@@ -155,23 +190,25 @@ export default function CreateCoverRecordPage(props: Props) {
         </div>
       ) : null}
       <div className="container flex-col justify-center items-center">
-        {isVideo ? (
-          <div className="flex justify-center">
-            <video
-              id={'video'}
-              src={mediaBlobUrl ? mediaBlobUrl : undefined}
-              controls
-              autoPlay
+        {isRecordingEnabled ? (
+          isVideo ? (
+            <div className="flex justify-center">
+              <video
+                id={'video'}
+                src={mediaBlobUrl ? mediaBlobUrl : undefined}
+                controls
+                autoPlay
+              />
+            </div>
+          ) : mediaBlobUrl ? (
+            <WaveformView
+              selectedSegmentId={selectedSegmentId}
+              audioUrl={mediaBlobUrl}
+              audioContentType={'audio/mpeg'}
+              setSegments={setSegments}
+              setIsSegmentListVisible={setIsSegmentListVisible}
             />
-          </div>
-        ) : mediaBlobUrl ? (
-          <WaveformView
-            audioUrl={mediaBlobUrl}
-            audioContentType={'audio/mpeg'}
-            // audioContext={audioContext}
-            setSegments={setSegments}
-            setPoints={setPoints}
-          />
+          ) : null
         ) : null}
         {isRecording && isVideo ? (
           <VideoPreview
@@ -180,8 +217,23 @@ export default function CreateCoverRecordPage(props: Props) {
           />
         ) : null}
       </div>
-      {isUploading ? <input type="file" id="upload" /> : null}
-      {renderSegments()}
+      {isUploading ? (
+        <input id="upload-file" type="file" onChange={onChangeUpload} />
+      ) : null}
+      <div className="container flex-col justify-center items-center">
+        {isUploading ? (
+          uploadUrl ? (
+            <WaveformView
+              selectedSegmentId={selectedSegmentId}
+              audioUrl={uploadUrl}
+              audioContentType={'audio/mpeg'}
+              setSegments={setSegments}
+              setIsSegmentListVisible={setIsSegmentListVisible}
+            />
+          ) : null
+        ) : null}
+      </div>
+      {isRecordingEnabled && isSegmentListVisible ? renderSegments() : null}
       <div
         data-testid="CreateCoverButtons"
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"

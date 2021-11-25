@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Peaks, { PeaksOptions } from 'peaks.js';
-import { createPointMarker, createSegmentMarker } from './MarkerFactories';
+import { createSegmentMarker } from './MarkerFactories';
 import { createSegmentLabel } from './SegmentLabelFactory';
 
 import './WaveformView.css';
@@ -9,14 +9,22 @@ interface Props {
   audioUrl: string;
   waveformDataUrl?: string;
   audioContentType: string;
-  audioContext?: AudioContext;
+  // audioContext?: AudioContext;
   setSegments: (props: any) => void;
-  setPoints: (props: any) => void;
+  setIsSegmentListVisible: (props: any) => void;
+  selectedSegmentId: string | undefined;
 }
 
 interface State {}
 
 class WaveformView extends Component<Props, State> {
+  static PeaksInstance: any;
+  static getPeaks() {
+    if (this.PeaksInstance) {
+      return this.PeaksInstance;
+    }
+    throw new Error('Method not implemented.');
+  }
   zoomviewWaveformRef: any;
   overviewWaveformRef: any;
   audioElementRef: any;
@@ -68,8 +76,8 @@ class WaveformView extends Component<Props, State> {
         <button onClick={this.zoomIn}>Zoom in</button>&nbsp;
         <button onClick={this.zoomOut}>Zoom out</button>&nbsp;
         <button onClick={this.addSegment}>Add Segment</button>&nbsp;
-        <button onClick={this.addPoint}>Add Point</button>&nbsp;
-        <button onClick={this.logMarkers}>Log segments/points</button>
+        <button onClick={this.deleteSegment}>Delete Segement</button>
+        <button onClick={this.logMarkers}>See segments</button>
       </div>
     );
   }
@@ -84,6 +92,11 @@ class WaveformView extends Component<Props, State> {
     console.log('WaveformComponent.componentDidUpdate');
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;
+    }
+
+    if (this.props.selectedSegmentId) {
+      const seg = this.peaks.segments.getSegment(this.props.selectedSegmentId);
+      this.peaks.player.playSegment(seg);
     }
     console.log('props', this.props);
     console.log('prevProps', prevProps);
@@ -105,6 +118,8 @@ class WaveformView extends Component<Props, State> {
     this.peaks.setSource(options, function (err, peaks) {
       console.log(peaks);
     });
+
+    WaveformView.PeaksInstance = this.peaks;
   }
 
   initPeaks() {
@@ -120,7 +135,7 @@ class WaveformView extends Component<Props, State> {
       logger: console.error.bind(console),
       createSegmentMarker: createSegmentMarker,
       createSegmentLabel: createSegmentLabel,
-      createPointMarker: createPointMarker,
+      // createPointMarker: createPointMarker,
       webAudio: {
         audioContext: audioContext,
         scale: 128,
@@ -128,22 +143,25 @@ class WaveformView extends Component<Props, State> {
       },
       showPlayheadTime: true,
     };
-    console.log(options);
     // if (this.props.waveformDataUrl) {
     //   options.dataUri = {
     //     arraybuffer: this.props.waveformDataUrl,
     //   };
     // }
 
+    console.log(this);
+
     this.audioElementRef.current.src = this.props.audioUrl;
 
     if (this.peaks) {
       this.peaks.destroy();
       this.peaks = null;
+      WaveformView.PeaksInstance = null;
     }
 
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks;
+      WaveformView.PeaksInstance = peaks;
       this.onPeaksReady();
     });
   }
@@ -153,6 +171,7 @@ class WaveformView extends Component<Props, State> {
 
     if (this.peaks) {
       this.peaks.destroy();
+      WaveformView.PeaksInstance = null;
     }
   }
 
@@ -171,32 +190,33 @@ class WaveformView extends Component<Props, State> {
   addSegment = () => {
     if (this.peaks) {
       const time = this.peaks.player.getCurrentTime();
-
+      const id = this.peaks.segments._segmentIdCounter;
       this.peaks.segments.add({
         startTime: time,
         endTime: time + 10,
-        labelText: 'Test Segment',
+        labelText: `편집할 부분 ${id}`,
         editable: true,
       });
     }
   };
 
-  addPoint = () => {
+  deleteSegment = () => {
     if (this.peaks) {
-      const time = this.peaks.player.getCurrentTime();
+      const input = window.prompt('삭제하실 Segment 번호를 입력해주세요');
+      if (!input) return;
+      const id = Number(input);
 
-      this.peaks.points.add({
-        time: time,
-        labelText: 'Test Point',
-        editable: true,
-      });
+      if (id >= 0 && id < 100) {
+        this.peaks.segments.removeById(`peaks.segment.${id}`);
+      }
     }
   };
 
   logMarkers = () => {
     if (this.peaks) {
-      this.props.setSegments(this.peaks.segments.getSegments());
-      this.props.setPoints(this.peaks.points.getPoints());
+      this.props.setSegments(prevState => this.peaks.segments.getSegments());
+      console.log(this.peaks.segments.getSegments());
+      this.props.setIsSegmentListVisible(prev => !prev);
     }
   };
 
