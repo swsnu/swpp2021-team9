@@ -53,6 +53,41 @@ export const dummySongs: Song[] = [
     reference: 'https://www.youtube.com/watch?v=SK6Sm2Ki9tI',
     description: '붉은색 푸른색 그 사이 3초 그 짧은 시간~',
   },
+  {
+    id: 1,
+    title: 'strawberry moon',
+    singer: '아이유',
+    category: 'POP',
+    reference: 'https://www.youtube.com/watch?v=sqgxcCjD04s',
+  },
+  {
+    id: 2,
+    title: 'Savage',
+    singer: 'aespa',
+    category: 'POP',
+    reference: 'https://www.youtube.com/watch?v=WPdWvnAAurg',
+  },
+  {
+    id: 3,
+    title: 'STAY',
+    singer: 'The Kid LAROI, Justin Bieber',
+    category: 'POP',
+    reference: 'https://www.youtube.com/watch?v=rkYlZnIbe2E',
+  },
+  {
+    id: 4,
+    title: 'My Universe',
+    singer: 'Coldplay, 방탄소년단',
+    category: 'POP',
+    reference: 'https://www.youtube.com/watch?v=bZYPI4mYwhw',
+  },
+  {
+    id: 5,
+    title: 'OHAYO MY NIGHT',
+    singer: '디핵 (D-Hack), PATEKO (파테코)',
+    category: 'HIP-HOP',
+    reference: 'https://www.youtube.com/watch?v=KCpWMEsiN3Q',
+  },
 ];
 
 export const dummyCovers: Cover[] = [
@@ -128,45 +163,6 @@ export const dummyCombinations: Combination[] = [
     song: 0,
     covers: [1, 2, 3],
     likes: 14,
-  },
-];
-
-export const dummyAlbums = [
-  {
-    id: 0,
-    title: '신호등',
-    singer: '이무진',
-    thumbnail: image2,
-  },
-  {
-    id: 1,
-    title: 'strawberry moon',
-    singer: '아이유',
-    thumbnail: image1,
-  },
-  {
-    id: 2,
-    title: 'Savage',
-    singer: 'aespa',
-    thumbnail: image0,
-  },
-  {
-    id: 3,
-    title: 'STAY',
-    singer: 'The Kid LAROI, Justin Bieber',
-    thumbnail: image3,
-  },
-  {
-    id: 4,
-    title: 'My Universe',
-    singer: 'Coldplay, 방탄소년단',
-    thumbnail: image4,
-  },
-  {
-    id: 5,
-    title: 'OHAYO MY NIGHT',
-    singer: '디핵 (D-Hack), PATEKO (파테코)',
-    thumbnail: image5,
   },
 ];
 
