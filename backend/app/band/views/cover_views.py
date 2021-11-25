@@ -1,6 +1,5 @@
 """ Band views
 cover views for band
-TODO ("implement")
 """
 from django.http.request import HttpRequest
 from django.http.response import HttpResponseBadRequest
@@ -11,8 +10,6 @@ from rest_framework import mixins, generics, status
 from band.models import Cover, Song
 from band.serializers import CoverSerializer, CoverLikeSerializer
 
-# pylint: disable=W0613, R0201
-# temporarily disable unused-argument, no-self-use warning
 
 
 class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
