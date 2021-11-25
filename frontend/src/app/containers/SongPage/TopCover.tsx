@@ -23,14 +23,14 @@ export default function TopCover(props: Props) {
         .sort((a, b) => {
           return -(a.views - b.views); // more views = higher rank
         })
-        .map((cover, index) => (
+        .map((cover, coverId) => (
           <tr key={cover.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
               data-testid="CoverGetButton"
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
-              {index + 1}
+              {coverId + 1}
             </td>
             <td
               className="px-3 py-2 text-sm font-medium whitespace-nowrap text-center text-gray-600"
@@ -55,9 +55,9 @@ export default function TopCover(props: Props) {
               onClick={() => dispatch(actions.editCurrent(cover))}
             >
               <ul className="flex flex-wrap gap-1">
-                {cover.tags.map((tag, index) => (
+                {cover.tags.map((tag, tagId) => (
                   <li
-                    key={index}
+                    key={tagId}
                     className="px-1 text-xs font-medium rounded-full bg-gray-200 text-gray-600"
                   >
                     {tag}
