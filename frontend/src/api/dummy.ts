@@ -30,8 +30,8 @@ export const dummyUser: User[] = Array.from({ length: 10 }, (_, idx) => {
   };
 });
 
-const instNames = ['Vocals, Keyboard', 'Guitar', 'Drum'];
-const instIcons = ['mic, piano', 'guitar', 'drum'];
+const instNames = ['Vocals', 'Keyboard', 'Guitar', 'Drum'];
+const instIcons = ['mic', 'piano', 'guitar', 'drum'];
 
 export const dummyInstruments: Instrument[] = Array.from(
   { length: instNames.length },
