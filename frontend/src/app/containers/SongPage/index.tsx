@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCombination, selectCurrent } from './slice/selectors';
 
 import { Main } from 'utils/urls';
+import { getThumbnail } from 'utils/imageTools';
 
 import SongInfo from './SongInfo';
 import TopCombination from './TopCombination';
@@ -16,7 +17,7 @@ import {
   dummyCombinations,
   dummyCovers,
   dummyInstruments,
-} from './dummy';
+} from 'api/dummy';
 
 interface MatchParams {
   id?: string;
@@ -56,7 +57,7 @@ export default function SongPage(props: Props) {
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         <SongInfo
           song={dummySongs[0]}
-          image={'https://img.youtube.com/vi/SK6Sm2Ki9tI/hqdefault.jpg'}
+          image={getThumbnail(dummySongs[0].reference)}
         />
         <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
         <CombinationArea instruments={dummyInstruments} covers={dummyCovers} />

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Album from '../../components/Album/index';
-import { dummyAlbums } from './dummy';
+import { dummySongs } from 'api/dummy';
 import Player from 'app/helper/Player';
 import { Song } from 'utils/urls';
+import { getThumbnail } from 'utils/imageTools';
 
 export type Props = {};
 
@@ -30,14 +31,14 @@ export default function MainPage(props: Props) {
       data-testid="MainPage"
       className="items-center overflow-hidden grid grid-cols-12"
     >
-      {dummyAlbums.map(album => (
+      {dummySongs.map(song => (
         <Album
-          key={album.id}
-          id={album.id}
-          title={album.title}
-          singer={album.singer}
-          thumbnail={album.thumbnail}
-          onClickTitle={() => history.push(Song(album.id))}
+          key={song.id}
+          id={song.id}
+          title={song.title}
+          singer={song.singer}
+          thumbnail={getThumbnail(song.reference)}
+          onClickTitle={() => history.push(Song(song.id))}
           onClickPlay={() => {}}
           // TODO
         />

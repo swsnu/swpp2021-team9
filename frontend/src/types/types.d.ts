@@ -1,3 +1,10 @@
+interface SignUpForm {
+  email: string;
+  password: string;
+}
+
+type SignInForm = SignUpForm;
+
 interface Combination {
   id: number;
   views: number;
@@ -6,19 +13,42 @@ interface Combination {
   likes: number;
 }
 
+interface CombinationForm {
+  songId: number;
+  covers: number[];
+}
+
 interface Cover {
   id: number;
   audio: string;
   title: string;
   category: string;
   description?: string;
-  user: number;
+  user: UserInfo;
   instrument: Instrument;
-  song: number;
+  song: Song;
   tags: string[];
   likes: number;
   views: number;
-  combination: number | null;
+  combinationId: number | null;
+}
+
+interface CoverForm {
+  audio: string;
+  songId: number;
+  title: string;
+  category: string;
+  description: string;
+  tags: string[];
+  combinationId: number;
+  instrumentId: number;
+}
+
+interface CoverFormPut {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
 }
 
 interface Instrument {
@@ -36,11 +66,18 @@ interface Song {
   description?: string;
 }
 
+interface SongForm {
+  title: string;
+  singer: string;
+  category: string;
+  reference: string;
+  description: string;
+}
+
 interface User {
   id: number;
   username: string;
   email: string;
-  password: string;
   description: string;
   photo: string;
   followings: number[];
@@ -50,6 +87,7 @@ interface User {
 type UserInfo = {
   id: number;
   username: string;
+  photo?: string;
 };
 
 type PlayInfo = {

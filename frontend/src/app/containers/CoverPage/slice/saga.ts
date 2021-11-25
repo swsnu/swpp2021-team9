@@ -1,5 +1,5 @@
 import { put, takeEvery } from 'redux-saga/effects';
-import { signInActions } from '.';
+import { coverActions } from '.';
 import * as AT from 'api/actionTypes';
 import * as actions from 'api/actions';
 import { api } from 'api/band';
@@ -13,11 +13,11 @@ export default function* coverPageSaga(payload: any) {
 export function* getCoverResponse(
   action: ActionType<typeof actions.loadCover.request>,
 ) {
-  yield put(signInActions.loadingCoverResponse('start load'));
+  yield put(coverActions.loadingCoverResponse('start load'));
   try {
     const coverResponse = yield api.getCoverInfo(action.payload);
-    yield put(signInActions.successCoverResponse(coverResponse));
+    yield put(coverActions.successCoverResponse(coverResponse));
   } catch (e: any) {
-    yield put(signInActions.errorCoverResponse(e));
+    yield put(coverActions.errorCoverResponse(e));
   }
 }

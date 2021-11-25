@@ -30,11 +30,13 @@ try:
 except (FileNotFoundError, JSONDecodeError):
     secrets = {}
 
+
 def get_secret(setting, fallback):
     try:
         return secrets[setting]
     except KeyError:
         return fallback
+
 
 SECRET_KEY = get_secret("SECRET_KEY", "ASDFG")
 
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'band',
     'user',
 ]
@@ -149,3 +152,13 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
