@@ -44,7 +44,7 @@ export default function TopCombination(props: Props) {
 
   const renderCombinations = (combinations: Combination[]) => {
     return combinations.length > 0 ? (
-      combinations
+      [...combinations]
         .sort((a, b) => {
           return -(a.views - b.views); // more views = higher rank
         })
