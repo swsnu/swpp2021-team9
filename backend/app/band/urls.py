@@ -21,7 +21,7 @@ urlpatterns = [
     ),
     # cover urls
     path(
-        "cover/info/<int:cover_id>/", cover_views.CoverInfo.as_view(), name="cover_info"
+        "cover/info/<int:pk>/", cover_views.CoverInfo.as_view(), name="cover_info"
     ),
     path(
         "cover/like/<int:cover_id>/", cover_views.CoverLike.as_view(), name="cover_like"

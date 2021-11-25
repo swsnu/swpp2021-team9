@@ -5,6 +5,11 @@ TODO ("implement")
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.views import View
+from rest_framework.response import Response
+from rest_framework import mixins, generics
+
+from band.models import Cover
+from band.serializers import CoverSerializer
 
 # pylint: disable=W0613, R0201
 # temporarily disable unused-argument, no-self-use warning
@@ -27,17 +32,35 @@ class CoverSongInstrument(View):
         return HttpResponse(status=501)
 
 
-class CoverInfo(View):
+class CoverInfo(mixins.RetrieveModelMixin, generics.GenericAPIView):
     """cover/info/<int:cover_id>/"""
 
-    def get(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=501)
+    queryset = Cover.objects.all()
+    serializer_class = CoverSerializer
 
-    def put(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=501)
+    def update(self, request: HttpRequest, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data.copy()
+        if data.get("tags") is not None:
+            data["tags_list"] = data.pop("tags")
+        serializer: CoverSerializer = self.get_serializer(
+            instance, data=data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    def delete(self, request: HttpRequest, cover_id: int):
-        return HttpResponse(status=501)
+        return Response(serializer.data)
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request: HttpRequest, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request: HttpRequest, *args, **kwargs):
+        instance: Cover = self.get_object()
+        instance.delete()
+        return Response()
 
 
 class CoverLike(View):

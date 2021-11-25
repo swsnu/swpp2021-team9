@@ -25,18 +25,6 @@ class CoverTestCase(TestCase):
         response = client.get("/api/cover/1/1/")
         self.assertEqual(response.status_code, 501)
 
-    def test_cover_info(self):
-        client = Client(enforce_csrf_checks=False)
-
-        response = client.get("/api/cover/info/1/")
-        self.assertEqual(response.status_code, 501)
-
-        response = client.put("/api/cover/info/1/", {})
-        self.assertEqual(response.status_code, 501)
-
-        response = client.delete("/api/cover/info/1/")
-        self.assertEqual(response.status_code, 501)
-
     def test_cover_like(self):
         client = Client(enforce_csrf_checks=False)
 
