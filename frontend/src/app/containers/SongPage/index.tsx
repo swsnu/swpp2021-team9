@@ -40,7 +40,7 @@ export default function SongPage(props: Props) {
   const renderTopCover = () => {
     if (current === null) return null;
 
-    const item = combination.find(item => item.id === current);
+    const item = combination.find(i => i.id === current);
     return (
       item && (
         <TopCover
