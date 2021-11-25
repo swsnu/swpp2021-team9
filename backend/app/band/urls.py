@@ -20,12 +20,8 @@ urlpatterns = [
         name="instrument",
     ),
     # cover urls
-    path(
-        "cover/info/<int:pk>/", cover_views.CoverInfo.as_view(), name="cover_info"
-    ),
-    path(
-        "cover/like/<int:cover_id>/", cover_views.CoverLike.as_view(), name="cover_like"
-    ),
+    path("cover/info/<int:pk>/", cover_views.CoverInfo.as_view(), name="cover_info"),
+    path("cover/like/<int:pk>/", cover_views.CoverLike.as_view(), name="cover_like"),
     path(
         "cover/<int:song_id>/<int:instrument_id>/",
         cover_views.CoverSongInstrument.as_view(),

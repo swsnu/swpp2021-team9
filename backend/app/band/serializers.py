@@ -36,12 +36,20 @@ class CoverSerializer(serializers.ModelSerializer):
     song = SongSerializer(many=False, read_only=True)
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
 
-    tags_list = serializers.ListField(write_only=True)
+    tags_list = serializers.ListField(write_only=True, required=False)
+    song_id = serializers.IntegerField(write_only=True)
 
     # override
-    # def create(self, validated_data):
-    #     print('create')
-    #     super().create(validated_data)
+    def create(self, validated_data):
+        if validated_data.get("tags_list") is not None:
+            tags_list = validated_data.pop("tags_list")
+            validated_data["tags"] = CoverTag.objects.filter(name__in=tags_list)
+
+        song_id = validated_data.pop("song_id")
+        validated_data["song"] = Song.objects.get(id=song_id)
+
+        print(validated_data)
+        return super().create(validated_data)
 
     # override
     def update(self, instance, validated_data):
@@ -68,6 +76,19 @@ class CoverSerializer(serializers.ModelSerializer):
             "views",
             "combination",
             "tags_list",
+            "song_id",
+        ]
+
+
+class CoverLikeSerializer(serializers.ModelSerializer):
+    """Serializer for likes of cover"""
+
+    class Meta:
+        model = Cover
+        fields = [
+            "id",
+            "likes",
+            "like_count",
         ]
 
 
