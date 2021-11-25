@@ -19,7 +19,7 @@ export default function TopCover(props: Props) {
 
   const renderCovers = (covers: Cover[]) => {
     return covers.length > 0 ? (
-      covers
+      [...covers]
         .sort((a, b) => {
           return -(a.views - b.views); // more views = higher rank
         })
