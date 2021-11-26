@@ -1,5 +1,5 @@
 import { WaveformColor } from 'peaks.js';
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   startTime: number;
@@ -8,40 +8,79 @@ interface Props {
   color?: WaveformColor;
   labelText?: string;
   id?: string;
+  isMergeClicked: boolean;
   setSelectedId: (props: string | undefined) => any;
   setIsPlaySegmentClicked: (props: any) => any;
+  setIsDeleteClicked: (props: any) => any;
+  handleMergeList: (id: string | undefined, isMerge: boolean) => any;
 }
 
-class SegmentComponent extends Component<Props> {
-  render() {
-    return (
-      <tr test-dataid="Segment" className="hover:bg-gray-100 cursor-pointer">
-        <td className="py-2 border text-md font-medium whitespace-nowrap text-center">
-          {this.props.id}
-        </td>
-        <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-          {this.props.startTime}
-        </td>
-        <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-          {this.props.endTime}
-        </td>
-        <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-          {this.props.labelText}
-        </td>
-        <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-          <button
-            onClick={() => {
-              console.log(this.props.id);
-              this.props.setSelectedId(this.props.id);
-              this.props.setIsPlaySegmentClicked(prev => !prev);
-            }}
-          >
-            Play Segment
-          </button>
-        </td>
-      </tr>
-    );
-  }
-}
+export default function SegmentComponent({
+  id,
+  startTime,
+  endTime,
+  labelText,
+  isMergeClicked,
+  setSelectedId,
+  setIsPlaySegmentClicked,
+  setIsDeleteClicked,
+  handleMergeList,
+}: Props) {
+  const [isMerge, setIsMerge] = useState(false);
 
-export default SegmentComponent;
+  useEffect(() => {
+    if (isMergeClicked) {
+      setIsMerge(false);
+    }
+  }, [isMergeClicked]);
+
+  return (
+    <tr test-dataid="Segment" className="hover:bg-gray-100 cursor-pointer">
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        <input
+          checked={isMerge}
+          onChange={e => {
+            handleMergeList(id, !isMerge);
+            setIsMerge(prev => !prev);
+          }}
+          type="checkBox"
+        ></input>
+      </td>
+      <td className="py-2 border text-md font-medium whitespace-nowrap text-center">
+        {id}
+      </td>
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        {startTime}
+      </td>
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        {endTime}
+      </td>
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        {labelText}
+      </td>
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        <button
+          onClick={() => {
+            console.log(id);
+            setSelectedId(id);
+            setIsPlaySegmentClicked(true);
+          }}
+        >
+          Play Segment
+        </button>
+      </td>
+
+      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
+        <button
+          onClick={() => {
+            console.log(id);
+            setSelectedId(id);
+            setIsDeleteClicked(true);
+          }}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  );
+}

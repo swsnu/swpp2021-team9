@@ -1,4 +1,4 @@
-import React, { useState, useMemo, ChangeEventHandler } from 'react';
+import React, { useState, useMemo, ChangeEventHandler, useEffect } from 'react';
 import YoutubePlayer from 'app/components/CreateCover/YoutubePlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,21 +17,29 @@ import { useCreateCoverSlice } from './slice';
 import VideoPreview from 'app/components/CreateCover/VideoPreview';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
+import AudioEditor from 'app/helper/Audio/AudioHelpers';
+import MergedAudio from 'app/components/CreateCover/MergedAudio';
 export interface Props {}
 
 export default function CreateCoverRecordPage(props: Props) {
+  const editor = useMemo(() => AudioEditor.getInstance(), []);
+
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
   const [selectedSegmentId, setSelectedSegmentId] = useState<
     string | undefined
   >('');
-  // const [file, setFile] = useState<any>(null);
+  const [file, setFile] = useState<any>(null);
+  const [mergedFile, setMergedFile] = useState<File[]>([]);
+  const [mergedUrl, setMergedUrl] = useState<string>('');
+  const [mergeList, setMergeList] = useState<string[]>([]);
+  const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
+  const [isDeleteClicked, setIsDeleteClicked] = useState<boolean>(false);
   const [isPlaySegmentClicked, setIsPlaySegmentClicked] =
     useState<boolean>(false);
   const [uploadUrl, setUploadUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
-  const [isSegmentListVisible, setIsSegmentListVisible] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
@@ -45,9 +53,32 @@ export default function CreateCoverRecordPage(props: Props) {
     previewAudioStream,
   } = useReactMediaRecorder({ video: isVideo });
 
+  const handleMergeList = (id: string | undefined, isMerge: boolean) => {
+    if (!id) {
+      return;
+    }
+    if (isMerge) {
+      if (!mergeList.includes(id)) {
+        setMergeList([...mergeList, id]);
+      }
+    } else {
+      if (mergeList.includes(id)) {
+        const _mergeList = mergeList.filter(mL => mL !== id);
+        setMergeList(_mergeList);
+      }
+    }
+  };
+
   const handleVideoStatus = () => {
     setIsVideo(!isVideo);
   };
+
+  useEffect(() => {
+    return () => {
+      setSegments([]);
+      setMergeList([]);
+    };
+  }, [isUploading, isRecordingEnabled]);
 
   useMemo(() => {
     if (
@@ -60,10 +91,39 @@ export default function CreateCoverRecordPage(props: Props) {
       });
       const seg: Segment = Segs[0];
       const peaks = WaveformView.getPeaks();
+      console.log(seg);
       peaks.player.playSegment(seg);
+      setIsPlaySegmentClicked(false);
     }
-    setIsPlaySegmentClicked(false);
-  }, [selectedSegmentId, isPlaySegmentClicked, segments]);
+  }, [isPlaySegmentClicked]);
+
+  useMemo(() => {
+    if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
+      const peaks = WaveformView.getPeaks();
+      peaks.segments.removeById(selectedSegmentId);
+      const segs = peaks.segments.getSegments();
+      console.log('afterdelete', segs);
+      setSegments(segs);
+      setIsDeleteClicked(false);
+    }
+  }, [isDeleteClicked]);
+
+  useMemo(async () => {
+    if (!mediaBlobUrl) {
+      return;
+    }
+    let blob = await fetch(mediaBlobUrl).then(r => r.blob());
+    console.log('[REC BLOB URL]', blob);
+
+    let fileBlob = new File(
+      [blob],
+      new Date().toISOString() + '_recording.mpeg',
+      { type: 'audio/mpeg' },
+    );
+    console.log(fileBlob);
+    setFile(fileBlob);
+    editor.readAndDecode(fileBlob);
+  }, [mediaBlobUrl]);
 
   const onRecordClicked = () => {
     if (isRecording) {
@@ -93,19 +153,33 @@ export default function CreateCoverRecordPage(props: Props) {
   };
 
   const onChangeUpload: ChangeEventHandler<HTMLInputElement> = (e: any) => {
-    // let reader = new FileReader();
+    if (!e.target.files[0]) {
+      return;
+    }
     let file = e.target.files[0];
-    // reader.onloadend = () => {
-    //   setFile(file);
-    //   setUploadUrl(URL.createObjectURL(file));
-    // };
+    const upload = URL.createObjectURL(file);
+    setUploadUrl(upload);
+    console.log(upload);
+    editor.readAndDecode(file);
+    setFile(file);
+  };
 
-    console.log(uploadUrl);
-    setUploadUrl(URL.createObjectURL(file));
+  const mergeSegments = async () => {
+    const targetSegments = mergeList.map(id => {
+      return segments.filter(seg => seg.id === id)[0];
+    });
+    targetSegments.sort(
+      (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
+    );
+    const mp3File: any = await editor.mergeAudio(targetSegments);
+    setMergedFile(mp3File);
+    setMergedUrl(URL.createObjectURL(mp3File));
+    setMergeList([]);
+    setIsMergeClicked(prev => !prev);
   };
 
   const renderSegments = () => {
-    const _segments = segments;
+    const _segments = [...segments];
 
     if (!_segments) {
       return null;
@@ -116,11 +190,11 @@ export default function CreateCoverRecordPage(props: Props) {
     }
 
     return (
-      <>
-        <h2>Segments</h2>
+      <React.Fragment>
         <table>
           <thead>
             <tr>
+              <th>Merge</th>
               <th>ID</th>
               <th>Start time</th>
               <th>End time</th>
@@ -128,23 +202,31 @@ export default function CreateCoverRecordPage(props: Props) {
               <th>Play</th>
             </tr>
           </thead>
-          <tbody>{renderSegmentRows(segments)}</tbody>
+          <tbody>{renderSegmentRows(_segments)}</tbody>
         </table>
-      </>
+        <button type="button" onClick={e => mergeSegments()}>
+          Merge
+        </button>
+      </React.Fragment>
     );
   };
 
   const renderSegmentRows = (segments: Segment[]) => {
     return segments.map(segment => (
-      <SegmentComponent
-        id={segment.id}
-        key={segment.id}
-        startTime={segment.startTime}
-        endTime={segment.endTime}
-        labelText={segment.labelText}
-        setSelectedId={setSelectedSegmentId}
-        setIsPlaySegmentClicked={setIsPlaySegmentClicked}
-      />
+      <React.Fragment key={segment.id}>
+        <SegmentComponent
+          id={segment.id}
+          key={segment.id}
+          startTime={segment.startTime}
+          endTime={segment.endTime}
+          labelText={segment.labelText}
+          isMergeClicked={isMergeClicked}
+          setSelectedId={setSelectedSegmentId}
+          setIsPlaySegmentClicked={setIsPlaySegmentClicked}
+          setIsDeleteClicked={setIsDeleteClicked}
+          handleMergeList={handleMergeList}
+        />
+      </React.Fragment>
     ));
   };
 
@@ -206,7 +288,6 @@ export default function CreateCoverRecordPage(props: Props) {
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
-              setIsSegmentListVisible={setIsSegmentListVisible}
             />
           ) : null
         ) : null}
@@ -218,7 +299,12 @@ export default function CreateCoverRecordPage(props: Props) {
         ) : null}
       </div>
       {isUploading ? (
-        <input id="upload-file" type="file" onChange={onChangeUpload} />
+        <input
+          id="upload-file"
+          type="file"
+          accept="audio/*"
+          onChange={onChangeUpload}
+        />
       ) : null}
       <div className="container flex-col justify-center items-center">
         {isUploading ? (
@@ -228,12 +314,14 @@ export default function CreateCoverRecordPage(props: Props) {
               audioUrl={uploadUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
-              setIsSegmentListVisible={setIsSegmentListVisible}
             />
           ) : null
         ) : null}
       </div>
-      {isRecordingEnabled && isSegmentListVisible ? renderSegments() : null}
+      {renderSegments()}
+      {mergedUrl ? (
+        <MergedAudio audioFile={mergedFile} audioUrl={mergedUrl} />
+      ) : null}
       <div
         data-testid="CreateCoverButtons"
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
@@ -266,7 +354,7 @@ export default function CreateCoverRecordPage(props: Props) {
             onClick={() => setIsRecordingEnabled(!isRecordingEnabled)}
           >
             <FontAwesomeIcon
-              className="justify-center items-center font-large rounded-md "
+              className="justify-center items-center font-large rounded-md"
               icon={faMicrophoneAlt}
               size={'3x'}
               spin={isRecordingEnabled}

@@ -10,8 +10,11 @@ describe('<Segment />', () => {
         startTime={1}
         endTime={2}
         labelText={'test'}
+        isMergeClicked={false}
         setSelectedId={jest.fn()}
         setIsPlaySegmentClicked={jest.fn()}
+        setIsDeleteClicked={jest.fn()}
+        handleMergeList={jest.fn()}
       />,
     );
     expect(screen.getByTestId('Segment')).toBeTruthy();

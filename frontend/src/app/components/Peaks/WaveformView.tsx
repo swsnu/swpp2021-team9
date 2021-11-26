@@ -11,7 +11,6 @@ interface Props {
   audioContentType: string;
   // audioContext?: AudioContext;
   setSegments: (props: any) => void;
-  setIsSegmentListVisible: (props: any) => void;
   selectedSegmentId: string | undefined;
 }
 
@@ -22,8 +21,9 @@ class WaveformView extends Component<Props, State> {
   static getPeaks() {
     if (this.PeaksInstance) {
       return this.PeaksInstance;
+    } else {
+      return null;
     }
-    throw new Error('Method not implemented.');
   }
   zoomviewWaveformRef: any;
   overviewWaveformRef: any;
@@ -47,7 +47,7 @@ class WaveformView extends Component<Props, State> {
     );
 
     return (
-      <div>
+      <div className="justify-center items-center">
         <div
           className="zoomview-container"
           ref={this.zoomviewWaveformRef}
@@ -57,27 +57,55 @@ class WaveformView extends Component<Props, State> {
           ref={this.overviewWaveformRef}
         ></div>
 
-        <audio ref={this.audioElementRef} controls>
-          <source
-            src={this.props.audioUrl}
-            type={this.props.audioContentType}
-          />
-          Your browser does not support the audio element.
-        </audio>
+        <div className="flex-col justify-center items-center">
+          <audio ref={this.audioElementRef} controls>
+            <source
+              src={this.props.audioUrl}
+              type={this.props.audioContentType}
+            />
+            Your browser does not support the audio element.
+          </audio>
 
-        {this.renderButtons()}
+          {this.renderButtons()}
+        </div>
       </div>
     );
   }
 
   renderButtons() {
     return (
-      <div className="inline-flex">
-        <button onClick={this.zoomIn}>Zoom in</button>&nbsp;
-        <button onClick={this.zoomOut}>Zoom out</button>&nbsp;
-        <button onClick={this.addSegment}>Add Segment</button>&nbsp;
-        <button onClick={this.deleteSegment}>Delete Segement</button>
-        <button onClick={this.logMarkers}>See segments</button>
+      <div className="inline-flex space-x-2">
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          onClick={this.zoomIn}
+        >
+          Zoom in
+        </button>
+        &nbsp;
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          onClick={this.zoomOut}
+        >
+          Zoom out
+        </button>
+        <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          onClick={this.addSegment}
+        >
+          Add Segment
+        </button>
+        {/* <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          onClick={this.deleteSegment}
+        >
+          Delete Segement
+        </button> */}
+        {/* <button
+          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          onClick={this.logMarkers}
+        >
+          See segments
+        </button> */}
       </div>
     );
   }
@@ -115,10 +143,9 @@ class WaveformView extends Component<Props, State> {
       },
       zoomLevels: [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
     };
-    this.peaks.setSource(options, function (err, peaks) {
-      console.log(peaks);
+    this.peaks.setSource(options, (err, peaks) => {
+      this.onPeaksReady();
     });
-
     WaveformView.PeaksInstance = this.peaks;
   }
 
@@ -135,19 +162,14 @@ class WaveformView extends Component<Props, State> {
       logger: console.error.bind(console),
       createSegmentMarker: createSegmentMarker,
       createSegmentLabel: createSegmentLabel,
-      // createPointMarker: createPointMarker,
       webAudio: {
         audioContext: audioContext,
         scale: 128,
         multiChannel: true,
       },
       showPlayheadTime: true,
+      emitCueEvents: true,
     };
-    // if (this.props.waveformDataUrl) {
-    //   options.dataUri = {
-    //     arraybuffer: this.props.waveformDataUrl,
-    //   };
-    // }
 
     console.log(this);
 
@@ -193,36 +215,30 @@ class WaveformView extends Component<Props, State> {
       const id = this.peaks.segments._segmentIdCounter;
       this.peaks.segments.add({
         startTime: time,
-        endTime: time + 10,
+        endTime: time + 5,
         labelText: `편집할 부분 ${id}`,
         editable: true,
       });
-    }
-  };
-
-  deleteSegment = () => {
-    if (this.peaks) {
-      const input = window.prompt('삭제하실 Segment 번호를 입력해주세요');
-      if (!input) return;
-      const id = Number(input);
-
-      if (id >= 0 && id < 100) {
-        this.peaks.segments.removeById(`peaks.segment.${id}`);
-      }
+      this.logMarkers();
     }
   };
 
   logMarkers = () => {
     if (this.peaks) {
-      this.props.setSegments(prevState => this.peaks.segments.getSegments());
-      console.log(this.peaks.segments.getSegments());
-      this.props.setIsSegmentListVisible(prev => !prev);
+      this.props.setSegments(prevState => [
+        ...this.peaks.segments.getSegments(),
+      ]);
     }
   };
 
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
     console.log('Peaks.js is ready');
+    this.peaks.on('segments.dragend', segment => {
+      const segments = this.peaks.segments.getSegments();
+      this.props.setSegments(prev => [...segments]);
+      console.log(segment, segments);
+    });
   };
 }
 
