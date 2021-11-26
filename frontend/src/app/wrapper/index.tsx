@@ -40,7 +40,7 @@ export default function Wrapper(props: Props) {
         like: false,
       });
     });
-    // player.setTracks(trackList);
+    player.setTracks(trackList);
   }, [player]);
 
   const onLogoClicked = useCallback(() => {
