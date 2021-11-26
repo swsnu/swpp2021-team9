@@ -20,16 +20,16 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Cover.objects.none()
     serializer_class = CoverSerializer
 
-    def get(self, request: HttpRequest, song_id: int, *args, **kwargs):
+    def get(self, request: HttpRequest, song_id: int):
         self.queryset = Cover.objects.filter(song__id=song_id)
-        return self.list(request, *args, **kwargs)
+        return self.list(request)
 
-    def post(self, request: Request, song_id: int, *args, **kwargs):
+    def post(self, request: Request, song_id: int):
         data = request.data.copy()
         try:
             Song.objects.get(id=song_id)
-        except Song.DoesNotExist as e:
-            return HttpResponseBadRequest(e)
+        except Song.DoesNotExist as error:
+            return HttpResponseBadRequest(error)
 
         data["song_id"] = song_id
 
@@ -37,7 +37,7 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
             data["tags_list"] = data.pop("tags")
 
         # data["user"] = ...
-        # TODO add user field
+        # Todo add user field
 
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -53,12 +53,12 @@ class CoverSongInstrument(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = CoverSerializer
 
     def get(
-        self, request: HttpRequest, song_id: int, instrument_id: int, *args, **kwargs
+        self, request: HttpRequest, song_id: int, instrument_id: int
     ):
         self.queryset = Cover.objects.filter(
             song__id=song_id, instrument__id=instrument_id
         )
-        return self.list(request, *args, **kwargs)
+        return self.list(request)
 
 
 class CoverInfo(mixins.RetrieveModelMixin, generics.GenericAPIView):
@@ -98,26 +98,26 @@ class CoverLike(generics.GenericAPIView):
     queryset = Cover.objects.all()
     serializer_class = CoverLikeSerializer
 
-    def get(self, request: Request, *args, **kwargs):
+    def get(self, request: Request):
         instance: Cover = self.get_object()
         serializer: CoverLikeSerializer = self.get_serializer(instance)
 
-        user_id = 1  # TODO
+        user_id = 1  # Todo
         res_data = {"isLike": user_id in serializer.data.get("likes")}
         return Response(res_data, content_type="application/json")
 
-    def put(self, request: Request, *args, **kwargs):
+    def put(self, request: Request):
         instance = self.get_object()
         serializer_old: CoverLikeSerializer = self.get_serializer(instance)
         likes: list = serializer_old.data.get("likes")
 
-        isLike = request.data.get("isLike")
-        if isLike is None:
+        is_like = request.data.get("isLike")
+        if is_like is None:
             return HttpResponseBadRequest()
 
-        user_id = 1  # TODO
+        user_id = 1  # Todo
 
-        if isLike:
+        if is_like:
             if user_id not in likes:
                 # like the cover
                 likes.append(user_id)
@@ -136,5 +136,5 @@ class CoverLike(generics.GenericAPIView):
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
 
-        res_data = {"isLike": isLike}
+        res_data = {"isLike": is_like}
         return Response(res_data, content_type="application/json")
