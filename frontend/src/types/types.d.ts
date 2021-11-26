@@ -63,7 +63,7 @@ interface Song {
   singer: string;
   category: string;
   reference: string;
-  description?: string;
+  description: string;
 }
 
 interface SongForm {

@@ -23,12 +23,12 @@ const slice = createSlice({
       return state;
     },
     successCoverResponse(state, action: PayloadAction<Cover>) {
-      state.coverResponse.loading = false;
+      state.coverResponse = { loading: false };
       state.coverResponse.data = action.payload;
       return state;
     },
     errorCoverResponse(state, action: PayloadAction<string>) {
-      state.coverResponse.loading = false;
+      state.coverResponse = { loading: false };
       state.coverResponse.error = action.payload;
       return state;
     },

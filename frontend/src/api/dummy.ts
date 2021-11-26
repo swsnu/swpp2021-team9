@@ -59,6 +59,7 @@ export const dummySongs: Song[] = [
     singer: '아이유',
     category: 'POP',
     reference: 'https://www.youtube.com/watch?v=sqgxcCjD04s',
+    description: '',
   },
   {
     id: 2,
@@ -66,6 +67,7 @@ export const dummySongs: Song[] = [
     singer: 'aespa',
     category: 'POP',
     reference: 'https://www.youtube.com/watch?v=WPdWvnAAurg',
+    description: '',
   },
   {
     id: 3,
@@ -73,6 +75,7 @@ export const dummySongs: Song[] = [
     singer: 'The Kid LAROI, Justin Bieber',
     category: 'POP',
     reference: 'https://www.youtube.com/watch?v=rkYlZnIbe2E',
+    description: '',
   },
   {
     id: 4,
@@ -80,6 +83,7 @@ export const dummySongs: Song[] = [
     singer: 'Coldplay, 방탄소년단',
     category: 'POP',
     reference: 'https://www.youtube.com/watch?v=bZYPI4mYwhw',
+    description: '',
   },
   {
     id: 5,
@@ -87,13 +91,14 @@ export const dummySongs: Song[] = [
     singer: '디핵 (D-Hack), PATEKO (파테코)',
     category: 'HIP-HOP',
     reference: 'https://www.youtube.com/watch?v=KCpWMEsiN3Q',
+    description: '',
   },
 ];
 
 export const dummyCovers: Cover[] = [
   {
     id: 0,
-    audio: '',
+    audio: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/1.mp3',
     title: 'Cute Vocals!',
     category: '',
     description: '',
@@ -107,7 +112,7 @@ export const dummyCovers: Cover[] = [
   },
   {
     id: 1,
-    audio: '',
+    audio: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/2.mp3',
     title: 'Folk Guitar Cover',
     category: '',
     description: '',
@@ -121,7 +126,7 @@ export const dummyCovers: Cover[] = [
   },
   {
     id: 2,
-    audio: '',
+    audio: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/3.mp3',
     title: 'FUNKY Piano cover',
     category: '',
     description: '',
@@ -135,7 +140,7 @@ export const dummyCovers: Cover[] = [
   },
   {
     id: 3,
-    audio: '',
+    audio: 'https://js-music-sample.s3.ap-northeast-2.amazonaws.com/1.mp3',
     title: '신호등 female solo cover',
     category: '',
     description: '',
