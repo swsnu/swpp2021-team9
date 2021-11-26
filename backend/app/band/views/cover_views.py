@@ -37,7 +37,7 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
             data["tags_list"] = data.pop("tags")
 
         # data["user"] = ...
-        # Todo add user field
+        # add user field
 
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -102,7 +102,7 @@ class CoverLike(generics.GenericAPIView):
         instance: Cover = self.get_object()
         serializer: CoverLikeSerializer = self.get_serializer(instance)
 
-        user_id = 1  # Todo
+        user_id = 1  # add user detection
         res_data = {"isLike": user_id in serializer.data.get("likes")}
         return Response(res_data, content_type="application/json")
 
@@ -115,7 +115,7 @@ class CoverLike(generics.GenericAPIView):
         if is_like is None:
             return HttpResponseBadRequest()
 
-        user_id = 1  # Todo
+        user_id = 1  # add user detection
 
         if is_like:
             if user_id not in likes:
