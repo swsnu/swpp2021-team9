@@ -98,7 +98,7 @@ class CoverLike(generics.GenericAPIView):
     queryset = Cover.objects.all()
     serializer_class = CoverLikeSerializer
 
-    def get(self, request: Request):
+    def get(self, request: Request, *args, **kwargs):
         instance: Cover = self.get_object()
         serializer: CoverLikeSerializer = self.get_serializer(instance)
 
@@ -106,7 +106,7 @@ class CoverLike(generics.GenericAPIView):
         res_data = {"isLike": user_id in serializer.data.get("likes")}
         return Response(res_data, content_type="application/json")
 
-    def put(self, request: Request):
+    def put(self, request: Request, *args, **kwargs):
         instance = self.get_object()
         serializer_old: CoverLikeSerializer = self.get_serializer(instance)
         likes: list = serializer_old.data.get("likes")
