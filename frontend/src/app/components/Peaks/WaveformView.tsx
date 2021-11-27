@@ -21,8 +21,6 @@ class WaveformView extends Component<Props, State> {
   static getPeaks() {
     if (this.PeaksInstance) {
       return this.PeaksInstance;
-    } else {
-      return null;
     }
   }
   zoomviewWaveformRef: any;
@@ -47,7 +45,7 @@ class WaveformView extends Component<Props, State> {
     );
 
     return (
-      <div className="justify-center items-center">
+      <div data-testid="WaveformView" className="justify-center items-center">
         <div
           className="zoomview-container"
           ref={this.zoomviewWaveformRef}
@@ -94,18 +92,6 @@ class WaveformView extends Component<Props, State> {
         >
           Add Segment
         </button>
-        {/* <button
-          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-          onClick={this.deleteSegment}
-        >
-          Delete Segement
-        </button> */}
-        {/* <button
-          className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-          onClick={this.logMarkers}
-        >
-          See segments
-        </button> */}
       </div>
     );
   }
@@ -120,11 +106,6 @@ class WaveformView extends Component<Props, State> {
     console.log('WaveformComponent.componentDidUpdate');
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;
-    }
-
-    if (this.props.selectedSegmentId) {
-      const seg = this.peaks.segments.getSegment(this.props.selectedSegmentId);
-      this.peaks.player.playSegment(seg);
     }
     console.log('props', this.props);
     console.log('prevProps', prevProps);
@@ -183,6 +164,7 @@ class WaveformView extends Component<Props, State> {
 
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks;
+      console.log(peaks);
       WaveformView.PeaksInstance = peaks;
       this.onPeaksReady();
     });
@@ -239,6 +221,7 @@ class WaveformView extends Component<Props, State> {
       this.props.setSegments(prev => [...segments]);
       console.log(segment, segments);
     });
+    console.log(this.peaks);
   };
 }
 

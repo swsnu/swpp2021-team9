@@ -1,14 +1,11 @@
 import React from 'react';
-
 interface Props {
-  audioFile: File[];
   audioUrl: string;
 }
 
-export default function MergedAudio({ audioFile, audioUrl }: Props) {
-  console.log(audioFile, audioUrl);
+export default function MergedAudio({ audioUrl }: Props) {
   return (
-    <div>
+    <div data-testid="MergedAudio">
       <audio src={audioUrl} controls />
     </div>
   );

@@ -1,6 +1,7 @@
 import { WaveformColor } from 'peaks.js';
 import React, { useEffect, useState } from 'react';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 interface Props {
   startTime: number;
   endTime: number;
@@ -38,6 +39,7 @@ export default function SegmentComponent({
     <tr data-testid="Segment" className="hover:bg-gray-100 cursor-pointer">
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         <input
+          data-testid="MergeCheckBox"
           checked={isMerge}
           onChange={e => {
             handleMergeList(id, !isMerge);
@@ -60,25 +62,25 @@ export default function SegmentComponent({
       </td>
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         <button
+          data-testid="PlayButton"
           onClick={() => {
-            console.log(id);
             setSelectedId(id);
             setIsPlaySegmentClicked(true);
           }}
         >
-          Play Segment
+          <FontAwesomeIcon icon={faPlay} />
         </button>
       </td>
 
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         <button
+          data-testid="DeleteButton"
           onClick={() => {
-            console.log(id);
             setSelectedId(id);
             setIsDeleteClicked(true);
           }}
         >
-          Delete
+          <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>
     </tr>

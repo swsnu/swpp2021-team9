@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { CreateSegmentMarkerOptions } from 'peaks.js';
 class CustomSegmentMarker {
   _options: any;
   _group: any;
@@ -6,8 +7,9 @@ class CustomSegmentMarker {
   _tag: any;
   _text: any;
   _line: any;
-  constructor(options) {
+  constructor(options: CreateSegmentMarkerOptions) {
     this._options = options;
+    console.log(options);
   }
 
   init(group) {

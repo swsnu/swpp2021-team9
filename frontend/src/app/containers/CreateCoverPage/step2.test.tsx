@@ -65,7 +65,7 @@ describe('CreateCoverInfoPage', () => {
     const { getByTestId } = render(page);
     const tagInput = getByTestId('tag-input');
     fireEvent.change(tagInput, { target: { value: 'R&B' } });
-    // fireEvent.keyPress(tagInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+    fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter', charCode: 13 });
   });
 
   it('should instrument input works properly', () => {
@@ -82,7 +82,9 @@ describe('CreateCoverInfoPage', () => {
     });
   });
 
-  it('should submit works', () => {
+  it('should submit works when user confirm', () => {
+    window.confirm = jest.fn(() => true); // always click 'yes'
+
     const { getByTestId } = render(page);
 
     const titleInput = getByTestId('title');
@@ -90,12 +92,39 @@ describe('CreateCoverInfoPage', () => {
 
     const tagInput = getByTestId('tag-input');
     fireEvent.change(tagInput, { target: { value: 'R&B' } });
-    fireEvent.keyPress(tagInput, { key: 'Enter', keyCode: 13 });
+    fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter', charCode: 13 });
 
     const instInput = getByTestId('instrument');
     fireEvent.change(instInput, { target: { value: 'guitar' } });
 
     const submitBtn = getByTestId('submit-btn');
     fireEvent.click(submitBtn);
+    console.log(tagInput);
+
+    expect(window.confirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('should submit works when user does not confirm', () => {
+    window.confirm = jest.fn(() => false); // always click 'yes'
+
+    const { getByTestId } = render(page);
+
+    const titleInput = getByTestId('title');
+    fireEvent.change(titleInput, { target: { value: '신호등' } });
+
+    const tagInput = getByTestId('tag-input');
+    fireEvent.change(tagInput, { target: { value: 'R&B' } });
+
+    // for 100% branch coverage
+    fireEvent.keyDown(tagInput, { key: 'a', code: 'KeyA', charCode: 65 });
+
+    fireEvent.keyDown(tagInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+
+    const instInput = getByTestId('instrument');
+    fireEvent.change(instInput, { target: { value: 'guitar' } });
+
+    const submitBtn = getByTestId('submit-btn');
+    fireEvent.click(submitBtn);
+    expect(window.confirm).toHaveBeenCalledTimes(1);
   });
 });

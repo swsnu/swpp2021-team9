@@ -41,15 +41,23 @@ export default function CreateCoverInfoPage(props: Props) {
     setForm({ ...Form, [key]: e.currentTarget.value });
   };
 
-  const onKeyPress = e => {
-    if (e.key === 'Enter') {
+  const onKeyDown = e => {
+    if (e.key === 'Enter' && e.code === 'Enter') {
+      console.log(e);
+      e.preventDefault();
       setForm({ ...Form, tags: [...Form.tags, tagInput] });
       setTagInput('');
     }
   };
 
-  const onSubmitForm = (e: React.FormEvent) => {
+  const onSubmitForm = (
+    e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
+    const isFinish = window.confirm('커버 정보를 업로드 하시겠습니까?');
+    if (!isFinish) {
+      return;
+    }
     console.log(Form);
     dispatch(actions.setInfo(Form));
     history.push(Song(0));
@@ -154,7 +162,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   id="tagInput"
                   value={tagInput}
                   onChange={e => setTagInput(e.target.value)}
-                  onKeyPress={onKeyPress}
+                  onKeyDown={onKeyDown}
                   className={styles.input}
                 />
               </div>
@@ -180,6 +188,7 @@ export default function CreateCoverInfoPage(props: Props) {
               data-testid="submit-btn"
               type="submit"
               disabled={submitDisabled()}
+              onClick={e => onSubmitForm(e)}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Submit

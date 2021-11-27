@@ -190,6 +190,7 @@ export default function CreateCoverRecord(props: Props) {
               <th>End time</th>
               <th>Label text</th>
               <th>Play</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>{renderSegmentRows(_segments)}</tbody>
@@ -306,9 +307,7 @@ export default function CreateCoverRecord(props: Props) {
         ) : null}
       </div>
       {renderSegments()}
-      {mergedUrl ? (
-        <MergedAudio audioFile={mergedFile} audioUrl={mergedUrl} />
-      ) : null}
+      {mergedUrl ? <MergedAudio audioUrl={mergedUrl} /> : null}
       <div
         data-testid="CreateCoverButtons"
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
@@ -352,7 +351,7 @@ export default function CreateCoverRecord(props: Props) {
           data-testid="next-btn"
           type="button"
           onClick={e => onNextClicked(e)}
-          disabled={!mediaBlobUrl}
+          disabled={!file}
           className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Next

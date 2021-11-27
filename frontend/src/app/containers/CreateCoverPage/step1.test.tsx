@@ -31,7 +31,7 @@ function setup() {
   return page;
 }
 
-describe('<CreateCoverRecordPage>', () => {
+describe('<CreateCoverRecord>', () => {
   let mockUseReactMedia, page;
   beforeEach(() => {
     page = setup();

@@ -86,6 +86,7 @@
     "enzyme-adapter-react-17-updated": "1.0.2",
     "enzyme-to-json": "3.6.2",
     "postcss": "^7",
+    "standardized-audio-context-mock": "8.5.25",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7"
   },
   "scripts": {
