@@ -17,7 +17,7 @@ import { useCreateCoverSlice } from './slice';
 import VideoPreview from 'app/components/CreateCover/VideoPreview';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
-import AudioEditor from 'app/helper/Audio/AudioHelpers';
+import AudioEditor from 'app/helper/AudioEditor';
 import MergedAudio from 'app/components/CreateCover/MergedAudio';
 export interface Props {}
 

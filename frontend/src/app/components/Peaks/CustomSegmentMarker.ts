@@ -1,7 +1,4 @@
-import { Label, Tag } from 'konva/lib/shapes/Label';
-import { Line } from 'konva/lib/shapes/Line';
-import { Text } from 'konva/lib/shapes/Text';
-
+import Konva from 'konva';
 class CustomSegmentMarker {
   _options: any;
   _group: any;
@@ -16,14 +13,14 @@ class CustomSegmentMarker {
   init(group) {
     this._group = group;
 
-    this._label = new Label({
+    this._label = new Konva.Label({
       x: 0.5,
       y: 0.5,
     });
 
     const color = this._options.segment.color;
 
-    this._tag = new Tag({
+    this._tag = new Konva.Tag({
       fill: color,
       stroke: color,
       strokeWidth: 1,
@@ -48,7 +45,7 @@ class CustomSegmentMarker {
 
     labelText += this._options.startMarker ? 'Start' : 'End';
 
-    this._text = new Text({
+    this._text = new Konva.Text({
       text: labelText,
       fontFamily: 'Calibri',
       fontSize: 14,
@@ -60,7 +57,7 @@ class CustomSegmentMarker {
 
     // Vertical Line - create with default y and points, the real values
     // are set in fitToView().
-    this._line = new Line({
+    this._line = new Konva.Line({
       x: 0,
       y: 0,
       stroke: color,

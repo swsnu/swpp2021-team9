@@ -25,6 +25,7 @@
     "@types/webpack": "5.28.0",
     "@types/webpack-env": "1.16.2",
     "axios": "0.24.0",
+    "canvas": "2.8.0",
     "chalk": "4.1.1",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "8.3.0",
@@ -129,6 +130,9 @@
     ]
   },
   "jest": {
+    "moduleNameMapper": {
+      "^konva": "konva/konva"
+    },
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts",

@@ -1,5 +1,4 @@
-import { Label, Tag } from 'konva/lib/shapes/Label';
-import { Text } from 'konva/lib/shapes/Text';
+import Konva from 'konva';
 import { CreateSegmentLabelOptions } from 'peaks.js';
 
 export function createSegmentLabel(options: CreateSegmentLabelOptions) {
@@ -7,13 +6,13 @@ export function createSegmentLabel(options: CreateSegmentLabelOptions) {
   //     return;
   //   }
 
-  const label = new Label({
+  const label = new Konva.Label({
     x: 12,
     y: 16,
   });
 
   label.add(
-    new Tag({
+    new Konva.Tag({
       fill: 'black',
       pointerDirection: 'none',
       shadowColor: 'black',
@@ -25,7 +24,7 @@ export function createSegmentLabel(options: CreateSegmentLabelOptions) {
   );
 
   label.add(
-    new Text({
+    new Konva.Text({
       text: options.segment.labelText,
       fontSize: 14,
       fontFamily: 'Calibri',

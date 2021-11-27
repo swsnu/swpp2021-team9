@@ -35,7 +35,7 @@ export default function SegmentComponent({
   }, [isMergeClicked]);
 
   return (
-    <tr test-dataid="Segment" className="hover:bg-gray-100 cursor-pointer">
+    <tr data-testid="Segment" className="hover:bg-gray-100 cursor-pointer">
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         <input
           checked={isMerge}
