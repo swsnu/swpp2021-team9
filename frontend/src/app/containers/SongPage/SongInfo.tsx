@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { getThumbnail } from 'utils/imageTools';
 
 export interface Props {
   song: Song;
@@ -20,7 +21,7 @@ export default function SongInfo(props: Props) {
           {props.image && (
             <img
               className="h-full w-full object-cover rounded-full"
-              src={props.image}
+              src={getThumbnail(props.song.reference)}
               alt="Loading Thumbnail..."
             />
           )}

@@ -7,7 +7,7 @@ import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song } from 'utils/urls';
-import { dummyInstruments } from './dummy';
+import { dummyInstruments } from 'api/dummy';
 import { Props as InstrumentDropdownProps } from 'app/components/Dropdown/InstrumentDropdown';
 import { Props as CoverDropdownProps } from 'app/components/Dropdown/CoverDropdown';
 

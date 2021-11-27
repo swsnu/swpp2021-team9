@@ -6,9 +6,10 @@ import * as apiActions from 'api/actions';
 import { selectCover } from './slice/selectors';
 import WavePlayer from './WavePlayer';
 import * as urls from 'utils/urls';
+import { getThumbnail } from 'utils/imageTools';
 
 interface MatchParams {
-  id?: string;
+  id: string;
 }
 export interface Props extends RouteComponentProps<MatchParams> {}
 
@@ -19,8 +20,8 @@ export default function CoverPage(props: Props) {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(apiActions.loadCover.request('start load cover'));
-  }, [dispatch]);
+    dispatch(apiActions.loadCover.request(Number(props.match.params.id)));
+  }, [dispatch, props.match]);
 
   const onSingTitleClicked = useCallback(() => {
     const coverResponse = coverState.coverResponse;
@@ -47,8 +48,7 @@ export default function CoverPage(props: Props) {
                 {cover.song.reference && (
                   <img
                     className="h-full w-full object-cover rounded-full text-center"
-                    // FIXME("need to use extract youtube thumnail link")
-                    src={cover.song.reference}
+                    src={getThumbnail(cover.song.reference)}
                     alt="Loading Thumbnail..."
                   />
                 )}

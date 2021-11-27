@@ -25,8 +25,8 @@ class CustomUser(AbstractUser):
     last_name = None
     description = models.TextField(db_column='description', default='')
     photo = models.ImageField(upload_to='profile_pic', default=None)
-    followings = models.ManyToManyField('CustomUser', related_name='followers', db_table='User_Following')
-    instruments = models.ManyToManyField('band.Instrument', related_name='+', db_table='User_Instruments')
+    followings = models.ManyToManyField('CustomUser', related_name='followers', db_table='User_Following', blank=True)
+    instruments = models.ManyToManyField('band.Instrument', related_name='+', db_table='User_Instruments', blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

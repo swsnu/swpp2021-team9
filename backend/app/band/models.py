@@ -63,9 +63,11 @@ class Cover(models.Model):
     :field combination: The 'Combination' this cover was made to / null if there was no combination
     """
 
-    audio = models.FileField(upload_to="cover_audio")
+    audio = models.FileField(upload_to="cover_audio", editable=False)
     title: str = models.CharField(max_length=50, db_column="title")
-    category: str = models.CharField(max_length=30, db_column="category")
+    category: str = models.CharField(
+        max_length=30, db_column="category", editable=False
+    )
     description: str = models.TextField(db_column="description")
     user: User = ForeignKey(
         User, related_name="covers", on_delete=models.SET_NULL, null=True
@@ -74,12 +76,22 @@ class Cover(models.Model):
         Instrument, related_name="+", on_delete=models.SET_NULL, null=True
     )
     song: Song = ForeignKey(Song, related_name="covers", on_delete=models.CASCADE)
-    tags = ManyToManyField("CoverTag", db_table="Cover_Tags")
-    likes = ManyToManyField(User, db_table="Cover_Likes", related_name="like_covers")
+    tags = ManyToManyField("CoverTag", db_table="Cover_Tags", blank=True)
+    likes = ManyToManyField(
+        User, db_table="Cover_Likes", related_name="like_covers", blank=True
+    )
     views: int = IntegerField(db_column="view", default=0)
     combination: "Combination" = ForeignKey(
-        "Combination", related_name="+", on_delete=models.SET_NULL, null=True
+        "Combination",
+        related_name="+",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
+
+    @property
+    def like_count(self) -> int:
+        return self.likes.count()
 
     def __str__(self):
         return f"([{self.pk}] {self.title})"
@@ -95,7 +107,7 @@ class Combination(models.Model):
     song: Song = ForeignKey(Song, related_name="combinations", on_delete=models.CASCADE)
     covers = ManyToManyField(Cover, db_table="Cover_Combination", related_name="+")
     likes = ManyToManyField(
-        User, db_table="Combination_Likes", related_name="like_combinations"
+        User, db_table="Combination_Likes", related_name="like_combinations", blank=True
     )
 
     def __str__(self):

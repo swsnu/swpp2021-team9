@@ -18,8 +18,8 @@ import SongPage from './containers/SongPage';
 import CreateSongPage from './containers/CreateSongPage';
 import CoverPage from './containers/CoverPage';
 import {
-  CreateCoverInfoPage,
-  CreateCoverRecordPage,
+  CreateCoverInfo,
+  CreateCoverRecord,
 } from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
@@ -54,12 +54,12 @@ export function App() {
             <Route
               exact
               path={url.CreateCover('record')}
-              component={CreateCoverRecordPage}
+              component={CreateCoverRecord}
             />
             <Route
               exact
               path={url.CreateCover('info')}
-              component={CreateCoverInfoPage}
+              component={CreateCoverInfo}
             />
             <Route exact path={url.Song(':id')} component={CoverPage} />
             <Route exact path={url.Profile(':id')} component={ProfilePage} />
