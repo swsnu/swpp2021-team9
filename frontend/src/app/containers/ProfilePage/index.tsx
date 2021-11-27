@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
-//import ReactCrop from 'react-image-cropper';
-//import 'react-image-crop/dist/ReactCrop.css';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import Button from '@material-ui/core/Button';
+import Slider from '@material-ui/core/Slider';
+import Cropper from 'react-easy-crop';
+import { setTokenSourceMapRange } from 'typescript';
 
 export type Props = {};
 
 export default function ProfilePage(props: Props) {
-  const [crop, setCrop] = useState({ aspect: 9 / 16 });
+  const inputRef = React.useRef();
+
+  const [name, setName] = useState<string>('');
+  const [fileUrl, setFileUrl] = useState<string>('');
+  const [image, setImage] = useState<any>(null);
+  const [result, setResult] = useState({});
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [crop, setCrop] = React.useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = React.useState(1);
+
+  /*
+  function processImage(event){
+    const imageFile = event.target.files[0];
+    const imageUrl = URL.createObjectURL(imageFile);
+    setFileUrl(imageUrl);
+  }
+  */
 
   // Basic Info area
   // 1. Profile Photo
@@ -23,10 +43,15 @@ export default function ProfilePage(props: Props) {
           <div className="w-full md:w-3/12 md:mx-2">
             <div className="bg-white p-3 border-t-4 border-blue-800">
               <div className="image overflow-hidden">
-                <img
-                  className="h-auto w-full mx-auto"
-                  src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                />
+                <div className="image_upload">
+                  <input
+                    data-testid="file_upload"
+                    type="file"
+                    accept="image/*"
+                  />
+                  <img src={fileUrl}></img>
+                </div>
+
                 <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Reprehenderit, eligendi dolorum sequi illum qui unde
@@ -115,9 +140,15 @@ export default function ProfilePage(props: Props) {
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
-                  <div className="grid grid-cols-2">
+                  <div className="grid grid-cols-3">
                     <div className="px-4 py-2 font-semibold">Name</div>
                     <div className="px-4 py-2">Jane Doe</div>
+                    <button
+                      id="edit_button"
+                      className="mx-1 py-1 px-1 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
+                    >
+                      Edit
+                    </button>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Followers</div>

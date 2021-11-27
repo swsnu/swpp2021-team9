@@ -1,32 +1,44 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Main } from 'utils/urls';
-import { useUserSlice } from './slice';
+import { useSignUpSlice } from './slice';
+import * as apiActions from 'api/actions';
+import { selectSignUp } from './slice/selectors';
 
-export type Props = {
-  email: string;
-  password: string;
-};
+export type Props = {};
 
 export default function SignUpPage(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useUserSlice();
+  const { actions } = useSignUpSlice();
+  const signUpState = useSelector(selectSignUp);
 
   const history = useHistory();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const onSigninClicked = () => {
+  const onSignUpClicked = () => {
     if (!email) {
       alert('Please enter email');
     } else if (!password) {
       alert('Please enter password');
+    } else if (signUpState.signUpResponse.loading) {
+      alert('Still loading');
     } else {
-      history.push(Main());
-      //dispatch(actions.signup({ email, password }));
+      dispatch(apiActions.signup.request({ email, password }));
     }
   };
+
+  useEffect(() => {
+    if (!signUpState.signUpResponse.loading) {
+      if (signUpState.signUpResponse.data) {
+        history.push(Main());
+      }
+      if (signUpState.signUpResponse.error) {
+        alert('SignUp Failed!');
+      }
+    }
+  });
 
   return (
     <div data-testid="SignUpPage">
@@ -70,7 +82,7 @@ export default function SignUpPage(props: Props) {
               type="submit"
               className="w-full p-4 bg-indigo-500 text-gray-100  rounded-full 
                   font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
-              onClick={onSigninClicked}
+              onClick={onSignUpClicked}
             >
               Sign Up
             </button>

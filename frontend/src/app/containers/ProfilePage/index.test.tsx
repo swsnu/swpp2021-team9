@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-
+import user from '@testing-library/user-event';
 import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
+import userEvent from '@testing-library/user-event';
 import ProfilePage from '.';
 
 const store = configureAppStore();

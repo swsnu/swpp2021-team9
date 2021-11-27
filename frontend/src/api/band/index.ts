@@ -6,7 +6,7 @@ export const api = {
     return await apiClient.post<null>(`/api/user/signup/`, form);
   },
   signin: async (form: SignInForm) => {
-    return await apiClient.post<User>(`/api/user/signin/`, form);
+    return await apiClient.post<UserInfo>(`/api/user/signin/`, form);
   },
   signout: async () => {
     const response = await apiClient.get<null>(`/api/user/signout/`);

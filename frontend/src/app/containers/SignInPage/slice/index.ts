@@ -1,41 +1,47 @@
-import { unstable_createMuiStrictModeTheme } from '@material-ui/core';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer } from 'utils/redux-injectors';
-
-interface UserItem {
-  email: string;
-  password: string;
-}
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import signInPageSaga from './saga';
 
 /* --- STATE --- */
-export interface UserState {
-  users: UserItem[];
-  current: UserItem | null;
+export interface SignInState {
+  name: string;
+  signInResponse: AsyncStateType<UserInfo>;
 } // state 형식 정의
 
-export const initialState: UserState = {
-  users: [],
-  current: null,
+export const initialState: SignInState = {
+  name: 'signin',
+  signInResponse: { loading: false },
 };
 
 const slice = createSlice({
-  name: 'user', // 이 이름을 types/RootState.ts에 써놓아야 함
+  name: 'signin', // 이 이름을 types/RootState.ts에 써놓아야 함
   initialState,
   reducers: {
-    signin(state, action: PayloadAction<any>) {
-      const currentUser: UserItem = {
-        email: action.payload.email,
-        password: action.payload.password,
-      };
-      state.current = currentUser;
+    loadingSignInResponse(state, action: PayloadAction<any>) {
+      state.signInResponse = { loading: true };
+      return state;
+    },
+    successSignInResponse(state, action: PayloadAction<UserInfo>) {
+      state.signInResponse = { loading: false };
+      state.signInResponse.data = action.payload;
+      return state;
+    },
+    errorSignInResponse(state, action: PayloadAction<string>) {
+      state.signInResponse = { loading: false };
+      state.signInResponse.error = action.payload;
+      return state;
     },
   },
 });
 
-export const { actions: userActions, reducer: userReducer } = slice;
+export const { actions: signInActions, reducer: SignInReducer } = slice;
 
-export const useUserSlice = () => {
+export const useSignInSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
+  useInjectSaga({
+    key: slice.name,
+    saga: signInPageSaga,
+  });
   return { actions: slice.actions, reducer: slice.reducer };
 };

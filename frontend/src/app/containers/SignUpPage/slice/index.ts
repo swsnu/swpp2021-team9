@@ -1,41 +1,48 @@
-import { unstable_createMuiStrictModeTheme } from '@material-ui/core';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer } from 'utils/redux-injectors';
-
-interface UserItem {
-  email: string;
-  password: string;
-}
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import signUpPageSaga from './saga';
 
 /* --- STATE --- */
-export interface UserState {
-  users: UserItem[];
-  current: UserItem | null;
+export interface SignUpState {
+  name: string;
+  signUpResponse: AsyncStateType<null>;
 } // state 형식 정의
 
-export const initialState: UserState = {
-  users: [],
-  current: null,
+export const initialState: SignUpState = {
+  name: 'signup',
+  signUpResponse: { loading: false },
 };
 
 const slice = createSlice({
-  name: 'user', // 이 이름을 types/RootState.ts에 써놓아야 함
+  name: 'signup', // 이 이름을 types/RootState.ts에 써놓아야 함
   initialState,
   reducers: {
-    signin(state, action: PayloadAction<any>) {
-      const newUser: UserItem = {
-        email: action.payload.email,
-        password: action.payload.password,
-      };
-      state.current = newUser;
+    loadingSignUpResponse(state, action: PayloadAction<any>) {
+      state.signUpResponse = { loading: true };
+      return state;
+    },
+    successSignUpResponse(state, action: PayloadAction<null>) {
+      //signup 은 post null
+      state.signUpResponse = { loading: false };
+      state.signUpResponse.data = action.payload;
+      return state;
+    },
+    errorSignUpResponse(state, action: PayloadAction<string>) {
+      state.signUpResponse = { loading: false };
+      state.signUpResponse.error = action.payload;
+      return state;
     },
   },
 });
 
-export const { actions: userActions, reducer: userReducer } = slice;
+export const { actions: signUpActions, reducer: SignUpReducer } = slice;
 
-export const useUserSlice = () => {
+export const useSignUpSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
+  useInjectSaga({
+    key: slice.name,
+    saga: signUpPageSaga,
+  });
   return { actions: slice.actions, reducer: slice.reducer };
 };

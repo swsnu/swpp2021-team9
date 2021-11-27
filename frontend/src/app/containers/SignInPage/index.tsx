@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Main } from 'utils/urls';
-import { useUserSlice } from './slice';
-
-export type Props = {
-  email: string;
-  password: string;
-};
+import { useSignInSlice } from './slice';
+import * as apiActions from 'api/actions';
+import { selectSignIn } from './slice/selectors';
+export type Props = {};
 
 export default function SignInPage(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useUserSlice();
+  const { actions } = useSignInSlice();
+  const signInState = useSelector(selectSignIn);
 
   const history = useHistory();
   const [email, setEmail] = useState<string>('');
@@ -22,11 +21,23 @@ export default function SignInPage(props: Props) {
       alert('Please enter email');
     } else if (!password) {
       alert('Please enter password');
+    } else if (signInState.signInResponse.loading) {
+      alert('Still loading');
     } else {
-      history.push(Main());
-      dispatch(actions.signin({ email, password }));
+      dispatch(apiActions.signin.request({ email, password }));
     }
   };
+
+  useEffect(() => {
+    if (!signInState.signInResponse.loading) {
+      if (signInState.signInResponse.data) {
+        history.push(Main()); // TODO : testing
+      }
+      if (signInState.signInResponse.error) {
+        alert('No User Info Received!');
+      }
+    }
+  });
 
   return (
     <div data-testid="SignInPage">
