@@ -1,4 +1,3 @@
-import { WaveformView } from 'app/components/Peaks';
 import * as lamejs from 'lamejs';
 import { Segment } from 'peaks.js';
 

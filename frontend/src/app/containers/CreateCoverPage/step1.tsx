@@ -84,6 +84,9 @@ export default function CreateCoverRecord(props: Props) {
       });
       const seg: Segment = Segs[0];
       const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
+      }
       console.log(seg);
       peaks.player.playSegment(seg);
       setIsPlaySegmentClicked(false);
@@ -93,6 +96,9 @@ export default function CreateCoverRecord(props: Props) {
   useMemo(() => {
     if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
       const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
+      }
       peaks.segments.removeById(selectedSegmentId);
       const segs = peaks.segments.getSegments();
       console.log('afterdelete', segs);

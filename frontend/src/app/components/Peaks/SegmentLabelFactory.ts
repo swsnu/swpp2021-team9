@@ -1,11 +1,6 @@
 import Konva from 'konva';
-import { CreateSegmentLabelOptions } from 'peaks.js';
 
-export function createSegmentLabel(options: CreateSegmentLabelOptions) {
-  //   if (options.view === 'overview') {
-  //     return;
-  //   }
-
+export function createSegmentLabel(options) {
   const label = new Konva.Label({
     x: 12,
     y: 16,

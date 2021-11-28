@@ -3,15 +3,28 @@ import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { WaveformView } from '.';
 import Peaks from 'peaks.js';
-import {
-  AudioBuffer,
-  AudioContext,
-  registrar,
-} from 'standardized-audio-context-mock';
+import { shallow, mount } from 'enzyme';
 
+import { createSegmentMarker, createSegmentLabel } from '.';
+let events = {};
 let mockContent = {
-  logger: jest.fn(),
-  peaks: 'TEST_PEAK',
+  on: jest.fn((event, callback) => {
+    events[event] = callback;
+    return callback('test');
+  }),
+  destroy: jest.fn(() => {}),
+  setSource: jest.fn((options, cb) => {
+    cb(null, 'Peaks');
+  }),
+  player: { getCurrentTime: jest.fn() },
+  segments: {
+    _segmentIdCounter: 2,
+    add: jest.fn((startTime, endTime, labelText, editable) => {}),
+    getSegments: jest.fn(() => {
+      'TEST_SEGMENT';
+    }),
+  },
+  zoom: { zoomIn: jest.fn(() => {}), zoomOut: jest.fn(() => {}) },
 };
 
 jest.mock('peaks.js', () => {
@@ -20,8 +33,12 @@ jest.mock('peaks.js', () => {
     __esModule: true,
     ...originalModule,
     default: {
-      init: (_options: any) => {
-        return mockContent;
+      init: (_options: any, callback) => {
+        // return new Promise((resolve, reject) => {
+        //   resolve(mockContent);
+        // });
+        const err = null;
+        return callback(err, mockContent);
       },
     },
   };
@@ -46,8 +63,8 @@ describe('<WaveformView />', () => {
   let mockSetSegments;
   let segmentId = 'peaks.segment.0';
   beforeEach(() => {
-    window.AudioContext = jest.fn();
     jest.clearAllMocks();
+    window.AudioContext = jest.fn();
     mockSetSegments = jest.fn();
   });
 
@@ -63,7 +80,9 @@ describe('<WaveformView />', () => {
   });
 
   it('componentDidUpdate test when url is changed', () => {
-    const { rerender } = render(getWaveformView(segmentId, mockSetSegments));
+    const { rerender, unmount } = render(
+      getWaveformView(segmentId, mockSetSegments),
+    );
     rerender(
       getWaveformView(
         'peaks.segment.1',
@@ -71,6 +90,7 @@ describe('<WaveformView />', () => {
         'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3',
       ),
     );
+
     WaveformView.getPeaks();
     rerender(
       getWaveformView(
@@ -79,6 +99,16 @@ describe('<WaveformView />', () => {
         'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3',
       ),
     );
-    console.log(screen);
+    unmount();
+  });
+
+  it('should zoom in, zoom out, add segment method work', function () {
+    render(getWaveformView(segmentId, mockSetSegments));
+    const zoomIn = screen.getByTestId('ZoomIn');
+    fireEvent.click(zoomIn);
+    const zoomOut = screen.getByTestId('ZoomOut');
+    fireEvent.click(zoomOut);
+    const addSegment = screen.getByTestId('AddSegment');
+    fireEvent.click(addSegment);
   });
 });

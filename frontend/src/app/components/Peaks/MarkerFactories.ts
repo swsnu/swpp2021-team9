@@ -1,7 +1,6 @@
 import CustomSegmentMarker from './CustomSegmentMarker';
-import { CreateSegmentMarkerOptions } from 'peaks.js';
 
-export function createSegmentMarker(options: CreateSegmentMarkerOptions) {
+export function createSegmentMarker(options) {
   if (options.view === 'zoomview') {
     return new CustomSegmentMarker(options);
   }

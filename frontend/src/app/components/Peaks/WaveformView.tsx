@@ -22,6 +22,7 @@ class WaveformView extends Component<Props, State> {
     if (this.PeaksInstance) {
       return this.PeaksInstance;
     }
+    return null;
   }
   zoomviewWaveformRef: any;
   overviewWaveformRef: any;
@@ -74,6 +75,7 @@ class WaveformView extends Component<Props, State> {
     return (
       <div className="inline-flex space-x-2">
         <button
+          data-testid="ZoomIn"
           className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
           onClick={this.zoomIn}
         >
@@ -81,12 +83,14 @@ class WaveformView extends Component<Props, State> {
         </button>
         &nbsp;
         <button
+          data-testid="ZoomOut"
           className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
           onClick={this.zoomOut}
         >
           Zoom out
         </button>
         <button
+          data-testid="AddSegment"
           className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
           onClick={this.addSegment}
         >
@@ -219,9 +223,7 @@ class WaveformView extends Component<Props, State> {
     this.peaks.on('segments.dragend', segment => {
       const segments = this.peaks.segments.getSegments();
       this.props.setSegments(prev => [...segments]);
-      console.log(segment, segments);
     });
-    console.log(this.peaks);
   };
 }
 
