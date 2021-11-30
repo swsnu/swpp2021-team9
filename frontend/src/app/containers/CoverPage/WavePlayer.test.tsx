@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
 import WavePlayer from './WavePlayer';
-import { act } from 'react-dom/test-utils';
 
 let mockContent = {
-  on: jest.fn((state: string, callback: Function) => {}),
+  on: jest.fn((_state: string, _callback: Function) => {}),
   play: jest.fn(() => {}),
-  load: jest.fn((url: string) => {}),
+  load: jest.fn((_url: string) => {}),
   destroy: jest.fn(() => {}),
-  setVolume: jest.fn((volume: number) => {}),
+  setVolume: jest.fn((_volume: number) => {}),
   playPause: jest.fn(() => {}),
 };
 jest.mock('wavesurfer.js', () => {

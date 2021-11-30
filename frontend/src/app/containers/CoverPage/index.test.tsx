@@ -1,17 +1,14 @@
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import * as reactRedux from 'react-redux';
 
 import { render, waitFor } from '@testing-library/react';
-import { findByTestId, fireEvent, screen } from '@testing-library/dom';
+import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CoverPage from '.';
-import { CoverState, initialState } from './slice';
 import { dummyCovers } from 'api/dummy';
 import * as urls from 'utils/urls';
 import { api } from 'api/band';
 import { WrapperState } from 'app/wrapper/slice';
-import { selectWrapper } from 'app/wrapper/slice/selectors';
 
 window.alert = jest.fn();
 const mockHistoryPush = jest.fn();

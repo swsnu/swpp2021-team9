@@ -17,7 +17,7 @@ import { runSaga } from 'redux-saga';
 import { api } from 'api/band';
 import { renderHook } from '@testing-library/react-hooks';
 import * as ReactRedux from 'react-redux';
-import { EditCoverRequest, getCoverRequest } from './saga';
+import { getCoverRequest } from './saga';
 
 jest.mock('utils/redux-injectors', () => {
   const originalModule = jest.requireActual('utils/redux-injectors');
