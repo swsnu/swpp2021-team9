@@ -24,6 +24,7 @@ import {
 import ProfilePage from './containers/ProfilePage';
 
 import * as url from 'utils/urls';
+import CoverEditPage from './containers/CoverEditPage';
 
 export function App() {
   // const { i18n } = useTranslation();
@@ -55,6 +56,11 @@ export function App() {
               exact
               path={url.CreateCover('record')}
               component={CreateCoverRecord}
+            />
+            <Route
+              exact
+              path={url.CoverEdit(':id')}
+              component={CoverEditPage}
             />
             <Route
               exact
