@@ -8,6 +8,7 @@ from django.http.request import HttpRequest
 from django.views import View
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from rest_framework import mixins, generics
+from rest_framework.request import Request
 from .serializers import UserSerializer
 
 User = get_user_model()
@@ -17,10 +18,10 @@ User = get_user_model()
 # temporarily disable unused-argument, no-self-use warning
 
 
-class UserSignup(View):
+class UserSignup(generics.GenericAPIView):
     """user/signup/"""
 
-    def post(self, request: HttpRequest):
+    def post(self, request: Request):
         data = request.data
         email = data["email"]
         password = data["password"]
@@ -28,10 +29,10 @@ class UserSignup(View):
         return HttpResponse(status=201)
 
 
-class UserSignin(View):
+class UserSignin(generics.GenericAPIView):
     """user/signin/"""
 
-    def post(self, request: HttpRequest):
+    def post(self, request: Request):
         data = request.data
         email = data["email"]
         password = data["password"]
@@ -44,7 +45,7 @@ class UserSignin(View):
             return HttpResponse(status=401)
 
 
-class UserSignout(View):
+class UserSignout(generics.GenericAPIView):
     """user/signout/"""
 
     def get(self, request: HttpRequest):
