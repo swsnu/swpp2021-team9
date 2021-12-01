@@ -1,32 +1,30 @@
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import * as reactRedux from 'react-redux';
 
-import { render } from '@testing-library/react';
-import { fireEvent, screen } from '@testing-library/dom';
+import { render, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CoverPage from '.';
-import { CoverState } from './slice';
 import { dummyCovers } from 'api/dummy';
 import * as urls from 'utils/urls';
 import { api } from 'api/band';
+import { WrapperState } from 'app/wrapper/slice';
 
-const store = configureAppStore();
+window.alert = jest.fn();
+const mockHistoryPush = jest.fn();
+const mockHistoryReplace = jest.fn();
+const spySelectWrapper = jest.spyOn(
+  require('app/wrapper/slice/selectors'),
+  'selectWrapper',
+);
 
-// const mockLoadingState: CoverState = {
-//   name: 'cover',
-//   coverResponse: { loading: true },
-// };
-
-const mockSuccessState: CoverState = {
-  name: 'cover',
-  coverResponse: { loading: false, data: dummyCovers[0] },
-};
-
-const mockErrorState: CoverState = {
-  name: 'cover',
-  coverResponse: { loading: false, error: 'MOCK_ERROR' },
-};
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+    replace: mockHistoryReplace,
+  }),
+}));
 
 jest.mock('./WavePlayer', () => {
   return {
@@ -35,16 +33,20 @@ jest.mock('./WavePlayer', () => {
   };
 });
 
-function setup(state: CoverState) {
-  const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-  useSelectorMock.mockReturnValue(state);
-  const path = '/cover/1';
+const wrapperWithUser: WrapperState = {
+  name: 'wrapper',
+  user: dummyCovers[1].user,
+};
+
+function setup() {
+  const store = configureAppStore();
   const page = (
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} component={CoverPage} />
-          <Redirect to={path} />
+          <Route exact path={urls.Cover(':id')} component={CoverPage} />
+          <Redirect exact from="/" to={urls.Cover(1)} />
+          <Route component={() => <div />} />
         </Switch>
       </BrowserRouter>
     </Provider>
@@ -52,45 +54,22 @@ function setup(state: CoverState) {
   return { page };
 }
 
-const mockHistoryPush = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
-
-afterEach(() => {
+beforeEach(() => {
   jest.clearAllMocks();
+  spySelectWrapper.mockReturnValue({ name: 'wrapper' });
   api.getCoverInfo = jest.fn(
-    (coverId: number) =>
+    (_coverId: number) =>
       new Promise((res, rej) => {
-        res(dummyCovers[coverId]);
+        res(dummyCovers[1]);
       }),
   );
 });
 
-test('should render', () => {
-  const path = '/cover/1';
-  const page = (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Switch>
-          <Route path={path} component={CoverPage} />
-          <Redirect to={path} />
-        </Switch>
-      </BrowserRouter>
-    </Provider>
-  );
-  render(page);
-  expect(screen.getByTestId('CoverPage')).toBeTruthy();
-});
+it('should handle buttons', async () => {
+  const { page } = setup();
+  const { getByTestId, findByTestId } = render(page);
 
-test('should handle buttons', () => {
-  const { page } = setup(mockSuccessState);
-  const { getByTestId } = render(page);
-
+  await findByTestId('songTitle');
   const songTitleButton = getByTestId('songTitle');
   const usernameButton = getByTestId('usename');
 
@@ -98,17 +77,66 @@ test('should handle buttons', () => {
   expect(usernameButton).toBeTruthy();
 
   fireEvent.click(songTitleButton);
-  expect(mockHistoryPush).lastCalledWith(urls.Song(0));
+  expect(mockHistoryPush).lastCalledWith(urls.Song(dummyCovers[1].song.id));
 
   fireEvent.click(usernameButton);
-  expect(mockHistoryPush).lastCalledWith(urls.Profile(0));
+  expect(mockHistoryPush).lastCalledWith(urls.Profile(dummyCovers[1].user.id));
 });
 
-test('should show error statement', () => {
-  const { page } = setup(mockErrorState);
-  const { getByTestId } = render(page);
+it('should show error statement', async () => {
+  const { page } = setup();
+  (api.getCoverInfo as jest.Mock).mockRejectedValueOnce('MOCK_ERROR');
+  const { getByTestId, findByTestId } = render(page);
+
+  await findByTestId('errorStatement');
 
   const errorStatement = getByTestId('errorStatement');
-
   expect(errorStatement.textContent).toBe('error: MOCK_ERROR');
+});
+
+it('edit cover', async () => {
+  spySelectWrapper.mockReturnValue(wrapperWithUser);
+  const { page } = setup();
+  const { getByTestId, findByTestId } = render(page);
+
+  await findByTestId('songTitle');
+
+  let editButton = getByTestId('edit_button');
+
+  fireEvent.click(editButton);
+  await waitFor(() => expect(mockHistoryPush).toBeCalledTimes(1));
+  expect(mockHistoryPush).toHaveBeenLastCalledWith(
+    urls.CoverEdit(dummyCovers[1].id),
+  );
+});
+
+it('delete cover', async () => {
+  spySelectWrapper.mockReturnValue(wrapperWithUser);
+  api.deleteCover = jest.fn().mockResolvedValue({ status: 200 });
+  const { page } = setup();
+  const { getByTestId, findByTestId } = render(page);
+
+  await findByTestId('songTitle');
+
+  let deleteButton = getByTestId('delete_button');
+
+  fireEvent.click(deleteButton);
+  await waitFor(() => expect(window.alert).toBeCalledTimes(1));
+  expect(window.alert).toHaveBeenLastCalledWith('Success to Delete');
+  expect(mockHistoryReplace).toHaveBeenLastCalledWith(urls.Main());
+});
+
+it('error delete cover', async () => {
+  spySelectWrapper.mockReturnValue(wrapperWithUser);
+  api.deleteCover = jest.fn().mockRejectedValue('MOCK_ERROR');
+  const { page } = setup();
+  const { getByTestId, findByTestId } = render(page);
+
+  await findByTestId('songTitle');
+
+  let deleteButton = getByTestId('delete_button');
+
+  fireEvent.click(deleteButton);
+  await waitFor(() => expect(window.alert).toBeCalledTimes(1));
+  expect(window.alert).toHaveBeenLastCalledWith('Failed to Delete MOCK_ERROR');
 });

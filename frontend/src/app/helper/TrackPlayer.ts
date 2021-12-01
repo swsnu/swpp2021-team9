@@ -1,17 +1,23 @@
-type status = 'init' | 'loading' | 'loadFinish' | 'pause' | 'playing';
+type status = 'init' | 'loading' | 'wait' | 'pause' | 'play' | 'ended';
 
 export default class TrackPlayer {
   private audios: HTMLAudioElement[] = [];
   private track?: TrackInfo;
   private status: status = 'init';
 
-  private checkLoading() {
-    if (
-      this.status === 'loading' &&
-      this.audios.every(audio => audio.readyState > 3)
-    ) {
-      this.setStatus('loadFinish');
-      this.play();
+  private checkCanPlay() {
+    if (this.audios.every(audio => audio.readyState > 3)) {
+      if (this.status === 'wait') {
+        this.play();
+      } else if (this.status === 'loading') {
+        this.pause();
+      }
+    }
+  }
+
+  private checkEnded() {
+    if (this.audios.every(audio => audio.ended)) {
+      this.setStatus('ended');
     }
   }
 
@@ -33,49 +39,59 @@ export default class TrackPlayer {
     this.track = track;
     this.audios = [];
     this.setStatus('loading');
-    this.track.sources.forEach((source, idx) => {
+    this.track.sources.forEach(source => {
       const audio = new Audio();
       this.audios.push(audio);
       audio.src = source;
       audio.addEventListener('canplay', () => {
-        this.checkLoading();
+        this.checkCanPlay();
+      });
+      audio.addEventListener('ended', () => {
+        this.checkEnded();
       });
       audio.load();
     });
   }
 
-  isPaused() {
-    return this.audios.every(audio => audio.paused);
-  }
-
   play() {
-    if (this.getMinReadyState() < 3) {
-      this.setStatus('loading');
-      return false;
-    }
-    if (this.audios.length !== 0) {
-      const currentTime = this.getCurrentTime();
-      this.setCurrentTime(currentTime);
+    if (['wait', 'pause'].includes(this.status)) {
       this.audios.forEach(audio => {
-        if (!audio.ended) {
-          const promise = audio.play();
-          promise.catch(() => this.setStatus('pause'));
-        }
+        audio.play().catch(() => {
+          this.pause();
+        });
       });
-      this.setStatus('playing');
-      return true;
-    } else {
-      return false;
+      this.setStatus('play');
+    } else if (this.status === 'ended') {
+      this.setCurrentTime(0);
+    } else if (this.status === 'loading') {
+      this.setStatus('wait');
     }
   }
 
   pause() {
-    if (this.audios.length !== 0) {
-      this.audios.forEach(audio => {
-        audio.pause();
-      });
+    if (['loading', 'play'].includes(this.status)) {
+      this.audios.forEach(audio => audio.pause());
     }
+
+    const currentTime = this.getCurrentTime();
+    this.audios.forEach(audio => (audio.currentTime = currentTime));
     this.setStatus('pause');
+  }
+
+  setCurrentTime(time: number) {
+    if (isNaN(time)) return;
+    if (['ended', 'play', 'wait'].includes(this.status)) {
+      this.setStatus('wait');
+    } else if (['loading', 'pause'].includes(this.status)) {
+      this.setStatus('loading');
+    }
+    this.audios.forEach(audio => {
+      audio.currentTime = time;
+    });
+  }
+
+  isPaused() {
+    return this.audios.every(audio => audio.paused);
   }
 
   getDuration() {
@@ -92,12 +108,6 @@ export default class TrackPlayer {
     } else {
       return 0;
     }
-  }
-
-  setCurrentTime(time: number) {
-    this.audios.forEach(audio => {
-      audio.currentTime = time;
-    });
   }
 
   getMinReadyState() {

@@ -90,6 +90,7 @@ def set_up_data():
                 user=users[(song.id + i) % len(users)],
                 instrument=instruments[(song.id + i) % len(instruments)],
                 song=song,
+                audio='audio',
             )
             cover.save()
             cover.tags.set(

@@ -28,6 +28,7 @@ export default class Player extends TrackPlayer {
       this.index = idx;
       this.setTrack(this.tracks[idx]);
       this.onTrackChanged?.(this.tracks[idx]);
+      this.play();
     } else {
       throw Error(
         `Out of index of tracks idx: ${idx}, length: ${this.tracks.length}`,
