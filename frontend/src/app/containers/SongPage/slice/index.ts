@@ -2,7 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 
-interface CombinationItem {
+export interface CombinationItem {
   id: number;
   instrument: Instrument;
   cover: Cover | null;
