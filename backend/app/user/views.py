@@ -2,13 +2,14 @@
 views for user
 TODO ("implement")
 """
-
-from django.http import HttpResponse
+from json.decoder import JSONDecodeError
 from django.http.request import HttpRequest
-from django.views import View
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
 from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from .serializers import UserSerializer
 
 User = get_user_model()
@@ -18,49 +19,74 @@ User = get_user_model()
 # temporarily disable unused-argument, no-self-use warning
 
 
-class UserSignup(generics.GenericAPIView):
+class UserSignup(APIView):
     """user/signup/"""
 
+    permission_classes = [AllowAny]
+
     def post(self, request: Request):
-        data = request.data
-        email = data["email"]
-        password = data["password"]
+        try:
+            data = request.data
+            email = data["email"]
+            password = data["password"]
+        except (KeyError, JSONDecodeError):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         User.objects.create_user(email, password)
-        return HttpResponse(status=201)
+        return Response(status=status.HTTP_201_CREATED)
 
 
-class UserSignin(generics.GenericAPIView):
+class UserSignin(APIView):
     """user/signin/"""
 
+    permission_classes = [AllowAny]
+
     def post(self, request: Request):
-        data = request.data
-        email = data["email"]
-        password = data["password"]
+        try:
+            data = request.data
+            email = data["email"]
+            password = data["password"]
+        except (KeyError, JSONDecodeError):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         user = authenticate(request, email=email, password=password)
+        if user is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        if user is not None:  # If user exists
-            login(request, user)
-            return HttpResponse(status=204)
-        else:
-            return HttpResponse(status=401)
+        login(request, user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserSignout(generics.GenericAPIView):
+class UserSignout(APIView):
     """user/signout/"""
 
     def get(self, request: HttpRequest):
         if request.user.is_authenticated:
             logout(request)
-            return HttpResponse(status=204)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            return HttpResponse(status=401)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UserInfo(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    """user/info/`pk:int`/"""
+class UserInfo(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
+    """user/info/`int:user_id`/"""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get(self, request: HttpRequest, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request: HttpRequest, *args, **kwargs):
+        if request.user.id != kwargs["pk"]:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request: HttpRequest, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

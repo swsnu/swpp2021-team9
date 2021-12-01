@@ -1,8 +1,11 @@
 """
 Test codes for user app
 """
+import json
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
+from rest_framework import status
+from .models import CustomUser
 
 # pylint: disable=C0114
 User = get_user_model()
@@ -57,38 +60,118 @@ class UserManagersTests(TestCase):
         self.assertEqual(f"([{user.id}] {user.email})", preview_str)
 
 
-class SongTestCase(TestCase):
+class UserTestCase(TestCase):
     """Tests for user"""
 
-    def setUp(self):
-        pass
+    @classmethod
+    def setUpClass(cls):
+        super(UserTestCase, cls).setUpClass()
+        User.objects.create_user(email="EMAIL_1", password="PASSWORD_1")
+        User.objects.create_user(email="EMAIL_2", password="PASSWORD_2")
 
-    def test_user_signup(self):
+    def test_user_sign(self):
         client = Client(enforce_csrf_checks=False)
 
-        response = client.post("/api/user/signup/", {})
-        self.assertEqual(response.status_code, 501)
+        test_user_info = {"email": "EMAIL_TEST", "password": "PASSWORD_TEST"}
 
-    def test_user_signin(self):
-        client = Client(enforce_csrf_checks=False)
+        # signup with wrong format
+        response = client.post(
+            "/api/user/signup/",
+            json.dumps(
+                {
+                    "email": "EMAIL_TEST",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = client.post("/api/user/signin/", {})
-        self.assertEqual(response.status_code, 501)
+        # signup with correct format
+        response = client.post(
+            "/api/user/signup/",
+            json.dumps(test_user_info),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_user_signout(self):
-        client = Client(enforce_csrf_checks=False)
+        new_user: CustomUser = User.objects.last()
+        self.assertEqual(new_user.email, "EMAIL_TEST")
 
+        # signout without signing in
         response = client.get("/api/user/signout/")
-        self.assertEqual(response.status_code, 501)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # signin with wrong format
+        response = client.post(
+            "/api/user/signin/",
+            json.dumps(
+                {
+                    "email": "EMAIL_TEST",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # signin with wrong info
+        response = client.post(
+            "/api/user/signin/",
+            json.dumps(
+                {
+                    "email": "EMAIL_WRONG",
+                    "password": "PASSWORD_WRONG",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # signin with correct info
+        response = client.post(
+            "/api/user/signin/",
+            json.dumps(test_user_info),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # signout
+        response = client.get("/api/user/signout/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_user_info(self):
         client = Client(enforce_csrf_checks=False)
+        user: CustomUser = User.objects.first()
 
-        response = client.get("/api/user/info/1/")
-        self.assertEqual(response.status_code, 501)
+        response = client.get(f"/api/user/info/{user.id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        content_dict = json.loads(response.content)
+        self.assertEqual(content_dict["email"], user.email)
 
-        response = client.put("/api/user/info/1/", {})
-        self.assertEqual(response.status_code, 501)
+        # login
+        client.force_login(user)
 
-        response = client.delete("/api/user/info/1/")
-        self.assertEqual(response.status_code, 501)
+        response = client.put(
+            f"/api/user/info/{user.pk}/",
+            {"description": "DESCRIPTION_TEST"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        user_edited: CustomUser = User.objects.first()
+        self.assertEqual(user_edited.description, "DESCRIPTION_TEST")
+
+        # try changing different user's data
+        user_last: CustomUser = User.objects.last()
+        response = client.put(
+            f"/api/user/info/{user_last.pk}/",
+            {"description": "DESCRIPTION_TEST"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # delete user
+        response = client.delete(f"/api/user/info/{user.pk}/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.assertEqual(
+            User.objects.filter(pk=user.pk).count(), 0, "Delete User success"
+        )
