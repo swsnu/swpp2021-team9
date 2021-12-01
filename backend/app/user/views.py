@@ -61,11 +61,11 @@ class UserSignout(APIView):
     """user/signout/"""
 
     def get(self, request: HttpRequest):
-        if request.user.is_authenticated:
-            logout(request)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
+        if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        logout(request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserInfo(
