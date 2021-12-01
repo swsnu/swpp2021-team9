@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSongSlice } from '../slice';
+import { useSongSlice, CombinationItem } from '../slice';
 import { selectCombination, selectCurrent } from '../slice/selectors';
 
 import CoverDropdown from 'app/components/Dropdown/CoverDropdown';
@@ -17,6 +17,23 @@ export default function AddedCoverList(props: Props) {
   const combination = useSelector(selectCombination);
   const current = useSelector(selectCurrent);
 
+  const styles = {
+    menuButton: (item: CombinationItem) => {
+      let bgStyle = '';
+      if (item.id === current) {
+        bgStyle = 'bg-indigo-200';
+      } else if (item.cover === null) {
+        bgStyle = 'bg-red-200 hover:bg-red-300';
+      } else {
+        bgStyle = 'bg-gray-200 hover:bg-gray-300';
+      }
+      return (
+        bgStyle +
+        ' inline-flex justify-center items-center px-1 rounded-lg text-sm font-medium text-gray-600'
+      );
+    },
+  };
+
   return (
     <ul
       data-testid="AddedCoverList"
@@ -27,15 +44,7 @@ export default function AddedCoverList(props: Props) {
           <li key={item.id} data-testid="AddedCoverListItem">
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button
-                  className={`${
-                    item.id === current
-                      ? 'bg-indigo-200'
-                      : item.cover === null
-                      ? 'bg-red-200 hover:bg-red-300'
-                      : 'bg-gray-200 hover:bg-gray-300'
-                  } inline-flex justify-center items-center px-1 rounded-lg text-sm font-medium text-gray-600`}
-                >
+                <Menu.Button className={styles.menuButton(item)}>
                   <div className="mr-1 w-6 text-lg text-center text-gray-700">
                     <FontAwesomeIcon icon={getIcon(item.instrument.icon)} />
                   </div>

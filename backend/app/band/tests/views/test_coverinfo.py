@@ -35,6 +35,8 @@ class CoverInfoTestCase(TestCase):
             response.status_code, status.HTTP_404_NOT_FOUND, "Not exist id"
         )
 
+        client.force_login(cover.user)  # login as cover maker
+
         response = client.put(
             f"/api/cover/info/{cover.pk}/",
             json.dumps(
