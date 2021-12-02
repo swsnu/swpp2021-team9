@@ -94,8 +94,8 @@ class UserTestCase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        new_user: CustomUser = User.objects.last()
-        self.assertEqual(new_user.email, "EMAIL_TEST")
+        new_user: CustomUser = User.objects.get(email="EMAIL_TEST")
+        self.assertTrue(new_user)
 
         # signout without signing in
         response = client.get("/api/user/signout/")
@@ -140,7 +140,7 @@ class UserTestCase(TestCase):
 
     def test_user_info(self):
         client = Client(enforce_csrf_checks=False)
-        user: CustomUser = User.objects.first()
+        user: CustomUser = User.objects.get(pk=1)
 
         response = client.get(f"/api/user/info/{user.id}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -160,9 +160,9 @@ class UserTestCase(TestCase):
         self.assertEqual(user_edited.description, "DESCRIPTION_TEST")
 
         # try changing different user's data
-        user_last: CustomUser = User.objects.last()
+        user_new: CustomUser = User.objects.get(pk=2)
         response = client.put(
-            f"/api/user/info/{user_last.pk}/",
+            f"/api/user/info/{user_new.pk}/",
             {"description": "DESCRIPTION_TEST"},
             content_type="application/json",
         )
