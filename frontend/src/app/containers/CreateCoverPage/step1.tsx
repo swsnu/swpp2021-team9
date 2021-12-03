@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUpload,
   faMicrophoneAlt,
-  faVideoSlash,
-  faVideo,
   faCircle,
   faStopCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
-import VideoPreview from 'app/components/CreateCover/VideoPreview';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
@@ -30,7 +27,7 @@ export default function CreateCoverRecord(props: Props) {
     string | undefined
   >('');
   const [file, setFile] = useState<any>(null);
-  const [mergedFile, setMergedFile] = useState<File[]>([]);
+  const [mergedFile, setMergedFile] = useState<File | null>(null);
   const [mergedUrl, setMergedUrl] = useState<string>('');
   const [mergeList, setMergeList] = useState<string[]>([]);
   const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
@@ -120,23 +117,6 @@ export default function CreateCoverRecord(props: Props) {
     }
   }, [isDeleteClicked]);
 
-  // useMemo(async () => {
-  //   if (!mediaBlobUrl) {
-  //     return;
-  //   }
-  //   let blob = await fetch(mediaBlobUrl).then(r => r.blob());
-  //   console.log('[REC BLOB URL]', blob);
-
-  //   let fileBlob = new File(
-  //     [blob],
-  //     new Date().toISOString() + '_recording.mpeg',
-  //     { type: 'audio/mpeg' },
-  //   );
-  //   console.log(fileBlob);
-  //   setFile(fileBlob);
-  //   editor.readAndDecode(fileBlob);
-  // }, [mediaBlobUrl]);
-
   const onRecordClicked = () => {
     if (isRecording) {
       stopRecording();
@@ -185,10 +165,17 @@ export default function CreateCoverRecord(props: Props) {
     sortedTargetSegments = targetSegments.sort(
       (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
     );
-    const mp3File: any = await editor.mergeAudio(sortedTargetSegments);
-    setMergedFile(mp3File);
-    console.log(mp3File);
-    setMergedUrl(URL.createObjectURL(mp3File));
+    const mp3Blob: any = await editor.mergeAudio(sortedTargetSegments);
+    let fileFromBlob = new File(
+      [mp3Blob],
+      new Date().toISOString() + '_recording.mp3',
+      {
+        type: 'audio/mpeg',
+      },
+    );
+    setMergedFile(fileFromBlob);
+    console.log(fileFromBlob);
+    setMergedUrl(URL.createObjectURL(fileFromBlob));
     setMergeList([]);
     setIsMergeClicked(prev => !prev);
   };
