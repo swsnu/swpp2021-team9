@@ -1,8 +1,9 @@
 """ Band views
 cover views for band
 """
+import json
+from json.decoder import JSONDecodeError
 from django.http.request import HttpRequest
-from django.http.response import HttpResponseBadRequest
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
@@ -13,6 +14,7 @@ from band.serializers import CoverSerializer, CoverLikeSerializer
 
 # pylint: disable=W0613, R0201
 # temporarily disable unused-argument, no-self-use warning
+
 
 class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
     """cover/<int:song_id>/"""
@@ -29,15 +31,22 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
         try:
             Song.objects.get(id=song_id)
         except Song.DoesNotExist as error:
-            return HttpResponseBadRequest(error)
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         data["song_id"] = song_id
 
         if data.get("tags") is not None:
-            data["tags_list"] = data.pop("tags")
+            tags = data.pop("tags")
+            try:
+                tags_list = json.loads(tags[0])
+            except JSONDecodeError:
+                return Response(
+                    "Format of 'tags' is not in json format.",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            data["tags_list"] = tags_list
 
-        # data["user"] = ...
-        # add user field
+        data["user_id"] = request.user.id
 
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -52,9 +61,7 @@ class CoverSongInstrument(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Cover.objects.none()
     serializer_class = CoverSerializer
 
-    def get(
-        self, request: HttpRequest, song_id: int, instrument_id: int
-    ):
+    def get(self, request: HttpRequest, song_id: int, instrument_id: int):
         self.queryset = Cover.objects.filter(
             song__id=song_id, instrument__id=instrument_id
         )
@@ -98,12 +105,14 @@ class CoverLike(generics.GenericAPIView):
     queryset = Cover.objects.all()
     serializer_class = CoverLikeSerializer
 
-    def get(self, request: Request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs):
         instance: Cover = self.get_object()
         serializer: CoverLikeSerializer = self.get_serializer(instance)
 
-        user_id = 1  # add user detection
-        res_data = {"isLike": user_id in serializer.data.get("likes")}
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        res_data = {"isLike": request.user.id in serializer.data.get("likes")}
         return Response(res_data, content_type="application/json")
 
     def put(self, request: Request, *args, **kwargs):
@@ -113,9 +122,9 @@ class CoverLike(generics.GenericAPIView):
 
         is_like = request.data.get("isLike")
         if is_like is None:
-            return HttpResponseBadRequest()
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        user_id = 1  # add user detection
+        user_id = request.user.id
 
         if is_like:
             if user_id not in likes:

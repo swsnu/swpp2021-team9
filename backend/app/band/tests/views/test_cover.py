@@ -38,17 +38,17 @@ class CoverSongTestCase(TestCase):
                     "title": "TEST_TITLE",
                     "description": "TEST_DESCRIPTION",
                     "instrument": instrument.pk,
-                    "tags": [tag.pk]
+                    "tags": [tag.pk],
                 }
             ),
-            content_type="application/json",
+            content_type="form/data",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         response = client.post(
             f"/api/cover/{last_song.pk + 1}/",
             json.dumps({}),
-            content_type="application/json",
+            content_type="form/data",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

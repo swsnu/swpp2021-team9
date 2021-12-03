@@ -37,6 +37,7 @@ class CoverSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
 
     tags_list = serializers.ListField(write_only=True, required=False)
+    user_id = serializers.IntegerField(write_only=True)
     song_id = serializers.IntegerField(write_only=True)
 
     # override
@@ -44,9 +45,6 @@ class CoverSerializer(serializers.ModelSerializer):
         if validated_data.get("tags_list") is not None:
             tags_list = validated_data.pop("tags_list")
             validated_data["tags"] = CoverTag.objects.filter(name__in=tags_list)
-
-        song_id = validated_data.pop("song_id")
-        validated_data["song"] = Song.objects.get(id=song_id)
 
         return super().create(validated_data)
 
@@ -75,6 +73,7 @@ class CoverSerializer(serializers.ModelSerializer):
             "views",
             "combination",
             "tags_list",
+            "user_id",
             "song_id",
         ]
 

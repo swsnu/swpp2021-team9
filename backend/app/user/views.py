@@ -1,6 +1,5 @@
 """ User views
 views for user
-TODO ("implement")
 """
 from json.decoder import JSONDecodeError
 from django.http.request import HttpRequest
@@ -51,7 +50,9 @@ class UserSignin(APIView):
 
         user = authenticate(request, email=email, password=password)
         if user is None:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                "Wrong email or password.", status=status.HTTP_401_UNAUTHORIZED
+            )
 
         login(request, user)
         return Response(status=status.HTTP_204_NO_CONTENT)
