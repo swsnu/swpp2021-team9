@@ -41,6 +41,7 @@ export default function Wrapper(props: Props) {
       });
     });
     player.setTracks(trackList);
+    player.pause();
   }, [player]);
 
   const onLogoClicked = useCallback(() => {
