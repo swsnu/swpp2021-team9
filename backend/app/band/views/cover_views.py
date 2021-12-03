@@ -3,6 +3,7 @@ cover views for band
 """
 import json
 from json.decoder import JSONDecodeError
+from django.core.files.uploadedfile import UploadedFile
 from django.http.request import HttpRequest
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -35,6 +36,16 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
 
         data["song_id"] = song_id
 
+        # check audio file
+        audio: UploadedFile = data["audio"]
+        if not isinstance(audio, UploadedFile):
+            return Response("No audio file.", status=status.HTTP_400_BAD_REQUEST)
+        if len(audio) > 15728640:
+            return Response(
+                "File size larger than 15MB.", status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # check tags
         if data.get("tags") is not None:
             tags = data.pop("tags")
             try:

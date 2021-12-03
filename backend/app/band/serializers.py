@@ -1,6 +1,7 @@
 """ Band serializers
 DRF serializers for band
 """
+from django.core.files.base import File
 from rest_framework import serializers
 
 from user.serializers import UserSerializer
@@ -32,16 +33,16 @@ class SongSerializer(serializers.ModelSerializer):
 class CoverSerializer(serializers.ModelSerializer):
     """Serializer for cover"""
 
+    audio = serializers.FileField(read_only=True)
     user = UserSerializer(many=False, read_only=True)
-    song = SongSerializer(many=False, read_only=True)
-    tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
-
-    tags_list = serializers.ListField(write_only=True, required=False)
     user_id = serializers.IntegerField(write_only=True)
+    song = SongSerializer(many=False, read_only=True)
     song_id = serializers.IntegerField(write_only=True)
+    tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
+    tags_list = serializers.ListField(write_only=True, required=False)
 
     # override
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         if validated_data.get("tags_list") is not None:
             tags_list = validated_data.pop("tags_list")
             validated_data["tags"] = CoverTag.objects.filter(name__in=tags_list)
@@ -49,7 +50,7 @@ class CoverSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     # override
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data: dict):
         instance: Cover = super().update(instance, validated_data)
         if validated_data.get("tags_list") is not None:
             tags = CoverTag.objects.filter(name__in=validated_data["tags_list"])
@@ -72,9 +73,9 @@ class CoverSerializer(serializers.ModelSerializer):
             "like_count",
             "views",
             "combination",
-            "tags_list",
             "user_id",
             "song_id",
+            "tags_list",
         ]
 
 

@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: Get secret key from secrets.json file
 secret_file = os.path.join(BASE_DIR, "secrets.json")
 try:
-    with open(secret_file) as f:
+    with open(secret_file, encoding="utf8") as f:
         secrets = json.loads(f.read())
 except (FileNotFoundError, JSONDecodeError):
     secrets = {}
@@ -153,6 +153,8 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+# maximum file upload size: currently 15MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 15728640
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

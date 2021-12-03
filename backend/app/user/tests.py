@@ -7,7 +7,7 @@ from django.test import TestCase, Client
 from rest_framework import status
 from .models import CustomUser
 
-# pylint: disable=C0114
+
 User = get_user_model()
 
 
