@@ -33,7 +33,7 @@ class SongSerializer(serializers.ModelSerializer):
 class CoverSerializer(serializers.ModelSerializer):
     """Serializer for cover"""
 
-    audio = serializers.FileField(read_only=True)
+    audio = serializers.FileField(allow_empty_file=True)
     user = UserSerializer(many=False, read_only=True)
     user_id = serializers.IntegerField(write_only=True)
     song = SongSerializer(many=False, read_only=True)

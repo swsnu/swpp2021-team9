@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
 
+from bandcruit.settings import FILE_UPLOAD_MAX_MEMORY_SIZE
 from band.models import Cover, Song
 from band.serializers import CoverSerializer, CoverLikeSerializer
 
@@ -28,22 +29,25 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request)
 
     def post(self, request: Request, song_id: int):
-        data = request.data.copy()
         try:
             Song.objects.get(id=song_id)
-        except Song.DoesNotExist as error:
-            return Response(error, status=status.HTTP_400_BAD_REQUEST)
-
-        data["song_id"] = song_id
+        except Song.DoesNotExist:
+            return Response("Song does not exist.", status=status.HTTP_400_BAD_REQUEST)
 
         # check audio file
-        audio: UploadedFile = data["audio"]
+        audio: UploadedFile = request.data.get("audio")
+
         if not isinstance(audio, UploadedFile):
             return Response("No audio file.", status=status.HTTP_400_BAD_REQUEST)
-        if len(audio) > 15728640:
+
+        if len(audio) > FILE_UPLOAD_MAX_MEMORY_SIZE:
             return Response(
                 "File size larger than 15MB.", status=status.HTTP_400_BAD_REQUEST
             )
+
+        data = request.data.copy()
+        data["user_id"] = request.user.id
+        data["song_id"] = song_id
 
         # check tags
         if data.get("tags") is not None:
@@ -52,12 +56,10 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
                 tags_list = json.loads(tags[0])
             except JSONDecodeError:
                 return Response(
-                    "Format of 'tags' is not in json format.",
+                    "'tags' is not in json format.",
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             data["tags_list"] = tags_list
-
-        data["user_id"] = request.user.id
 
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
