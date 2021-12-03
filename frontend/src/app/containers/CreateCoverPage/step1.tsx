@@ -39,12 +39,29 @@ export default function CreateCoverRecord(props: Props) {
     useState<boolean>(false);
   const [uploadUrl, setUploadUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
-  const [isVideo, setIsVideo] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+
+  const getBlobFromRecorder = (blobUrl, blob) => {
+    console.log('url: ', blobUrl);
+    console.log('bolb: ', blob);
+    let fileFromBlob = new File(
+      [blob],
+      new Date().toISOString() + '_recording.wav',
+      {
+        type: 'audio/wav',
+      },
+    );
+    setFile(fileFromBlob);
+    editor.readAndDecode(fileFromBlob);
+  };
   const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } =
-    useReactMediaRecorder({ video: isVideo });
+    useReactMediaRecorder({
+      onStop: getBlobFromRecorder,
+      audio: true,
+      blobPropertyBag: { type: 'audio/wav' },
+    });
 
   const handleMergeList = (id: string | undefined, isMerge: boolean) => {
     if (!id) {
@@ -60,10 +77,6 @@ export default function CreateCoverRecord(props: Props) {
         setMergeList(_mergeList);
       }
     }
-  };
-
-  const handleVideoStatus = () => {
-    setIsVideo(!isVideo);
   };
 
   useEffect(() => {
@@ -107,22 +120,22 @@ export default function CreateCoverRecord(props: Props) {
     }
   }, [isDeleteClicked]);
 
-  useMemo(async () => {
-    if (!mediaBlobUrl) {
-      return;
-    }
-    let blob = await fetch(mediaBlobUrl).then(r => r.blob());
-    console.log('[REC BLOB URL]', blob);
+  // useMemo(async () => {
+  //   if (!mediaBlobUrl) {
+  //     return;
+  //   }
+  //   let blob = await fetch(mediaBlobUrl).then(r => r.blob());
+  //   console.log('[REC BLOB URL]', blob);
 
-    let fileBlob = new File(
-      [blob],
-      new Date().toISOString() + '_recording.mpeg',
-      { type: 'audio/mpeg' },
-    );
-    console.log(fileBlob);
-    setFile(fileBlob);
-    editor.readAndDecode(fileBlob);
-  }, [mediaBlobUrl]);
+  //   let fileBlob = new File(
+  //     [blob],
+  //     new Date().toISOString() + '_recording.mpeg',
+  //     { type: 'audio/mpeg' },
+  //   );
+  //   console.log(fileBlob);
+  //   setFile(fileBlob);
+  //   editor.readAndDecode(fileBlob);
+  // }, [mediaBlobUrl]);
 
   const onRecordClicked = () => {
     if (isRecording) {
@@ -156,19 +169,25 @@ export default function CreateCoverRecord(props: Props) {
     const upload = URL.createObjectURL(file);
     setUploadUrl(upload);
     console.log(upload);
+    console.log(file);
     editor.readAndDecode(file);
     setFile(file);
   };
 
   const mergeSegments = async () => {
+    let sortedTargetSegments;
+    if (mergeList.length === 0) {
+      return;
+    }
     const targetSegments = mergeList.map(id => {
       return segments.filter(seg => seg.id === id)[0];
     });
-    targetSegments.sort(
+    sortedTargetSegments = targetSegments.sort(
       (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
     );
-    const mp3File: any = await editor.mergeAudio(targetSegments);
+    const mp3File: any = await editor.mergeAudio(sortedTargetSegments);
     setMergedFile(mp3File);
+    console.log(mp3File);
     setMergedUrl(URL.createObjectURL(mp3File));
     setMergeList([]);
     setIsMergeClicked(prev => !prev);
@@ -241,17 +260,6 @@ export default function CreateCoverRecord(props: Props) {
           <h2 className="p-2">Recording Status: {status}</h2>
           <div className="space-x-3">
             <button
-              data-testid="handle-video"
-              className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-              onClick={handleVideoStatus}
-            >
-              {isVideo ? (
-                <FontAwesomeIcon icon={faVideo} />
-              ) : (
-                <FontAwesomeIcon icon={faVideoSlash} />
-              )}
-            </button>
-            <button
               data-testid="rec-btn"
               className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
               onClick={onRecordClicked}
@@ -267,16 +275,7 @@ export default function CreateCoverRecord(props: Props) {
       ) : null}
       <div className="container flex-col justify-center items-center">
         {isRecordingEnabled ? (
-          isVideo ? (
-            <div className="flex justify-center">
-              <video
-                id={'video'}
-                src={mediaBlobUrl ? mediaBlobUrl : undefined}
-                controls
-                autoPlay
-              />
-            </div>
-          ) : mediaBlobUrl ? (
+          mediaBlobUrl ? (
             <WaveformView
               selectedSegmentId={selectedSegmentId}
               audioUrl={mediaBlobUrl}
@@ -284,12 +283,6 @@ export default function CreateCoverRecord(props: Props) {
               setSegments={setSegments}
             />
           ) : null
-        ) : null}
-        {isRecording && isVideo ? (
-          <VideoPreview
-            className="flex justify-center"
-            stream={previewStream}
-          />
         ) : null}
       </div>
       {isUploading ? (

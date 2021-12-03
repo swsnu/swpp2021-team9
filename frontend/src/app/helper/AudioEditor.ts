@@ -1,16 +1,14 @@
 import * as lamejs from 'lamejs';
 import { Segment } from 'peaks.js';
 
-// Reference : https://github.com/Vinit-Dantkale/AudioFy
+// Reference : https://github.com/Vinit-Dantkale/AudioFy : mp3 형식 (기각)
+
+// this audio editor only handle .wav file
 
 export default class AudioEditor {
   private arrayBuffer;
   private audioBuffer;
   private static _instance: AudioEditor | null = null;
-  private totalDuration;
-  // private numberOfChannels;
-  // private sampleRate;
-  // private audioBufferLength;
   static getInstance(): AudioEditor {
     if (!AudioEditor._instance) {
       AudioEditor._instance = new AudioEditor();
@@ -20,6 +18,7 @@ export default class AudioEditor {
 
   async readAndDecode(audioFile) {
     try {
+      console.log(audioFile);
       this.arrayBuffer = await this.readAudio(audioFile);
       console.log(this.arrayBuffer);
     } catch {
@@ -113,12 +112,15 @@ export default class AudioEditor {
     for (let i = 0; i < this.audioBuffer.numberOfChannels; i++) {
       let startPosition = 0;
       for (let segDetail of segmentDetails) {
+        console.log(segDetail);
         channelData[i].set(
           this.audioBuffer
             .getChannelData(i)
-            .slice(segDetail['startTime'], segDetail['endTime'], startPosition),
+            .slice(segDetail.startTime, segDetail.endTime),
+          startPosition,
         );
-        startPosition = segDetail['segmentLength'];
+
+        startPosition += segDetail.segmentLength;
       }
     }
     for (let i = 0; i < this.audioBuffer.numberOfChannels; i++) {
@@ -137,6 +139,8 @@ export default class AudioEditor {
 
     try {
       const mp3File = await this.encoding(audioData);
+      console.log(audioData);
+      console.log(mp3File);
       return mp3File;
     } catch (e) {
       console.error(e);
@@ -166,6 +170,7 @@ export default class AudioEditor {
           let mono = samples.subarray(i, i + maxSamples);
           let mp3buf = mp3Encoder.encodeBuffer(mono);
           buffer.push(new Int8Array(mp3buf));
+          console.log(buffer);
           remaining -= maxSamples;
         }
         resolve(buffer);
