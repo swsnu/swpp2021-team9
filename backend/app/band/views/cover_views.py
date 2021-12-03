@@ -14,8 +14,8 @@ from band.models import Cover, Song
 from band.serializers import CoverSerializer, CoverLikeSerializer
 
 
-# pylint: disable=W0613, R0201
-# temporarily disable unused-argument, no-self-use warning
+# pylint: disable=W0613
+# disable unused-argument warning
 
 
 class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):

@@ -8,7 +8,6 @@ from django.test import TestCase, Client
 from rest_framework import status
 from band.models import Cover, CoverTag, Instrument, Song
 from band.tests.tools import set_up_data
-from band.tests.forms import CoverPostForm
 from user.models import CustomUser
 from bandcruit.settings import FILE_UPLOAD_MAX_MEMORY_SIZE
 

@@ -14,10 +14,6 @@ from .serializers import UserSerializer
 User = get_user_model()
 
 
-# pylint: disable=W0613, R0201
-# temporarily disable unused-argument, no-self-use warning
-
-
 class UserSignup(APIView):
     """user/signup/"""
 

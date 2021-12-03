@@ -1,7 +1,6 @@
 """ Band serializers
 DRF serializers for band
 """
-from django.core.files.base import File
 from rest_framework import serializers
 
 from user.serializers import UserSerializer
