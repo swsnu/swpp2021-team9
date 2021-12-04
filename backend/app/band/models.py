@@ -68,7 +68,7 @@ class Cover(models.Model):
     category: str = models.CharField(
         max_length=30, db_column="category", editable=False
     )
-    description: str = models.TextField(db_column="description")
+    description: str = models.TextField(db_column="description", blank=True)
     user: User = ForeignKey(
         User, related_name="covers", on_delete=models.SET_NULL, null=True
     )
