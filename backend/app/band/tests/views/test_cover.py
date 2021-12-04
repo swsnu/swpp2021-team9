@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, Client
 from rest_framework import status
 from band.models import Cover, CoverTag, Instrument, Song
-from band.tests.tools import set_up_data
+from band.tests.tools import set_up_data, get_logined_client
 from user.models import CustomUser
 from bandcruit.settings import FILE_UPLOAD_MAX_MEMORY_SIZE
 
@@ -35,9 +35,7 @@ class CoverTestCase(TestCase):
         self.assertGreater(len(covers), 0)
 
     def test_cover_song_post(self):
-        client = Client(enforce_csrf_checks=False)
-        user: CustomUser = User.objects.get(pk=1)
-        client.force_login(user)
+        client = get_logined_client()
 
         song: Song = Song.objects.get(pk=1)
         last_song: Song = Song.objects.all().order_by("-id").first()

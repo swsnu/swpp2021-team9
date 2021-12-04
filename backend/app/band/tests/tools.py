@@ -3,7 +3,9 @@ tools for test band app
 """
 from typing import List
 from django.contrib.auth import get_user_model
+from django.test import Client
 from band.models import Combination, Instrument, Song, Cover, CoverTag
+from user.models import CustomUser
 
 User = get_user_model()
 
@@ -90,7 +92,7 @@ def set_up_data():
                 user=users[(song.id + i) % len(users)],
                 instrument=instruments[(song.id + i) % len(instruments)],
                 song=song,
-                audio='audio',
+                audio="audio",
             )
             cover.save()
             cover.tags.set(
@@ -112,3 +114,10 @@ def set_up_data():
         cover: Cover = song_cover.filter(instrument__id=4).first()
         if (cover is not None) and combi_covers:
             cover.combination = combi
+
+
+def get_logined_client():
+    client = Client(enforce_csrf_checks=False)
+    user: CustomUser = User.objects.get(pk=1)
+    client.force_login(user)
+    return client

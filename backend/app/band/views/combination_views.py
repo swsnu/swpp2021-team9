@@ -11,7 +11,7 @@ from band.models import Combination, Song
 from band.serializers import CombinationSerializer, CombinationLikeSerializer
 
 # pylint: disable=W0613
-# disable unused-argument
+# disable unused-argument warning, duplicate code
 
 
 class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):

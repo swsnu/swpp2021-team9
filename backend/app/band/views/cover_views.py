@@ -15,7 +15,7 @@ from band.serializers import CoverSerializer, CoverLikeSerializer
 
 
 # pylint: disable=W0613
-# disable unused-argument warning
+# disable unused-argument warning, duplicate code
 
 
 class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
