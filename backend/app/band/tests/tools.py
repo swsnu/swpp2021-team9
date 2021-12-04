@@ -116,8 +116,8 @@ def set_up_data():
             cover.combination = combi
 
 
-def get_logined_client():
+def get_logined_client(user_id=1):
     client = Client(enforce_csrf_checks=False)
-    user: CustomUser = User.objects.get(pk=1)
+    user: CustomUser = User.objects.get(pk=user_id)
     client.force_login(user)
     return client
