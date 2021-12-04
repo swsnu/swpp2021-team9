@@ -110,6 +110,10 @@ class Combination(models.Model):
         User, db_table="Combination_Likes", related_name="like_combinations", blank=True
     )
 
+    @property
+    def like_count(self) -> int:
+        return self.likes.count()
+
     def __str__(self):
         return f"([{self.pk}] {self.song} combination)"
 

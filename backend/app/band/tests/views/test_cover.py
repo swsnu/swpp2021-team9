@@ -175,7 +175,6 @@ class CoverTestCase(TestCase):
             json.dumps({"isLike": True}),
             content_type="application/json",
         )
-        cover: Cover = Cover.objects.get(pk=cover.pk)
         res_content = json.loads(response.content)
         self.assertTrue(res_content["isLike"])
         self.assertEqual(cover.like_count, like_count + 1)
@@ -186,7 +185,6 @@ class CoverTestCase(TestCase):
             json.dumps({"isLike": False}),
             content_type="application/json",
         )
-        cover: Cover = Cover.objects.get(pk=cover.pk)
         res_content = json.loads(response.content)
         self.assertFalse(res_content["isLike"])
         self.assertEqual(cover.like_count, like_count)
