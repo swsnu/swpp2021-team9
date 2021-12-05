@@ -4,3 +4,4 @@ pylint==2.6.0
 pylint-django==2.3.0
 Pillow==8.4.0
 djangorestframework==3.12.4
+mysqlclient==2.0.3

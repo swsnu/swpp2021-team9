@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { RootState } from 'types';
+import { RootState } from 'utils/types';
 import { initialState } from './index';
 
 const selectSlice = (state: RootState) => (state && state.song) || initialState;
