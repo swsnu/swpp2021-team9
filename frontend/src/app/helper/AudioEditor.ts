@@ -1,6 +1,6 @@
 import * as lamejs from 'lamejs';
 import { Segment } from 'peaks.js';
-import { wavToMp3, audioBufferToWav } from './WavToMp3';
+import { audioBufferToWav } from './WavToMp3';
 // Reference : https://github.com/Vinit-Dantkale/AudioFy : mp3 형식
 // https://stackoverflow.com/questions/61264581/how-to-convert-audio-buffer-to-mp3-in-javascript : wav to mp3
 // this audio editor only handle .wav, .mp3 file
@@ -19,14 +19,23 @@ export default class AudioEditor {
   async readAndDecode(audioFile) {
     let file = audioFile;
     if (audioFile.type === 'audio/wav') {
-      this.arrayBuffer = await this.readAudio(audioFile);
-      const tmpBuf = await new AudioContext().decodeAudioData(
-        this.arrayBuffer.result,
-      );
-      file = audioBufferToWav(tmpBuf);
+      try {
+        this.arrayBuffer = await this.readAudio(audioFile);
+        console.log(this.arrayBuffer);
+      } catch (e) {
+        console.error(e);
+      }
+      try {
+        const tmpBuf = await new AudioContext().decodeAudioData(
+          this.arrayBuffer.result,
+        );
+        console.log(tmpBuf);
+        file = audioBufferToWav(tmpBuf);
+      } catch (e) {
+        console.error(e);
+      }
     }
     try {
-      console.log(file);
       this.arrayBuffer = await this.readAudio(file);
     } catch {
       window.alert('파일을 읽을 수 없습니다.');
@@ -36,11 +45,6 @@ export default class AudioEditor {
       this.audioBuffer = await new AudioContext().decodeAudioData(
         this.arrayBuffer.result,
       );
-      console.log(this.audioBuffer);
-      // this.totalDuration = this.audioBuffer.duration;
-      // this.numberOfChannels = this.audioBuffer.numberOfChannels;
-      // this.sampleRate = this.audioBuffer.sampleRate;
-      // this.audioBufferLength = this.audioBuffer.length;
     } catch {
       window.alert('디코딩 오류 발생');
       return;
@@ -79,12 +83,7 @@ export default class AudioEditor {
 
     for (let seg of segmentList) {
       const segmentDuration = seg.endTime - seg.startTime;
-      console.log(seg);
-      console.log(
-        seg.startTime,
-        this.audioBuffer.length,
-        this.audioBuffer.duration,
-      );
+
       const startTime = Math.floor(
         (seg.startTime * this.audioBuffer.length) / this.audioBuffer.duration,
       );
@@ -100,11 +99,9 @@ export default class AudioEditor {
         endTime: endTime,
         segmentLength: segmentLength,
       };
-      console.log(segmentDetail);
       segmentDetails.push(segmentDetail);
     }
 
-    console.log(maxLength);
     let mergedAudio = new AudioContext().createBuffer(
       this.audioBuffer.numberOfChannels,
       maxLength,
@@ -119,7 +116,6 @@ export default class AudioEditor {
     for (let i = 0; i < this.audioBuffer.numberOfChannels; i++) {
       let startPosition = 0;
       for (let segDetail of segmentDetails) {
-        console.log(segDetail);
         channelData[i].set(
           this.audioBuffer
             .getChannelData(i)
@@ -154,8 +150,7 @@ export default class AudioEditor {
 
   encoding(audioData: AudioData) {
     let buffer: Int8Array[] = [];
-    let maxSamples,
-      sampleBlockSize = 1152;
+    let sampleBlockSize = 1152;
 
     let mp3Encoder = new lamejs.Mp3Encoder(
       audioData.channels.length,
@@ -165,19 +160,14 @@ export default class AudioEditor {
 
     if (audioData.channels.length === 1) {
       return new Promise((resolve, reject) => {
-        console.log(audioData.channels[0]);
         let arrayBuffer = audioData.channels[0];
 
         let samples = new Int16Array(arrayBuffer.length);
         this.floatTo16BitPCM(arrayBuffer, samples);
-        console.log(arrayBuffer);
-        console.log(samples);
 
         for (let i = 0; i < samples.length; i += sampleBlockSize) {
           let mono = samples.subarray(i, i + sampleBlockSize);
           let mp3buf = mp3Encoder?.encodeBuffer(mono);
-          console.log(mono);
-          console.log(mp3buf);
           if (mp3buf.length > 0) {
             buffer.push(mp3buf);
           }
@@ -187,11 +177,7 @@ export default class AudioEditor {
         if (d.length > 0) {
           buffer.push(new Int8Array(d));
         }
-        console.log(buffer);
         const blob = new Blob(buffer, { type: 'audio/mpeg' });
-        var url = window.URL.createObjectURL(blob);
-        console.log('MP3 URl: ', url);
-
         resolve(blob);
       });
     }
@@ -204,7 +190,6 @@ export default class AudioEditor {
         let left = new Int16Array(audioData.channels[1].length);
         this.floatTo16BitPCM(audioData.channels[1], left);
 
-        console.log(right, left);
         for (
           let i = 0;
           i < audioData.channels[0].length;
@@ -213,7 +198,6 @@ export default class AudioEditor {
           let leftData = left.subarray(i, i + sampleBlockSize);
           let rightData = right.subarray(i, i + sampleBlockSize);
           let mp3buf = mp3Encoder?.encodeBuffer(leftData, rightData);
-          console.log(mp3buf);
           if (mp3buf.length > 0) {
             buffer.push(mp3buf);
           }
@@ -223,7 +207,6 @@ export default class AudioEditor {
         if (d.length > 0) {
           buffer.push(new Int8Array(d));
         }
-        console.log(buffer);
         const mp3 = new Blob(buffer, { type: 'audio/mpeg' });
         resolve(mp3);
       });

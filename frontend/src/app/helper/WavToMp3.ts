@@ -1,6 +1,6 @@
 import * as lamejs from 'lamejs';
 
-export function audioBufferToWav(aBuffer) {
+export const audioBufferToWav = aBuffer => {
   function setUint16(data) {
     btwView.setUint16(btwPos, data, true);
     btwPos += 2;
@@ -59,11 +59,11 @@ export function audioBufferToWav(aBuffer) {
   const mp3File = wavToMp3(wavHdr.channels, wavHdr.sampleRate, wavSamples);
 
   return mp3File;
-}
+};
 
 export function wavToMp3(channels, sampleRate, samples) {
   var buffer: Int8Array[] = [];
-  var mp3enc = new lamejs.Mp3Encoder(channels, sampleRate, 128);
+  var mp3enc = new lamejs.Mp3Encoder(channels, sampleRate, 320);
   var remaining = samples.length;
   var samplesPerFrame = 1152;
   for (var i = 0; remaining >= samplesPerFrame; i += samplesPerFrame) {

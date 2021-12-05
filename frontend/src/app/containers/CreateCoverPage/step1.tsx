@@ -57,7 +57,6 @@ export default function CreateCoverRecord(props: Props) {
     useReactMediaRecorder({
       onStop: getBlobFromRecorder,
       audio: true,
-      blobPropertyBag: { type: 'audio/wav' },
     });
 
   const handleMergeList = (id: string | undefined, isMerge: boolean) => {
