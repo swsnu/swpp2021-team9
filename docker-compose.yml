@@ -7,7 +7,7 @@ services:
     container_name: front
     ports:
       - 80:80
-    command: nginx -g daemon off;
+    command: nginx -g "daemon off;"
 
   back:
     build: ./backend
@@ -33,16 +33,5 @@ services:
     env_file:
       - ./.env
 
-#   nginx:
-#     container_name: nginx.prod
-#     build: ./nginx
-#     volumes:
-#       - static_volume:/home/app/web/staticfiles
-#     ports:
-#       - 80:80
-#     depends_on:
-#       - front
-
 volumes:
   mysql_data:
-#   static_volume:
