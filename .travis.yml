@@ -13,6 +13,8 @@ jobs:
       before-install:
         - npm install -g yarn
       install:
+		- apt-get update
+		- apt-get -y install mysql-client libmysqlclient-dev
         - source ~/virtualenv/python3.7/bin/activate
         - pip install -r backend/requirements.txt
         - pip install coveralls
