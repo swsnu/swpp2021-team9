@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   front:
-    build:
-      context: ./frontend
+    image: titieiti/metaband:1.0
     container_name: front
     ports:
       - 80:80
     command: nginx -g "daemon off;"
+    restart: always
 
   back:
     build: ./backend
@@ -19,6 +19,7 @@ services:
       - ./.env
     volumes:
       - ./backend/:/srv/
+    restart: always
 
   db:
     image: mysql:8.0.22
@@ -32,6 +33,7 @@ services:
       - mysql_data:/var/lib/mysql
     env_file:
       - ./.env
+    restart: always
 
 volumes:
   mysql_data:
