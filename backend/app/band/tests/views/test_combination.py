@@ -103,7 +103,7 @@ class CombinationTestCase(TestCase):
         response = client.get(f"/api/combination/like/{combination.pk}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         res_content = json.loads(response.content)
-        self.assertFalse(res_content["isLike"])
+        self.assertFalse(res_content["isLiked"])
 
         # get like with bad combination id
         response = client.get(f"/api/combination/like/{last_combination.pk + 1}/")
@@ -120,19 +120,19 @@ class CombinationTestCase(TestCase):
         # like
         response = client.put(
             f"/api/combination/like/{combination.pk}/",
-            json.dumps({"isLike": True}),
+            json.dumps({"isLiked": True}),
             content_type="application/json",
         )
         res_content = json.loads(response.content)
-        self.assertTrue(res_content["isLike"])
+        self.assertTrue(res_content["isLiked"])
         self.assertEqual(combination.like_count, like_count + 1)
 
         # unlike
         response = client.put(
             f"/api/combination/like/{combination.pk}/",
-            json.dumps({"isLike": False}),
+            json.dumps({"isLiked": False}),
             content_type="application/json",
         )
         res_content = json.loads(response.content)
-        self.assertFalse(res_content["isLike"])
+        self.assertFalse(res_content["isLiked"])
         self.assertEqual(combination.like_count, like_count)

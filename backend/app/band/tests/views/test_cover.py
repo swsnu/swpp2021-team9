@@ -154,7 +154,7 @@ class CoverTestCase(TestCase):
         response = client.get(f"/api/cover/like/{cover.pk}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         res_content = json.loads(response.content)
-        self.assertFalse(res_content["isLike"])
+        self.assertFalse(res_content["isLiked"])
 
         # get like with bad cover id
         response = client.get(f"/api/cover/like/{last_cover.pk + 1}/")
@@ -170,19 +170,19 @@ class CoverTestCase(TestCase):
         # like
         response = client.put(
             f"/api/cover/like/{cover.pk}/",
-            json.dumps({"isLike": True}),
+            json.dumps({"isLiked": True}),
             content_type="application/json",
         )
         res_content = json.loads(response.content)
-        self.assertTrue(res_content["isLike"])
+        self.assertTrue(res_content["isLiked"])
         self.assertEqual(cover.like_count, like_count + 1)
 
         # unlike
         response = client.put(
             f"/api/cover/like/{cover.pk}/",
-            json.dumps({"isLike": False}),
+            json.dumps({"isLiked": False}),
             content_type="application/json",
         )
         res_content = json.loads(response.content)
-        self.assertFalse(res_content["isLike"])
+        self.assertFalse(res_content["isLiked"])
         self.assertEqual(cover.like_count, like_count)
