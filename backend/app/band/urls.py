@@ -30,12 +30,12 @@ urlpatterns = [
     path("cover/<int:song_id>/", cover_views.CoverSong.as_view(), name="cover_song"),
     # combination urls
     path(
-        "combination/info/<int:combination_id>/",
+        "combination/info/<int:pk>/",
         combination_views.CombinationInfo.as_view(),
         name="combination_info",
     ),
     path(
-        "combination/like/<int:combination_id>/",
+        "combination/like/<int:pk>/",
         combination_views.CombinationLike.as_view(),
         name="combination_like",
     ),
