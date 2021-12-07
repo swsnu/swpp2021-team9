@@ -42,9 +42,9 @@ SECRET_KEY = get_secret("SECRET_KEY", "ASDFG")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_secret("DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = get_secret("ALLOWED_HOSTS", [])
 
 
 # Application definition
