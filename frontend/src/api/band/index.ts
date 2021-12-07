@@ -70,15 +70,15 @@ export const api = {
 
   // `/api/cover/like/<id:int>/`
   getCoverLike: async (coverId: number) => {
-    const response = await apiClient.get<{ isLike: Boolean }>(
+    const response = await apiClient.get<{ isLiked: Boolean }>(
       `/api/cover/like/${coverId}/`,
     );
     return response.data;
   },
-  putCoverLike: async (form: { coverId: number; isLike: Boolean }) => {
-    return await apiClient.put<{ isLike: Boolean }>(
+  putCoverLike: async (form: { coverId: number; isLiked: Boolean }) => {
+    return await apiClient.put<{ isLiked: Boolean }>(
       `/api/cover/like/${form.coverId}/`,
-      { isLike: form.isLike },
+      { isLiked: form.isLiked },
     );
   },
   deleteCoverLike: async (coverId: number) => {
