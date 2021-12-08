@@ -9,3 +9,7 @@ export const editCover = asyncAction<CoverFormPut, Cover, AxiosError>(
 export const deleteCover = asyncAction<number, number, AxiosError>(
   AT.DELETE_COVER,
 );
+
+export const createSong = asyncAction<SongForm, Song, AxiosError>(
+  AT.CREATE_SONG,
+);

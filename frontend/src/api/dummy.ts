@@ -1,10 +1,3 @@
-import image0 from 'app/components/Album/AlbumImage0.jpg';
-import image1 from 'app/components/Album/AlbumImage1.jpg';
-import image2 from 'app/components/Album/AlbumImage2.jpg';
-import image3 from 'app/components/Album/AlbumImage3.jpg';
-import image4 from 'app/components/Album/AlbumImage4.jpg';
-import image5 from 'app/components/Album/AlbumImage5.jpg';
-
 const followList = [
   [1, 2, 3, 4],
   [2, 9, 3, 4, 6],

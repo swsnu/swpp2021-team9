@@ -33,7 +33,7 @@ function setup() {
     </Provider>,
   );
   const title = page.getByLabelText('Title') as HTMLInputElement;
-  const artist = page.getByLabelText('Artist') as HTMLInputElement;
+  const singer = page.getByLabelText('Artist') as HTMLInputElement;
   const category = page.getByLabelText('Category') as HTMLSelectElement;
   const reference = page.getByLabelText('Reference Link') as HTMLInputElement;
   const description = page.getByLabelText(
@@ -45,7 +45,7 @@ function setup() {
   return {
     page,
     title,
-    artist,
+    singer,
     category,
     reference,
     description,
@@ -64,8 +64,8 @@ test('should handle form correctly', () => {
   fireEvent.change(set.title, { target: { value: 'TEST_TITLE' } });
   expect(set.title.value).toBe('TEST_TITLE');
 
-  fireEvent.change(set.artist, { target: { value: 'TEST_ARTIST' } });
-  expect(set.artist.value).toBe('TEST_ARTIST');
+  fireEvent.change(set.singer, { target: { value: 'TEST_ARTIST' } });
+  expect(set.singer.value).toBe('TEST_ARTIST');
 
   // fireEvent.select(set.category, { target: { value: '2' } }); // coverage에 반영 안 됨
   userEvent.selectOptions(set.category, '2');

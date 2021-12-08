@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Song } from 'utils/urls';
+import { useDispatch, useSelector } from 'react-redux';
+import * as urls from 'utils/urls';
+import * as apiActions from 'api/actions';
+import { useCreateSongSlice } from './slice';
+import { selectCreateSong } from './slice/selectors';
 
 export type Props = {};
 
 export default function CreateSongPage(props: Props) {
+  useCreateSongSlice();
+  const createSongState = useSelector(selectCreateSong);
   const history = useHistory();
-  const [Form, setForm] = useState({
+  const dispatch = useDispatch();
+
+  const songState = createSongState.songResponse;
+
+  const [Form, setForm] = useState<SongForm>({
     title: '',
-    artist: '',
-    category: '0',
+    singer: '',
+    category: 'Pop',
     reference: '',
     description: '',
   });
@@ -27,12 +37,22 @@ export default function CreateSongPage(props: Props) {
 
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log(Form);
-    history.push(Song(0));
+    dispatch(apiActions.createSong.request(Form));
   };
 
+  useEffect(() => {
+    if (!songState.loading) {
+      if (songState.error) {
+        console.log(songState.error);
+      } else if (songState.data) {
+        const newSongId = songState.data.id;
+        history.push(urls.Song(newSongId));
+      }
+    }
+  }, [songState, history]);
+
   const submitDisabled = () => {
-    return Form.title === '' || Form.artist === '' || Form.reference === '';
+    return Form.title === '' || Form.singer === '' || Form.reference === '';
   };
 
   const styles = {
@@ -72,15 +92,15 @@ export default function CreateSongPage(props: Props) {
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="artist" className={styles.label}>
+                <label htmlFor="singer" className={styles.label}>
                   Artist
                 </label>
                 <input
                   type="text"
-                  name="artist"
-                  id="artist"
-                  value={Form.artist}
-                  onChange={e => onChangeForm(e, 'artist')}
+                  name="singer"
+                  id="singer"
+                  value={Form.singer}
+                  onChange={e => onChangeForm(e, 'singer')}
                   className={styles.input}
                 />
               </div>
