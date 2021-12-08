@@ -3,6 +3,7 @@ version: '3.7'
 services:
   front:
     image: titieiti/metaband:1.0
+    # build: ./frontend
     container_name: front
     ports:
       - 80:80
