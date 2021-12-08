@@ -1,6 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useMakeCombinationSlice } from './slice/makeCombination';
+import * as urls from 'utils/urls';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +12,7 @@ export interface Props {
 }
 
 export default function TopCombination(props: Props) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useMakeCombinationSlice();
 
@@ -28,6 +31,7 @@ export default function TopCombination(props: Props) {
           <button
             key={index}
             className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
+            onClick={() => history.push(urls.Cover(cover.id))}
           >
             {cover.title}
           </button>
