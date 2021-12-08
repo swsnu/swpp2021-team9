@@ -37,6 +37,8 @@ class CoverSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(write_only=True)
     song = SongSerializer(many=False, read_only=True)
     song_id = serializers.IntegerField(write_only=True)
+    instrument = InstrumentSerializer(many=False, read_only=True)
+    instrument_id = serializers.IntegerField(write_only=True)
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     tags_list = serializers.ListField(write_only=True, required=False)
 
@@ -74,6 +76,7 @@ class CoverSerializer(serializers.ModelSerializer):
             "combination",
             "user_id",
             "song_id",
+            "instrument_id",
             "tags_list",
         ]
 

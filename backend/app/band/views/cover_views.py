@@ -49,6 +49,16 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
         data["user_id"] = request.user.id
         data["song_id"] = song_id
 
+        # check instrument
+        try:
+            instrument_id = data.pop("instrument")
+            data["instrument_id"] = int(instrument_id[0])
+        except:
+            return Response(
+                "'instrument' should be a number.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # check tags
         if data.get("tags") is not None:
             tags = data.pop("tags")
@@ -90,6 +100,13 @@ class CoverInfo(mixins.RetrieveModelMixin, generics.GenericAPIView):
     def update(self, request: Request, *args, **kwargs):
         instance = self.get_object()
         data = request.data.copy()
+        
+        # check instrument
+        if data.get("instrument") is not None:
+            instrument_id = data.pop("instrument")
+            data["instrument_id"] = int(instrument_id)
+        
+        # check tags
         if data.get("tags") is not None:
             data["tags_list"] = data.pop("tags")
         serializer: CoverSerializer = self.get_serializer(
