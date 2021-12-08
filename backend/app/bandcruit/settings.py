@@ -106,7 +106,7 @@ WSGI_APPLICATION = "bandcruit.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": get_secret("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": get_secret("SQL_DATABASE", "bandcruit"),
+        "NAME": get_secret("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
         "USER": get_secret("SQL_USER", "band"),
         "PASSWORD": get_secret("SQL_PASSWORD", "dlrjsqlalf"),
         "HOST": "mysql.db",
