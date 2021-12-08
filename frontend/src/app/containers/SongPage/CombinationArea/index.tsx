@@ -11,6 +11,7 @@ import { faPlay, faCircle } from '@fortawesome/free-solid-svg-icons';
 export interface Props {
   instruments: Instrument[];
   covers: Cover[];
+  onClickPlay: () => void;
 }
 
 export default function CombinationArea(props: Props) {
@@ -24,7 +25,10 @@ export default function CombinationArea(props: Props) {
       <div className="mt-2 flex w-full items-start">
         <AddedCoverList />
         <AddCoverButton instruments={props.instruments} />
-        <button className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600">
+        <button
+          className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600"
+          onClick={props.onClickPlay}
+        >
           <div className="text-lg text-center">
             <FontAwesomeIcon icon={faPlay} />
           </div>

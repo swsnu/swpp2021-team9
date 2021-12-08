@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,10 +9,10 @@ import {
 } from './slice/selectors';
 import { useSongSlice } from './slice';
 import * as apiActions from 'api/actions';
-
 import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
 
+import Player from 'app/helper/Player';
 import SongInfo from './SongInfo';
 import TopCombination from './TopCombination';
 import CombinationArea from './CombinationArea';
@@ -53,10 +53,9 @@ export default function SongPage(props: Props) {
         history.push(urls.Main());
       }
     }
-    if (coversResponse.data) console.log(coversResponse.data);
-  }, [coversResponse, songResponse, history]);
+  }, [songResponse, history]);
 
-  const renderTopCover = () => {
+  const renderTopCover = useCallback(() => {
     if (current === null) return null;
 
     const currentItem = combination.find(item => item.id === current);
@@ -72,7 +71,28 @@ export default function SongPage(props: Props) {
         />
       )
     );
-  };
+  }, [current, combination, coversResponse.data]);
+
+  // playing
+  const player = useMemo(() => Player.getInstance(), []);
+
+  const onClickPlay = useCallback(() => {
+    if (!songResponse.data) return;
+    const currentSongInfo: SongInfo = songResponse.data;
+
+    let sources: string[] = combination
+      .filter(item => item.cover)
+      .map(item => (item.cover ? item.cover.audio : ''));
+
+    console.log(sources);
+
+    const currentTrackInfo: TrackInfo = {
+      song: currentSongInfo,
+      sources,
+      like: false,
+    };
+    player.setTracks([currentTrackInfo]);
+  }, [combination, player, songResponse.data]);
 
   return (
     <div data-testid="SongPage" className="flex justify-center">
@@ -92,6 +112,7 @@ export default function SongPage(props: Props) {
           <CombinationArea
             instruments={instrumentsResponse.data}
             covers={coversResponse.data}
+            onClickPlay={onClickPlay}
           />
         )}
         {renderTopCover()}
