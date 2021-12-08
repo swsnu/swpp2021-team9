@@ -14,7 +14,7 @@ from .models import (
 
 
 class InstrumentSerializer(serializers.ModelSerializer):
-    """Serializer for insrument"""
+    """Serializer for instrument"""
 
     class Meta:
         model = Instrument
