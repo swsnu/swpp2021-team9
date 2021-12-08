@@ -14,7 +14,7 @@ from .models import (
 
 
 class InstrumentSerializer(serializers.ModelSerializer):
-    """Serializer for insrument"""
+    """Serializer for instrument"""
 
     class Meta:
         model = Instrument
@@ -93,6 +93,40 @@ class CoverLikeSerializer(serializers.ModelSerializer):
 class CombinationSerializer(serializers.ModelSerializer):
     """Serializer for combination"""
 
+    song = SongSerializer(many=False, read_only=True)
+    song_id = serializers.IntegerField(write_only=True)
+    covers = CoverSerializer(many=True, read_only=True)
+    covers_list = serializers.ListField(write_only=True, required=True)
+
+    # override
+    def create(self, validated_data: dict):
+        if validated_data.get("covers_list") is not None:
+            covers_list = validated_data.pop("covers_list")
+            validated_data["covers"] = Cover.objects.filter(id__in=covers_list)
+
+        return super().create(validated_data)
+
     class Meta:
         model = Combination
-        fields = ["id", "view", "song", "covers", "likes"]
+        fields = [
+            "id",
+            "view",
+            "song",
+            "covers",
+            "likes",
+            "like_count",
+            "song_id",
+            "covers_list",
+        ]
+
+
+class CombinationLikeSerializer(serializers.ModelSerializer):
+    """Serializer for likes of combination"""
+
+    class Meta:
+        model = Combination
+        fields = [
+            "id",
+            "likes",
+            "like_count",
+        ]

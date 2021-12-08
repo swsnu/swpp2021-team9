@@ -103,7 +103,7 @@ describe('band api', () => {
 
   test(`/api/cover/like/<id:int>/`, async () => {
     const mockId = 323;
-    const mockForm = { coverId: mockId, isLike: true };
+    const mockForm = { coverId: mockId, isLiked: true };
 
     expect(await api.getCoverLike(mockId)).toEqual(MOCK_GET_DATA);
     expect(apiClient.get).lastCalledWith(`/api/cover/like/${mockId}/`);
@@ -111,7 +111,7 @@ describe('band api', () => {
     expect(await api.putCoverLike(mockForm)).toEqual(MOCK_PUT_RESPONSE);
     expect(apiClient.put).lastCalledWith(
       `/api/cover/like/${mockForm.coverId}/`,
-      { isLike: mockForm.isLike },
+      { isLiked: mockForm.isLiked },
     );
 
     expect(await api.deleteCoverLike(mockId)).toEqual(MOCK_DELETE_RESPONSE);
@@ -150,12 +150,12 @@ describe('band api', () => {
     expect(apiClient.get).lastCalledWith(`/api/song/main/`);
   });
 
-  test(`/api/song/search/?q=key:str/`, async () => {
+  test(`/api/song/search/?search=key:str/`, async () => {
     const mockKey = 'MOCK_KEY';
 
     expect(await api.getSongBySearch(mockKey)).toEqual(MOCK_GET_DATA);
     expect(apiClient.get).lastCalledWith(`/api/search/`, {
-      params: { key: mockKey },
+      params: { search: mockKey },
     });
   });
 
@@ -169,7 +169,7 @@ describe('band api', () => {
   // Basic testing
   //   test(`urlll/<id:int>/`, async () => {
   //     const mockId = 323;
-  //     const mockForm = { coverId: mockId, isLike: true };
+  //     const mockForm = { coverId: mockId, isLiked: true };
 
   //     expect(await api.getCoverLike(mockId)).toEqual(MOCK_GET_DATA);
   //     expect(apiClient.get).lastCalledWith(`urlll/${mockId}/`);
