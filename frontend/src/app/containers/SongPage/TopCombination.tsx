@@ -7,7 +7,6 @@ import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export interface Props {
   combinations: Combination[];
-  covers: Cover[];
 }
 
 export default function TopCombination(props: Props) {
@@ -19,20 +18,15 @@ export default function TopCombination(props: Props) {
   };
 
   const onClickGet = (combination: Combination) => {
-    dispatch(
-      actions.getCovers(
-        combination.covers.map(id => props.covers.find(cov => cov.id === id)),
-      ),
-    );
+    dispatch(actions.getCovers(combination.covers));
   };
 
-  const renderCoverButtons = (covers: number[]) => {
-    return covers.map(id => {
-      const cover = props.covers.find(cov => cov.id === id);
+  const renderCoverButtons = (covers: Cover[]) => {
+    return covers.map((cover, index) => {
       return (
         cover && (
           <button
-            key={id}
+            key={index}
             className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
           >
             {cover.title}
@@ -104,7 +98,7 @@ export default function TopCombination(props: Props) {
   return (
     <div data-testid="TopCombination" className="mt-8 flex flex-col">
       <h2 className="pl-4 sm:pl-0 text-left text-sm font-bold text-gray-600 tracking-wider">
-        TOP COMBINATIONS
+        TOP META-BANDS
       </h2>
       <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
         <table className="table-fixed w-full">

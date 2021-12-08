@@ -23,32 +23,28 @@ export const dummyUser: User[] = Array.from({ length: 10 }, (_, idx) => {
   };
 });
 
-const instNames = ['Vocals', 'Keyboard', 'Guitar', 'Drum'];
-const instIcons = ['mic', 'piano', 'guitar', 'drum'];
-
-export const dummyInstruments: Instrument[] = Array.from(
-  { length: instNames.length },
-  (_, idx) => {
-    return {
-      id: idx,
-      name: instNames[idx],
-      icon: instIcons[idx],
-    };
+export const dummyInstruments: Instrument[] = [
+  {
+    id: 1,
+    name: 'Vocals',
   },
-);
-
-export const dummySong: Song = {
-  id: 0,
-  title: '',
-  singer: '',
-  category: '',
-  reference: '',
-  description: '',
-};
+  {
+    id: 2,
+    name: 'Keyboard',
+  },
+  {
+    id: 3,
+    name: 'Guitar',
+  },
+  {
+    id: 4,
+    name: 'Drum',
+  },
+];
 
 export const dummySongs: Song[] = [
   {
-    id: 0,
+    id: 1,
     title: '신호등',
     singer: '이무진',
     category: 'POP',
@@ -56,7 +52,7 @@ export const dummySongs: Song[] = [
     description: '붉은색 푸른색 그 사이 3초 그 짧은 시간~',
   },
   {
-    id: 1,
+    id: 2,
     title: 'strawberry moon',
     singer: '아이유',
     category: 'POP',
@@ -64,7 +60,7 @@ export const dummySongs: Song[] = [
     description: '',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Savage',
     singer: 'aespa',
     category: 'POP',
@@ -72,7 +68,7 @@ export const dummySongs: Song[] = [
     description: '',
   },
   {
-    id: 3,
+    id: 4,
     title: 'STAY',
     singer: 'The Kid LAROI, Justin Bieber',
     category: 'POP',
@@ -80,7 +76,7 @@ export const dummySongs: Song[] = [
     description: '',
   },
   {
-    id: 4,
+    id: 5,
     title: 'My Universe',
     singer: 'Coldplay, 방탄소년단',
     category: 'POP',
@@ -88,7 +84,7 @@ export const dummySongs: Song[] = [
     description: '',
   },
   {
-    id: 5,
+    id: 6,
     title: 'OHAYO MY NIGHT',
     singer: '디핵 (D-Hack), PATEKO (파테코)',
     category: 'HIP-HOP',
@@ -110,7 +106,7 @@ export const dummyCovers: Cover[] = [
     tags: ['Calm', 'Cute'],
     likes: 5,
     views: 27,
-    combinationId: null,
+    combination: null,
   },
   {
     id: 1,
@@ -124,7 +120,7 @@ export const dummyCovers: Cover[] = [
     tags: ['Cool'],
     likes: 3,
     views: 12,
-    combinationId: null,
+    combination: null,
   },
   {
     id: 2,
@@ -138,7 +134,7 @@ export const dummyCovers: Cover[] = [
     tags: ['Funky'],
     likes: 4,
     views: 11,
-    combinationId: null,
+    combination: null,
   },
   {
     id: 3,
@@ -152,7 +148,7 @@ export const dummyCovers: Cover[] = [
     tags: ['Cute'],
     likes: 3,
     views: 25,
-    combinationId: 0,
+    combination: 0,
   },
 ];
 
@@ -161,14 +157,14 @@ export const dummyCombinations: Combination[] = [
     id: 0,
     views: 141,
     song: 0,
-    covers: [0, 1, 2],
+    covers: [dummyCovers[0], dummyCovers[1], dummyCovers[2]],
     likes: 25,
   },
   {
     id: 1,
     views: 93,
     song: 0,
-    covers: [1, 2, 3],
+    covers: [dummyCovers[1], dummyCovers[2], dummyCovers[3]],
     likes: 14,
   },
 ];

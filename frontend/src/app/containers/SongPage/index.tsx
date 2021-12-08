@@ -18,13 +18,6 @@ import TopCombination from './TopCombination';
 import CombinationArea from './CombinationArea';
 import TopCover from './TopCover';
 
-import {
-  dummySong,
-  dummyCombinations,
-  dummyCovers,
-  dummyInstruments,
-} from 'api/dummy';
-
 interface MatchParams {
   id?: string;
 }
@@ -38,11 +31,19 @@ export default function SongPage(props: Props) {
   const combination = useSelector(selectCombination);
   const current = useSelector(selectCurrent);
 
-  // loading song
+  // loading
   const songResponse = songState.songResponse;
+  const combinationsResponse = songState.combinationsResponse;
+  const coversResponse = songState.coversResponse;
+  const instrumentsResponse = songState.instrumentsResponse;
 
   useEffect(() => {
     dispatch(apiActions.loadSong.request(Number(props.match.params.id)));
+    dispatch(
+      apiActions.loadCombinations.request(Number(props.match.params.id)),
+    );
+    dispatch(apiActions.loadCoversSong.request(Number(props.match.params.id)));
+    dispatch(apiActions.loadInstruments.request());
   }, [dispatch, props.match]);
 
   useEffect(() => {
@@ -52,17 +53,21 @@ export default function SongPage(props: Props) {
         history.push(urls.Main());
       }
     }
-  }, [songResponse, history]);
+    if (coversResponse.data) console.log(coversResponse.data);
+  }, [coversResponse, songResponse, history]);
 
   const renderTopCover = () => {
     if (current === null) return null;
 
     const currentItem = combination.find(item => item.id === current);
     return (
-      currentItem && (
+      currentItem &&
+      coversResponse.data && (
         <TopCover
-          covers={dummyCovers.filter(
-            cover => cover.instrument.id === currentItem.instrument.id,
+          covers={coversResponse.data.filter(
+            cover =>
+              cover.instrument &&
+              cover.instrument.id === currentItem.instrument.id,
           )}
         />
       )
@@ -72,16 +77,23 @@ export default function SongPage(props: Props) {
   return (
     <div data-testid="SongPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
-        <SongInfo
-          song={songResponse.data ?? dummySong}
-          image={getThumbnail(
-            songResponse.data
-              ? songResponse.data.reference
-              : dummySong.reference,
-          )}
-        />
-        <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
-        <CombinationArea instruments={dummyInstruments} covers={dummyCovers} />
+        {songResponse.data && (
+          <SongInfo
+            song={songResponse.data}
+            image={getThumbnail(songResponse.data.reference)}
+          />
+        )}
+
+        {combinationsResponse.data && (
+          <TopCombination combinations={combinationsResponse.data} />
+        )}
+
+        {instrumentsResponse.data && coversResponse.data && (
+          <CombinationArea
+            instruments={instrumentsResponse.data}
+            covers={coversResponse.data}
+          />
+        )}
         {renderTopCover()}
       </div>
     </div>

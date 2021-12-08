@@ -49,7 +49,7 @@ export default function AddedCoverList(props: Props) {
               <div>
                 <Menu.Button className={styles.menuButton(item)}>
                   <div className="mr-1 w-6 text-lg text-center text-gray-700">
-                    <FontAwesomeIcon icon={getIcon(item.instrument.icon)} />
+                    <FontAwesomeIcon icon={getIcon(item.instrument.name)} />
                   </div>
                   {item.cover
                     ? item.cover.title
@@ -67,7 +67,7 @@ export default function AddedCoverList(props: Props) {
         ))
       ) : (
         <span className="text-sm py-1 px-2 font-medium text-gray-500 tracking-wider">
-          Add covers to make your own combination!
+          Combine covers to create your own band!
         </span>
       )}
     </ul>

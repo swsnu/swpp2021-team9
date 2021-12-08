@@ -19,7 +19,7 @@ export default function CombinationArea(props: Props) {
   return (
     <div data-testid="CombinationArea" className="mt-4 ml-4 sm:ml-0">
       <h2 className="text-left text-sm font-bold text-gray-600 tracking-wider">
-        MAKE COMBINATION
+        MAKE YOUR OWN META-BAND
       </h2>
       <div className="mt-2 flex w-full items-start">
         <AddedCoverList />
