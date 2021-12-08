@@ -37,6 +37,15 @@ export const dummyInstruments: Instrument[] = Array.from(
   },
 );
 
+export const dummySong: Song = {
+  id: 0,
+  title: '',
+  singer: '',
+  category: '',
+  reference: '',
+  description: '',
+};
+
 export const dummySongs: Song[] = [
   {
     id: 0,

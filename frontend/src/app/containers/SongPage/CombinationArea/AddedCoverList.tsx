@@ -1,6 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSongSlice, CombinationItem } from '../slice';
+import {
+  useMakeCombinationSlice,
+  CombinationItem,
+} from '../slice/makeCombination';
 import { selectCombination, selectCurrent } from '../slice/selectors';
 
 import CoverDropdown from 'app/components/Dropdown/CoverDropdown';
@@ -12,7 +15,7 @@ export interface Props {}
 
 export default function AddedCoverList(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useSongSlice();
+  const { actions } = useMakeCombinationSlice();
 
   const combination = useSelector(selectCombination);
   const current = useSelector(selectCurrent);

@@ -1,4 +1,9 @@
-import { initialState, SongState, useSongSlice, songActions } from './index';
+import {
+  initialState,
+  MakeCombinationState,
+  useMakeCombinationSlice,
+  makeCombinationActions,
+} from './makeCombination';
 import { dummyCovers } from 'api/dummy';
 
 import {
@@ -19,12 +24,13 @@ jest.mock('utils/redux-injectors', () => {
 });
 
 test('should return initial state', () => {
-  expect(useSongSlice().reducer(undefined, { type: '' })).toEqual(initialState);
+  expect(useMakeCombinationSlice().reducer(undefined, { type: '' })).toEqual(
+    initialState,
+  );
 });
 
 test('editCurrent', () => {
-  const stateInit: SongState = {
-    id: null,
+  const stateInit: MakeCombinationState = {
     combination: [
       { id: 0, instrument: dummyCovers[0].instrument, cover: dummyCovers[0] },
       { id: 1, instrument: dummyCovers[1].instrument, cover: dummyCovers[1] },
@@ -33,20 +39,21 @@ test('editCurrent', () => {
   };
 
   expect(
-    useSongSlice().reducer(stateInit, songActions.editCurrent(dummyCovers[0])),
+    useMakeCombinationSlice().reducer(
+      stateInit,
+      makeCombinationActions.editCurrent(dummyCovers[0]),
+    ),
   ).toEqual(stateInit);
 });
 
 test('getCovers', () => {
-  const stateInit: SongState = {
-    id: null,
+  const stateInit: MakeCombinationState = {
     combination: [
       { id: 0, instrument: dummyCovers[0].instrument, cover: dummyCovers[0] },
     ],
     current: null,
   };
-  const stateChanged: SongState = {
-    id: null,
+  const stateChanged: MakeCombinationState = {
     combination: [
       { id: 0, instrument: dummyCovers[1].instrument, cover: dummyCovers[1] },
     ],
@@ -54,9 +61,9 @@ test('getCovers', () => {
   };
 
   expect(
-    useSongSlice().reducer(
+    useMakeCombinationSlice().reducer(
       stateInit,
-      songActions.getCovers([undefined, dummyCovers[1]]),
+      makeCombinationActions.getCovers([undefined, dummyCovers[1]]),
     ),
   ).toEqual(stateChanged);
 });

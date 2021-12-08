@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCombination, selectCurrent } from './slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectSong,
+  selectCombination,
+  selectCurrent,
+} from './slice/selectors';
+import { useSongSlice } from './slice';
+import * as apiActions from 'api/actions';
 
-import { Main } from 'utils/urls';
+import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
 
 import SongInfo from './SongInfo';
@@ -13,7 +19,7 @@ import CombinationArea from './CombinationArea';
 import TopCover from './TopCover';
 
 import {
-  dummySongs,
+  dummySong,
   dummyCombinations,
   dummyCovers,
   dummyInstruments,
@@ -25,17 +31,28 @@ interface MatchParams {
 export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function SongPage(props: Props) {
+  useSongSlice();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const songState = useSelector(selectSong);
   const combination = useSelector(selectCombination);
   const current = useSelector(selectCurrent);
 
+  // loading song
+  const songResponse = songState.songResponse;
+
   useEffect(() => {
-    // 존재하지 않는 노래면 리다이렉트
-    if (!props.match.params.id || props.match.params.id !== '0') {
-      window.alert('Song page does not exist.');
-      history.push(Main());
+    dispatch(apiActions.loadSong.request(Number(props.match.params.id)));
+  }, [dispatch, props.match]);
+
+  useEffect(() => {
+    if (!songResponse.loading) {
+      if (songResponse.error) {
+        window.alert('Song page does not exist.');
+        history.push(urls.Main());
+      }
     }
-  }, [history, props.match.params.id]);
+  }, [songResponse, history]);
 
   const renderTopCover = () => {
     if (current === null) return null;
@@ -56,8 +73,12 @@ export default function SongPage(props: Props) {
     <div data-testid="SongPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         <SongInfo
-          song={dummySongs[0]}
-          image={getThumbnail(dummySongs[0].reference)}
+          song={songResponse.data ?? dummySong}
+          image={getThumbnail(
+            songResponse.data
+              ? songResponse.data.reference
+              : dummySong.reference,
+          )}
         />
         <TopCombination combinations={dummyCombinations} covers={dummyCovers} />
         <CombinationArea instruments={dummyInstruments} covers={dummyCovers} />

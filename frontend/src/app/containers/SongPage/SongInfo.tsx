@@ -10,9 +10,9 @@ export interface Props {
 }
 
 export default function SongInfo(props: Props) {
-  const onClickLink = useCallback(() => {
-    window.open(props.song.reference);
-  }, [props.song.reference]);
+  const onClickLink = (song: Song) => {
+    window.open(song.reference);
+  };
 
   return (
     <div data-testid="SongInfo" className="px-8 sm:px-0 self-start">
@@ -42,7 +42,7 @@ export default function SongInfo(props: Props) {
             <button
               data-testid="button-youtube"
               className="justify-center ml-2 py-1 px-3 border border-transparent shadow-sm rounded-lg text-white bg-red-400 hover:bg-red-600"
-              onClick={onClickLink}
+              onClick={() => onClickLink(props.song)}
             >
               <FontAwesomeIcon icon={faPlay} />
             </button>

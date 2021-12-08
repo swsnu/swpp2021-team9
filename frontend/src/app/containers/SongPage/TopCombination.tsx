@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useSongSlice } from './slice';
+import { useMakeCombinationSlice } from './slice/makeCombination';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ export interface Props {
 
 export default function TopCombination(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useSongSlice();
+  const { actions } = useMakeCombinationSlice();
 
   const styles = {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
