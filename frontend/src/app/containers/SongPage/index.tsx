@@ -55,24 +55,6 @@ export default function SongPage(props: Props) {
     }
   }, [songResponse, history]);
 
-  const renderTopCover = useCallback(() => {
-    if (current === null) return null;
-
-    const currentItem = combination.find(item => item.id === current);
-    return (
-      currentItem &&
-      coversResponse.data && (
-        <TopCover
-          covers={coversResponse.data.filter(
-            cover =>
-              cover.instrument &&
-              cover.instrument.id === currentItem.instrument.id,
-          )}
-        />
-      )
-    );
-  }, [current, combination, coversResponse.data]);
-
   // playing
   const player = useMemo(() => Player.getInstance(), []);
 
@@ -93,6 +75,25 @@ export default function SongPage(props: Props) {
     };
     player.setTracks([currentTrackInfo]);
   }, [combination, player, songResponse.data]);
+
+  const renderTopCover = useCallback(() => {
+    if (current === null) return null;
+
+    const currentItem = combination.find(item => item.id === current);
+    return (
+      currentItem &&
+      coversResponse.data && (
+        <TopCover
+          covers={coversResponse.data.filter(
+            cover =>
+              cover.instrument &&
+              cover.instrument.id === currentItem.instrument.id,
+          )}
+          instrument={currentItem.instrument}
+        />
+      )
+    );
+  }, [current, combination, coversResponse.data]);
 
   return (
     <div data-testid="SongPage" className="flex justify-center">

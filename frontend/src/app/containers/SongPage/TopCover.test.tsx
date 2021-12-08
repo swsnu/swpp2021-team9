@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
 import { Provider } from 'react-redux';
-import { dummyCovers } from 'api/dummy';
+import { dummyCovers, dummyInstruments } from 'api/dummy';
 import TopCover from './TopCover';
 
 const store = configureAppStore();
@@ -9,7 +9,7 @@ const store = configureAppStore();
 function setup() {
   const page = render(
     <Provider store={store}>
-      <TopCover covers={dummyCovers} />
+      <TopCover covers={dummyCovers} instrument={dummyInstruments[0]} />
     </Provider>,
   );
   const getButtons = page.queryAllByTestId('CoverGetButton');
@@ -28,7 +28,7 @@ test('click get buttons', () => {
 test('render when no covers', () => {
   const page = render(
     <Provider store={store}>
-      <TopCover covers={[]} />
+      <TopCover covers={[]} instrument={dummyInstruments[0]} />
     </Provider>,
   );
   expect(page.getByText('There are no covers yet.')).toBeTruthy();

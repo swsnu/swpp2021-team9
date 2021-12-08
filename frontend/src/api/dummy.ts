@@ -26,7 +26,7 @@ export const dummyUser: User[] = Array.from({ length: 10 }, (_, idx) => {
 export const dummyInstruments: Instrument[] = [
   {
     id: 1,
-    name: 'Vocals',
+    name: 'Vocal',
   },
   {
     id: 2,

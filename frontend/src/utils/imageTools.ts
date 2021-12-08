@@ -8,7 +8,7 @@ import {
 // get icon from instrument name
 export const getIcon = (name: string) => {
   switch (name) {
-    case 'Vocals':
+    case 'Vocal':
       return faMicrophoneAlt;
     case 'Guitar':
       return faGuitar;

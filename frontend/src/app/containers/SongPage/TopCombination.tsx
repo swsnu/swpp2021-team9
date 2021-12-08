@@ -20,7 +20,7 @@ export default function TopCombination(props: Props) {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
   };
 
-  const onClickGet = (combination: Combination) => {
+  const onClickRow = (combination: Combination) => {
     dispatch(actions.getCovers(combination.covers));
   };
 
@@ -51,7 +51,7 @@ export default function TopCombination(props: Props) {
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
               data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              onClick={() => onClickRow(combination)}
             >
               {index + 1}
             </td>
@@ -62,27 +62,27 @@ export default function TopCombination(props: Props) {
               <button
                 className="self-stretch flex-grow"
                 data-testid="combinationGetButton"
-                onClick={() => onClickGet(combination)}
+                onClick={() => onClickRow(combination)}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
               data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              onClick={() => onClickRow(combination)}
             >
-              {combination.views}
+              {combination.views ?? 0}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
               data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              onClick={() => onClickRow(combination)}
             >
-              {combination.likes}
+              {combination.likes ?? 0}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-sm font-medium"
               data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              onClick={() => onClickRow(combination)}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">
                 GET
