@@ -1,8 +1,6 @@
-import { check } from 'prettier';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import Prompt from 'react-router-dom';
 export type Props = {};
 
 const CONTAINER_HEIGHT = 300;
@@ -101,7 +99,7 @@ export default function ProfilePage(props: Props) {
     if (checkedDrum) Instruments.push('Drum');
     if (checkedKeyboard) Instruments.push('Keyboard');
 
-    //console.log(Instruments);
+    alert('Your instruments have been saved !');
   }
 
   const handleChangeBass = () => {
@@ -133,6 +131,17 @@ export default function ProfilePage(props: Props) {
   // 5. Show cover list of users
   // 6. Bio Area : Edit their bio
 
+  /* TODO */
+  // 1. User cover list
+  // 2. user/info/<id:int>
+  // GET [User Info]
+  // followers
+  // covers
+  // PUT
+  // username
+  // photo
+  // instrument
+
   return (
     <div data-testid="ProfilePage">
       <div className="container mx-auto my-5 p-5">
@@ -140,14 +149,40 @@ export default function ProfilePage(props: Props) {
           <div className="w-full md:w-3/12 md:mx-2">
             <div className="bg-white p-3 border-t-4 border-blue-800">
               <div className="image overflow-hidden">
-                <div className="image_upload">
+                <label
+                  className="
+                    w-64
+                    flex flex-col
+                    items-center
+                    px-4
+                    py-6
+                    bg-white
+                    rounded-md
+                    shadow-md
+                    tracking-wide
+                    uppercase
+                    border border-blue
+                    cursor-pointer
+                    hover:bg-blue-800 hover:text-white
+                    text-blue-800
+                    ease-linear
+                    transition-all
+                    duration-150
+                  "
+                >
+                  <i className="fas fa-cloud-upload-alt fa-3x"></i>
+                  <span className="mt-2 text-base leading-normal">
+                    Select your profile picture
+                  </span>
                   <input
-                    data-testid="file_upload"
                     type="file"
+                    className="hidden"
                     accept="image/*"
                     onChange={onSelectFile}
                   />
-                </div>
+                </label>
+                <br></br>
+                <br></br>
                 <ReactCrop
                   src={upImg}
                   onImageLoaded={onLoad}
@@ -164,12 +199,33 @@ export default function ProfilePage(props: Props) {
                     }}
                   />
                 </div>
+                <br></br>
 
-                <span className="tracking-wide font-semibold">Bio</span>
-
+                <div className="bg-white p-3 hover:shadow">
+                  <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
+                    <span className="text-blue-800">
+                      <svg
+                        className="h-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                    </span>
+                    <span>Bio</span>
+                  </div>
+                </div>
                 <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
                   {Bio}
                 </p>
+                <br></br>
                 <button
                   id="signin_button"
                   className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
@@ -260,7 +316,7 @@ export default function ProfilePage(props: Props) {
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
-                  <div className="grid grid-cols-3">
+                  <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Name</div>
                     <div className="px-4 py-2">{Name}</div>
                     <button
@@ -346,84 +402,81 @@ export default function ProfilePage(props: Props) {
                       </svg>
                     </span>
                     <span className="tracking-wide">Instruments</span>
-                    <div flex-row>
-                      <div>
-                        <label className="inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={checkedBass}
-                            onClick={handleChangeBass}
-                          />
-                          <span className="ml-2">
-                            {instrument_name_list[0]}
-                          </span>
-                        </label>
-                      </div>
-
-                      <div>
-                        <label className="inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={checkedGuitar}
-                            onClick={handleChangeGuitar}
-                          />
-                          <span className="ml-2">
-                            {instrument_name_list[1]}
-                          </span>
-                        </label>
-                      </div>
-
-                      <div>
-                        <label className="inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={checkedVocals}
-                            onClick={handleChangeVocals}
-                          />
-                          <span className="ml-2">
-                            {instrument_name_list[2]}
-                          </span>
-                        </label>
-                      </div>
-
-                      <div>
-                        <label className="inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={checkedDrum}
-                            onClick={handleChangeDrum}
-                          />
-                          <span className="ml-2">
-                            {instrument_name_list[3]}
-                          </span>
-                        </label>
-                      </div>
-
-                      <div>
-                        <label className="inline-flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={checkedKeyboard}
-                            onClick={handleChangeKeyboard}
-                          />
-                          <span className="ml-2">
-                            {instrument_name_list[4]}
-                          </span>
-                        </label>
-                      </div>
-                      <button
-                        id="signin_button"
-                        className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
-                        onClick={onChooseInstruments}
-                      >
-                        Choose Instruments
-                      </button>
+                  </div>
+                  <div flex-row>
+                    <div>
+                      <label className="inline-flex items-center">
+                        <input
+                          data-testid="checkbass"
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={checkedBass}
+                          onClick={handleChangeBass}
+                        />
+                        <span className="ml-2">{instrument_name_list[0]}</span>
+                      </label>
                     </div>
+
+                    <div>
+                      <label className="inline-flex items-center">
+                        <input
+                          data-testid="checkguitar"
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={checkedGuitar}
+                          onClick={handleChangeGuitar}
+                        />
+                        <span className="ml-2">{instrument_name_list[1]}</span>
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="inline-flex items-center">
+                        <input
+                          data-testid="checkvocals"
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={checkedVocals}
+                          onClick={handleChangeVocals}
+                        />
+                        <span className="ml-2">{instrument_name_list[2]}</span>
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="inline-flex items-center">
+                        <input
+                          data-testid="checkdrum"
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={checkedDrum}
+                          onClick={handleChangeDrum}
+                        />
+                        <span className="ml-2">{instrument_name_list[3]}</span>
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="inline-flex items-center">
+                        <input
+                          data-testid="checkkeyboard"
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={checkedKeyboard}
+                          onClick={handleChangeKeyboard}
+                        />
+                        <span className="ml-2">{instrument_name_list[4]}</span>
+                      </label>
+                    </div>
+                    <br></br>
+                    <button
+                      data-testid="chooseInstrument"
+                      id="signin_button"
+                      className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
+                      onClick={onChooseInstruments}
+                    >
+                      Choose Instruments
+                    </button>
                   </div>
                 </div>
               </div>

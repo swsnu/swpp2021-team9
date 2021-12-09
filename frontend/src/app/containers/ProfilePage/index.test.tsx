@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import user from '@testing-library/user-event';
-import { render } from '@testing-library/react';
-import { fireEvent, screen } from '@testing-library/dom';
+import { fireEvent, screen, render, waitFor } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
 import userEvent from '@testing-library/user-event';
 import ProfilePage from '.';
@@ -29,4 +28,17 @@ test('should render', () => {
   const { page } = setup();
   render(page);
   expect(screen.getByTestId('ProfilePage')).toBeTruthy();
+});
+
+test('When click checkbox_bass and click choose instrument button', () => {
+  const { page } = setup();
+  render(page);
+
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+
+  const checkbass = screen.getByTestId('checkbass');
+  fireEvent.click(checkbass);
+  const chooseInstrument = screen.getByTestId('chooseInstrument');
+  fireEvent.click(chooseInstrument);
+  expect(alertMock).toHaveBeenCalledTimes(1);
 });

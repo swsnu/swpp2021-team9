@@ -83,6 +83,14 @@ interface User {
   instruments: number[];
 }
 
+interface UserPut {
+  id: number;
+  username?: string;
+  description?: string;
+  photo?: Blob;
+  instruments?: number[];
+}
+
 type UserInfo = {
   id: number;
   username: string;
