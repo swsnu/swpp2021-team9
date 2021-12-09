@@ -1,17 +1,28 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { Switch, Route, Redirect, MemoryRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song } from 'utils/urls';
-import { dummyInstruments } from 'api/dummy';
 import { Props as InstrumentDropdownProps } from 'app/components/Dropdown/InstrumentDropdown';
 import { Props as CoverDropdownProps } from 'app/components/Dropdown/CoverDropdown';
+import { api } from 'api/band';
+import {
+  dummySongs,
+  dummyCombinations,
+  dummyCovers,
+  dummyInstruments,
+} from 'api/dummy';
+import Player from 'app/helper/Player';
 
+let player = Player.getInstance();
 const store = configureAppStore();
+const mockPlayerSetTracks = jest
+  .fn()
+  .mockImplementation((_currentTrackInfo: TrackInfo[]) => {});
 
 const mockHistoryPush = jest.fn().mockImplementation(string => {});
 jest.mock('react-router-dom', () => ({
@@ -20,24 +31,6 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
 }));
-
-// function MockAddCoverButton(props: AddCoverButtonProps) {
-//   const { actions } = useSongSlice();
-//   const dispatch = useDispatch();
-//   return (
-//     <button
-//       onClick={() => dispatch(actions.addItem(dummyInstruments[0]))}
-//       data-testid="AddCoverButton"
-//     ></button>
-//   );
-// }
-// jest.mock('./CombinationArea/AddCoverButton', () => {
-//   return {
-//     __esModule: true,
-//     ...jest.requireActual('./CombinationArea/AddCoverButton'),
-//     default: MockAddCoverButton,
-//   };
-// });
 
 function MockInstrumentDropdown(props: InstrumentDropdownProps) {
   return (
@@ -94,23 +87,61 @@ jest.mock('./TopCombination', () => {
 });
 
 function setup() {
-  jest.clearAllMocks();
-
   const page = render(
     <Provider store={store}>
-      <MemoryRouter>
+      <BrowserRouter>
         <Switch>
-          <Route path={Song(':id')} component={SongPage} />
-          <Redirect to={Song(0)} />
+          <Route exact path={Song(':id')} component={SongPage} />
+          <Redirect exact from="/" to={Song(1)} />
+          <Route component={() => <div />} />
         </Switch>
-      </MemoryRouter>
+      </BrowserRouter>
     </Provider>,
   );
   return { page };
 }
 
-test('selecting cover test', () => {
+beforeEach(() => {
+  jest.clearAllMocks();
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummySongs[0]);
+      }),
+  );
+  api.getCombinationsBySong = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCombinations);
+      }),
+  );
+  api.getCoversBySongId = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCovers);
+      }),
+  );
+  api.getInstruments = jest.fn(
+    () =>
+      new Promise((res, rej) => {
+        res(dummyInstruments);
+      }),
+  );
+  player.setTracks = mockPlayerSetTracks;
+});
+
+test('selecting cover test', async () => {
   const { page } = setup();
+  await waitFor(() => {
+    expect(page.getByTestId('PlayButton')).toBeTruthy();
+  });
+
+  // try to play with nothing
+  const playButton = page.getByTestId('PlayButton');
+  fireEvent.click(playButton);
+  expect(mockPlayerSetTracks).toHaveBeenCalledTimes(0);
+
+  // add cover
   const addCoverButton = page.getByTestId('AddCoverButton');
   fireEvent.click(addCoverButton);
 
@@ -147,4 +178,8 @@ test('selecting cover test', () => {
 
   addedCovers = page.queryAllByTestId('AddedCoverListItem');
   expect(addedCovers.length).toBe(1);
+
+  // play
+  fireEvent.click(playButton);
+  expect(mockPlayerSetTracks).toHaveBeenCalled();
 });

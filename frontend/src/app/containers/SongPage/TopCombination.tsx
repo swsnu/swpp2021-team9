@@ -1,39 +1,38 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useSongSlice } from './slice';
+import { useMakeCombinationSlice } from './slice/makeCombination';
+import * as urls from 'utils/urls';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export interface Props {
   combinations: Combination[];
-  covers: Cover[];
 }
 
 export default function TopCombination(props: Props) {
+  const history = useHistory();
   const dispatch = useDispatch();
-  const { actions } = useSongSlice();
+  const { actions } = useMakeCombinationSlice();
 
   const styles = {
     th: 'px-3 py-2 text-center text-xs font-medium text-gray-500 tracking-wider',
   };
 
-  const onClickGet = (combination: Combination) => {
-    dispatch(
-      actions.getCovers(
-        combination.covers.map(id => props.covers.find(cov => cov.id === id)),
-      ),
-    );
+  const onClickRow = (combination: Combination) => {
+    dispatch(actions.getCovers(combination.covers));
   };
 
-  const renderCoverButtons = (covers: number[]) => {
-    return covers.map(id => {
-      const cover = props.covers.find(cov => cov.id === id);
+  const renderCoverButtons = (covers: Cover[]) => {
+    return covers.map((cover, index) => {
       return (
         cover && (
           <button
-            key={id}
+            key={index}
             className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
+            data-testid="ToCoverButton"
+            onClick={() => history.push(urls.Cover(cover.id))}
           >
             {cover.title}
           </button>
@@ -52,8 +51,8 @@ export default function TopCombination(props: Props) {
           <tr key={combination.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              data-testid="CombinationGetButton"
+              onClick={() => onClickRow(combination)}
             >
               {index + 1}
             </td>
@@ -63,28 +62,28 @@ export default function TopCombination(props: Props) {
               </ul>
               <button
                 className="self-stretch flex-grow"
-                data-testid="combinationGetButton"
-                onClick={() => onClickGet(combination)}
+                data-testid="CombinationGetButton"
+                onClick={() => onClickRow(combination)}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              data-testid="CombinationGetButton"
+              onClick={() => onClickRow(combination)}
             >
               {combination.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              data-testid="CombinationGetButton"
+              onClick={() => onClickRow(combination)}
             >
               {combination.likes}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-sm font-medium"
-              data-testid="combinationGetButton"
-              onClick={() => onClickGet(combination)}
+              data-testid="CombinationGetButton"
+              onClick={() => onClickRow(combination)}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">
                 GET
@@ -104,7 +103,7 @@ export default function TopCombination(props: Props) {
   return (
     <div data-testid="TopCombination" className="mt-8 flex flex-col">
       <h2 className="pl-4 sm:pl-0 text-left text-sm font-bold text-gray-600 tracking-wider">
-        TOP COMBINATIONS
+        TOP META-BANDS
       </h2>
       <div className="mt-4 shadow border-b border-gray-200 sm:rounded-lg">
         <table className="table-fixed w-full">

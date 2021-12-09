@@ -6,13 +6,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // get icon from instrument name
-export const getIcon = (icon: string) => {
-  switch (icon) {
-    case 'mic':
+export const getIcon = (name: string) => {
+  switch (name) {
+    case 'Vocal':
       return faMicrophoneAlt;
-    case 'guitar':
+    case 'Guitar':
       return faGuitar;
-    case 'drum':
+    case 'Drum':
       return faDrum;
     default:
       return faMusic;

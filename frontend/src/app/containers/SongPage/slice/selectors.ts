@@ -1,16 +1,23 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { RootState } from 'utils/types';
-import { initialState } from './index';
+import { initialState as initialMakeCombination } from './makeCombination';
+import { initialState as initialSong } from '.';
 
-const selectSlice = (state: RootState) => (state && state.song) || initialState;
+const selectMakeCombinationSlice = (state: RootState) =>
+  (state && state.makeCombination) || initialMakeCombination;
 
 export const selectCombination = createSelector(
-  [selectSlice],
+  [selectMakeCombinationSlice],
   state => state.combination,
 );
 
 export const selectCurrent = createSelector(
-  [selectSlice],
+  [selectMakeCombinationSlice],
   state => state.current,
 );
+
+const selectSongSlice = (state: RootState) =>
+  (state && state.song) || initialSong;
+
+export const selectSong = createSelector([selectSongSlice], state => state);
