@@ -5,7 +5,7 @@ import json
 from django.test import TestCase, Client
 from rest_framework import status
 
-from band.models import Cover, CoverTag
+from band.models import Cover, CoverTag, Instrument
 from band.tests.tools import set_up_data
 
 
@@ -44,6 +44,7 @@ class CoverInfoTestCase(TestCase):
                     "title": "NEW_TITLE",
                     "description": "NEW_DESCRIPTION",
                     "tags": ["COVER_TAG_1", "COVER_TAG_4"],
+                    "instrument": 2,
                 }
             ),
             content_type="application/json",
@@ -53,9 +54,13 @@ class CoverInfoTestCase(TestCase):
         self.assertEqual(
             response.status_code, status.HTTP_200_OK, "Success to put cover info"
         )
-        self.assertEqual(cover.title, "NEW_TITLE", "Cover title will changed")
+        self.assertEqual(cover.title, "NEW_TITLE", "Cover title will be changed")
         self.assertEqual(
-            cover.description, "NEW_DESCRIPTION", "Cover description will changed"
+            cover.description, "NEW_DESCRIPTION", "Cover description will be changed"
+        )
+        new_instrument: Instrument = Instrument.objects.get(pk=2)
+        self.assertEqual(
+            cover.instrument.name, new_instrument.name, "Instrument will be changed"
         )
 
         for tag in cover.tags.all():
