@@ -29,12 +29,7 @@ export function configureAppStore() {
 
   const store = configureStore({
     reducer: createReducer(),
-    middleware: [
-      ...getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-      ...middlewares,
-    ],
+    middleware: [...getDefaultMiddleware(), ...middlewares],
     devTools: process.env.NODE_ENV !== 'production',
     enhancers,
   });
