@@ -28,18 +28,18 @@ class MockAudio {
     this.src = src ?? '';
   }
 
-  play() {
+  play = jest.fn(() => {
     return new Promise<void>(res => {
       this.paused = false;
     });
-  }
+  });
 
   pause() {
     this.paused = true;
   }
 
   load() {
-    this.readyState = 4;
+    this.readyState = 1;
   }
 
   addEventListener(
@@ -52,9 +52,14 @@ class MockAudio {
   testCall(type: string) {
     this.listeners[type](this, {});
   }
+
+  testLoaded() {
+    this.readyState = 4;
+    this.listeners['canplay'](this, {});
+  }
 }
 
-describe('Player', () => {
+describe('TrackPlayer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     global.Audio = jest.fn().mockImplementation(() => {
@@ -67,75 +72,157 @@ describe('Player', () => {
     expect(trackPlayer['audios'].length).toBe(mockTrack[0].sources.length);
   });
 
-  test('setting tracks', () => {
+  test('setTracks', () => {
     const trackPlayer = new TrackPlayer();
     trackPlayer.onStatusChange = jest.fn();
-
     trackPlayer.setTrack(mockTrack[0]);
-    trackPlayer['audios'].forEach(audio => {
-      (audio as unknown as MockAudio).testCall('canplay');
+
+    expect(trackPlayer.onStatusChange).lastCalledWith('loading');
+
+    const mockAudios: MockAudio[] = trackPlayer['audios'] as any;
+    mockAudios.forEach((audio, idx) => {
+      audio.testLoaded();
+      expect(audio.src).toBe(mockTrack[0].sources[idx]);
     });
-    expect(trackPlayer.onStatusChange).lastCalledWith('playing');
+    expect(trackPlayer.onStatusChange).lastCalledWith('pause');
   });
 
   test('play and pause', () => {
     const trackPlayer = new TrackPlayer();
     trackPlayer.onStatusChange = jest.fn();
+    trackPlayer.setTrack(mockTrack[0]);
 
-    const audios = [new MockAudio(), new MockAudio(), new MockAudio()];
-    trackPlayer['audios'] = audios as any;
+    const mockAudios: MockAudio[] = trackPlayer['audios'] as any;
+    expect(trackPlayer.onStatusChange).lastCalledWith('loading');
 
-    audios[1].currentTime = 100;
+    // not ready
     trackPlayer.play();
-    expect(audios[0].currentTime).toBe(100);
+    expect(trackPlayer.onStatusChange).lastCalledWith('wait');
+
+    // ready one
+    mockAudios[0].testLoaded();
+    expect(trackPlayer.onStatusChange).lastCalledWith('wait');
+
+    // ready all and play
+    mockAudios[1].testLoaded();
+    expect(trackPlayer.onStatusChange).lastCalledWith('play');
+
+    // pass canplay
+    mockAudios[1].testLoaded();
+    expect(trackPlayer.onStatusChange).lastCalledWith('play');
+
+    // pass play
+    trackPlayer.play();
+    expect(trackPlayer.onStatusChange).lastCalledWith('play');
 
     trackPlayer.pause();
 
-    audios[1].duration = 100;
-    expect(trackPlayer.getDuration()).toBe(100);
+    mockAudios.forEach(mockAudio => {
+      mockAudio.ended = true;
+      mockAudio.currentTime = 140;
+      mockAudio.testCall('ended');
+    });
 
-    audios[1].ended = true;
     trackPlayer.play();
-    expect(audios[0].currentTime).toBe(100);
+    expect(trackPlayer.getCurrentTime()).toBe(0);
+
+    // error on play
+    mockAudios[0].play = jest.fn(() => {
+      return new Promise<void>((_res, rej) => {
+        rej('error');
+      });
+    });
+
+    trackPlayer.pause();
+    trackPlayer.play();
 
     trackPlayer['audios'] = [];
     expect(trackPlayer.getCurrentTime()).toBe(0);
     expect(trackPlayer.getDuration()).toBe(0);
-    expect(trackPlayer.play()).toBe(false);
   });
 
-  test('is puased when every paused', () => {
+  test('properties', () => {
     const trackPlayer = new TrackPlayer();
     trackPlayer.onStatusChange = jest.fn();
+    trackPlayer.setTrack(mockTrack[0]);
 
-    const audios: HTMLAudioElement[] = [];
-    for (let i = 0; i < 10; i++) {
-      const audio = new MockAudio();
+    const mockAudios: MockAudio[] = trackPlayer['audios'] as any;
+
+    mockAudios[1].duration = 100;
+    expect(trackPlayer.getDuration()).toBe(100);
+
+    mockAudios[0].currentTime = 150;
+    mockAudios[1].currentTime = 200;
+    expect(trackPlayer.getCurrentTime()).toBe(200);
+
+    mockAudios.forEach(audio => {
       audio.paused = true;
-      audios.push(new Audio());
-    }
-    trackPlayer['audios'] = audios;
+    });
     expect(trackPlayer.isPaused()).toBe(true);
 
-    (audios[0] as unknown as MockAudio).paused = false;
+    mockAudios[0].paused = false;
     expect(trackPlayer.isPaused()).toBe(false);
+  });
+
+  test('ended when all ended', () => {
+    const trackPlayer = new TrackPlayer();
+    trackPlayer.onStatusChange = jest.fn();
+    trackPlayer.setTrack(mockTrack[0]);
+
+    const mockAudios = trackPlayer['audios'] as unknown as MockAudio[];
+
+    (trackPlayer.onStatusChange as jest.Mock).mockClear();
+    mockAudios[0].ended = true;
+    mockAudios[0].testCall('ended');
+    expect(trackPlayer.onStatusChange).toBeCalledTimes(0);
+
+    mockAudios.forEach(mockAudio => {
+      mockAudio.ended = true;
+      mockAudio.testCall('ended');
+    });
+    expect(trackPlayer.onStatusChange).lastCalledWith('ended');
   });
 
   test('audios test', () => {
     const trackPlayer = new TrackPlayer();
     trackPlayer.onStatusChange = jest.fn();
+    trackPlayer.setTrack(mockTrack[0]);
 
-    const audios: HTMLAudioElement[] = [];
-    for (let i = 0; i < 10; i++) {
-      const audio = new MockAudio();
-      audio.paused = true;
-      audios.push(new Audio());
-    }
-    trackPlayer['audios'] = audios;
+    const mockAudios = trackPlayer['audios'] as unknown as MockAudio[];
 
-    (audios[0] as unknown as MockAudio).readyState = 1;
+    mockAudios[0].readyState = 1;
     expect(trackPlayer.getMinReadyState()).toBe(1);
 
-    expect(trackPlayer.play()).toBe(false);
+    expect(trackPlayer.onStatusChange).lastCalledWith('loading');
+  });
+
+  test('setCurrent"', () => {
+    const trackPlayer = new TrackPlayer();
+    trackPlayer.onStatusChange = jest.fn();
+    trackPlayer.setTrack(mockTrack[0]);
+
+    const mockAudios = trackPlayer['audios'] as unknown as MockAudio[];
+
+    mockAudios[1].currentTime = 100;
+    trackPlayer.play();
+
+    expect(trackPlayer.onStatusChange).lastCalledWith('wait');
+
+    (mockAudios[0].play as jest.Mock).mockClear();
+    trackPlayer.setCurrentTime(50);
+    expect(mockAudios[0].play).toHaveBeenCalledTimes(0);
+
+    trackPlayer.pause();
+    expect(trackPlayer.onStatusChange).lastCalledWith('pause');
+
+    trackPlayer.setCurrentTime(30);
+    expect(trackPlayer.onStatusChange).lastCalledWith('loading');
+
+    trackPlayer.setCurrentTime(NaN);
+    expect(trackPlayer.getCurrentTime()).toBe(30);
+
+    // pass with no error
+    const noTrackPlayer = new TrackPlayer();
+    noTrackPlayer.setCurrentTime(3);
   });
 });

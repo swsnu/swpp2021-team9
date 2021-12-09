@@ -180,7 +180,7 @@ test('should play button with status', () => {
 
   // playing
   act(() => {
-    player.onStatusChange?.('playing');
+    player.onStatusChange?.('play');
   });
 
   const pauseIcon = queryByTestId('pauseIcon');

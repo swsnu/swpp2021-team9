@@ -18,23 +18,19 @@ import SongPage from './containers/SongPage';
 import CreateSongPage from './containers/CreateSongPage';
 import CoverPage from './containers/CoverPage';
 import {
-  CreateCoverInfoPage,
-  CreateCoverRecordPage,
+  CreateCoverInfo,
+  CreateCoverRecord,
 } from './containers/CreateCoverPage';
 import ProfilePage from './containers/ProfilePage';
 
 import * as url from 'utils/urls';
+import CoverEditPage from './containers/CoverEditPage';
 
 export function App() {
-  // const { i18n } = useTranslation();
   return (
     <BrowserRouter>
       <div className="app">
-        <Helmet
-          titleTemplate="%s - Bandcruit"
-          defaultTitle="Bandcruit"
-          // htmlAttributes={{ lang: i18n.language }}
-        >
+        <Helmet titleTemplate="%s - Bandcruit" defaultTitle="Bandcruit">
           <meta name="description" content="Bandcruit" />
         </Helmet>
 
@@ -54,12 +50,17 @@ export function App() {
             <Route
               exact
               path={url.CreateCover('record')}
-              component={CreateCoverRecordPage}
+              component={CreateCoverRecord}
+            />
+            <Route
+              exact
+              path={url.CoverEdit(':id')}
+              component={CoverEditPage}
             />
             <Route
               exact
               path={url.CreateCover('info')}
-              component={CreateCoverInfoPage}
+              component={CreateCoverInfo}
             />
             <Route exact path={url.Song(':id')} component={CoverPage} />
             <Route exact path={url.Profile(':id')} component={ProfilePage} />

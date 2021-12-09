@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import YoutubePlayer from 'app/components/CreateCover/YoutubePlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,25 +18,17 @@ import { useCreateCoverSlice } from './slice';
 import VideoPreview from 'app/components/CreateCover/VideoPreview';
 export interface Props {}
 
-export default function CreateCoverRecordPage(props: Props) {
+export default function CreateCoverRecord(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
 
   const [isVideo, setIsVideo] = useState(false);
-  const [isYoutubeLink, setIsYoutubeLink] = useState(true);
-  // const [isUploaded, setIsUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const {
-    status,
-    startRecording,
-    stopRecording,
-    mediaBlobUrl,
-    previewStream,
-    previewAudioStream,
-  } = useReactMediaRecorder({ video: isVideo });
+  const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } =
+    useReactMediaRecorder({ video: isVideo });
 
   const handleVideoStatus = () => {
     setIsVideo(!isVideo);
@@ -54,9 +46,6 @@ export default function CreateCoverRecordPage(props: Props) {
   const onCancelClicked = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    // 임시 구현
-    // TODO
-    // song id를 route params로 받아와서 사용해야할 듯.
     e.preventDefault();
     history.push(Song(0));
   };
@@ -75,8 +64,6 @@ export default function CreateCoverRecordPage(props: Props) {
       className="flex flex-col items-center"
     >
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
-      {/* {isYoutubeLink ? <YoutubePlayer /> : null} */}
-      {/* tmp TODO*/}
       <YoutubePlayer />
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}

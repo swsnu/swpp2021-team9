@@ -134,7 +134,7 @@ export default function PlayerBar(props: Props) {
         >
           {status === 'loading' ? (
             <img data-testid="loadingIcon" src={loadingGif} alt="Loading" />
-          ) : status === 'playing' ? (
+          ) : status === 'play' ? (
             <FontAwesomeIcon data-testid="pauseIcon" icon={faPause} />
           ) : (
             <FontAwesomeIcon data-testid="playIcon" icon={faPlay} />

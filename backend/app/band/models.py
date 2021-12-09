@@ -39,7 +39,7 @@ class Song(models.Model):
     singer: str = models.CharField(max_length=50, db_column="singer")
     category: str = models.CharField(max_length=30, db_column="category")
     reference: str = models.CharField(max_length=255, db_column="reference")
-    description: str = models.TextField(db_column="description")
+    description: str = models.TextField(db_column="description", blank=True)
 
     def __str__(self):
         return f"([{self.pk}] {self.title})"
@@ -68,7 +68,7 @@ class Cover(models.Model):
     category: str = models.CharField(
         max_length=30, db_column="category", editable=False
     )
-    description: str = models.TextField(db_column="description")
+    description: str = models.TextField(db_column="description", blank=True)
     user: User = ForeignKey(
         User, related_name="covers", on_delete=models.SET_NULL, null=True
     )
@@ -109,6 +109,10 @@ class Combination(models.Model):
     likes = ManyToManyField(
         User, db_table="Combination_Likes", related_name="like_combinations", blank=True
     )
+
+    @property
+    def like_count(self) -> int:
+        return self.likes.count()
 
     def __str__(self):
         return f"([{self.pk}] {self.song} combination)"
