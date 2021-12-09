@@ -30,17 +30,17 @@ export const api = {
   },
   postCover: async (coverForm: CoverForm) => {
     const audioBlob = await fetch(coverForm.audio).then(r => r.blob());
-    const audiofile = new File([audioBlob], 'audiofile.webm', {
-      type: 'audio/webm',
+    const audiofile = new File([audioBlob], 'audiofile.mp3', {
+      type: 'audio/mpeg',
     });
     const coverFormData = new FormData();
     coverFormData.append('audio', audiofile);
     coverFormData.append('title', coverForm.title);
     coverFormData.append('category', coverForm.category);
     coverFormData.append('description', coverForm.description);
-    coverFormData.append('tags', coverForm.tags.join('||'));
+    coverFormData.append('tags', JSON.stringify(coverForm.tags));
     coverFormData.append('combination_id', String(coverForm.combinationId));
-    coverFormData.append('instrument_id', String(coverForm.instrumentId));
+    coverFormData.append('instrument', String(coverForm.instrumentId));
     return await apiClient.post<Cover>(
       `/api/cover/${coverForm.songId}/`,
       coverFormData,
@@ -70,15 +70,15 @@ export const api = {
 
   // `/api/cover/like/<id:int>/`
   getCoverLike: async (coverId: number) => {
-    const response = await apiClient.get<{ isLike: Boolean }>(
+    const response = await apiClient.get<{ isLiked: Boolean }>(
       `/api/cover/like/${coverId}/`,
     );
     return response.data;
   },
-  putCoverLike: async (form: { coverId: number; isLike: Boolean }) => {
-    return await apiClient.put<{ isLike: Boolean }>(
+  putCoverLike: async (form: { coverId: number; isLiked: Boolean }) => {
+    return await apiClient.put<{ isLiked: Boolean }>(
       `/api/cover/like/${form.coverId}/`,
-      { isLike: form.isLike },
+      { isLiked: form.isLiked },
     );
   },
   deleteCoverLike: async (coverId: number) => {
@@ -114,10 +114,10 @@ export const api = {
     return response.data;
   },
 
-  // `/api/song/search/?q=key:str/`
+  // `/api/song/search/?search=key:str/`
   getSongBySearch: async (key: string) => {
     const response = await apiClient.get<Song[]>(`/api/search/`, {
-      params: { key: key },
+      params: { search: key },
     });
     return response.data;
   },

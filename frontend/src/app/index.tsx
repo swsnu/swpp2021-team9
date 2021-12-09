@@ -24,17 +24,13 @@ import {
 import ProfilePage from './containers/ProfilePage';
 
 import * as url from 'utils/urls';
+import CoverEditPage from './containers/CoverEditPage';
 
 export function App() {
-  // const { i18n } = useTranslation();
   return (
     <BrowserRouter>
       <div className="app">
-        <Helmet
-          titleTemplate="%s - Bandcruit"
-          defaultTitle="Bandcruit"
-          // htmlAttributes={{ lang: i18n.language }}
-        >
+        <Helmet titleTemplate="%s - Bandcruit" defaultTitle="Bandcruit">
           <meta name="description" content="Bandcruit" />
         </Helmet>
 
@@ -55,6 +51,11 @@ export function App() {
               exact
               path={url.CreateCover('record')}
               component={CreateCoverRecord}
+            />
+            <Route
+              exact
+              path={url.CoverEdit(':id')}
+              component={CoverEditPage}
             />
             <Route
               exact

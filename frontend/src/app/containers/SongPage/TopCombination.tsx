@@ -21,16 +21,14 @@ export default function TopCombination(props: Props) {
   const onClickGet = (combination: Combination) => {
     dispatch(
       actions.getCovers(
-        combination.covers.map(id =>
-          props.covers.find(cover => cover.id === id),
-        ),
+        combination.covers.map(id => props.covers.find(cov => cov.id === id)),
       ),
     );
   };
 
   const renderCoverButtons = (covers: number[]) => {
     return covers.map(id => {
-      const cover = props.covers.find(cover => cover.id === id);
+      const cover = props.covers.find(cov => cov.id === id);
       return (
         cover && (
           <button
@@ -46,7 +44,7 @@ export default function TopCombination(props: Props) {
 
   const renderCombinations = (combinations: Combination[]) => {
     return combinations.length > 0 ? (
-      combinations
+      [...combinations]
         .sort((a, b) => {
           return -(a.views - b.views); // more views = higher rank
         })

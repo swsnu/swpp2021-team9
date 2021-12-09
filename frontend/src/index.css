@@ -62,3 +62,7 @@ select {
 .scroll-simple::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.small-button {
+  @apply py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900
+}
