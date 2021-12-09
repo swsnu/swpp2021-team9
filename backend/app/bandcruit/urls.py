@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 from rest_framework import routers
+from bandcruit import settings
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -26,3 +28,5 @@ urlpatterns = [
     path("api/user/", include("user.urls")),
     path("api/", include("band.urls")),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

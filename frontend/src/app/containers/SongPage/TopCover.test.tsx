@@ -1,19 +1,29 @@
 import { render, fireEvent } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
 import { Provider } from 'react-redux';
-import { dummyCovers } from 'api/dummy';
+import { dummyCovers, dummyInstruments } from 'api/dummy';
 import TopCover from './TopCover';
+
+const mockHistoryPush = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
 
 const store = configureAppStore();
 
 function setup() {
   const page = render(
     <Provider store={store}>
-      <TopCover covers={dummyCovers} />
+      <TopCover covers={dummyCovers} instrument={dummyInstruments[0]} />
     </Provider>,
   );
   const getButtons = page.queryAllByTestId('CoverGetButton');
-  return { page, getButtons };
+  const coverButtons = page.queryAllByTestId('ToCoverButton');
+  return { page, getButtons, coverButtons };
 }
 
 test('click get buttons', () => {
@@ -25,11 +35,22 @@ test('click get buttons', () => {
   });
 });
 
+test('click cover buttons', () => {
+  const { coverButtons } = setup();
+  expect(coverButtons.length).toBeGreaterThan(0);
+
+  coverButtons.forEach(button => {
+    fireEvent.click(button);
+  });
+
+  expect(mockHistoryPush).toHaveBeenCalled();
+});
+
 test('render when no covers', () => {
   const page = render(
     <Provider store={store}>
-      <TopCover covers={[]} />
+      <TopCover covers={[]} instrument={dummyInstruments[0]} />
     </Provider>,
   );
-  expect(page.getByText('There are no covers yet.')).toBeTruthy();
+  expect(page.getByText(/covers don't exist/)).toBeTruthy();
 });

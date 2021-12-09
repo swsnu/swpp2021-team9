@@ -1,6 +1,8 @@
 import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
 import { SignInState } from 'app/containers/SignInPage/slice';
+import { CreateSongState } from 'app/containers/CreateSongPage/slice';
 import { SongState } from 'app/containers/SongPage/slice';
+import { MakeCombinationState } from 'app/containers/SongPage/slice/makeCombination';
 import { WrapperState } from 'app/wrapper/slice';
 import { CoverState } from 'app/containers/CoverPage/slice';
 import { SignUpState } from 'app/containers/SignUpPage/slice';
@@ -15,7 +17,9 @@ import { CoverEditState } from 'app/containers/CoverEditPage/slice';
 */
 export interface RootState {
   createCover?: CreateCoverState;
+  createSong?: CreateSongState;
   song?: SongState;
+  makeCombination?: MakeCombinationState;
   wrapper?: WrapperState;
   cover?: CoverState;
   signin?: SignInState;

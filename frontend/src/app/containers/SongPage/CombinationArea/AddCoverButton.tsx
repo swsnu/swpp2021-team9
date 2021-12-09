@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useSongSlice } from '../slice';
+import { useMakeCombinationSlice } from '../slice/makeCombination';
 
 import InstrumentDropdown from 'app/components/Dropdown/InstrumentDropdown';
 import { Menu } from '@headlessui/react';
@@ -12,7 +12,7 @@ export interface Props {
 }
 
 export default function AddCoverButton(props: Props) {
-  const { actions } = useSongSlice();
+  const { actions } = useMakeCombinationSlice();
   const dispatch = useDispatch();
 
   return (

@@ -11,6 +11,7 @@ import { faPlay, faCircle } from '@fortawesome/free-solid-svg-icons';
 export interface Props {
   instruments: Instrument[];
   covers: Cover[];
+  onClickPlay: () => void;
 }
 
 export default function CombinationArea(props: Props) {
@@ -19,12 +20,16 @@ export default function CombinationArea(props: Props) {
   return (
     <div data-testid="CombinationArea" className="mt-4 ml-4 sm:ml-0">
       <h2 className="text-left text-sm font-bold text-gray-600 tracking-wider">
-        MAKE COMBINATION
+        MAKE YOUR OWN META-BAND
       </h2>
       <div className="mt-2 flex w-full items-start">
         <AddedCoverList />
         <AddCoverButton instruments={props.instruments} />
-        <button className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600">
+        <button
+          className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600"
+          data-testid="PlayButton"
+          onClick={props.onClickPlay}
+        >
           <div className="text-lg text-center">
             <FontAwesomeIcon icon={faPlay} />
           </div>

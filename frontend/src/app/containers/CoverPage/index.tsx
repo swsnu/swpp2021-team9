@@ -155,7 +155,7 @@ export default function CoverPage(props: Props) {
             id="player"
             className="sm:w-full sm:px-8 my-8 py-4 max-w-screen-lg"
           >
-            <WavePlayer url={cover?.audio} />
+            {cover.audio && <WavePlayer url={cover.audio} />}
           </div>
           <div className="border border-gray-100 mt-8" />
           <div
