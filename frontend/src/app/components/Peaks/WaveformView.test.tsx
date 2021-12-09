@@ -2,10 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { WaveformView } from '.';
-import Peaks from 'peaks.js';
-import { shallow, mount } from 'enzyme';
 
-import { createSegmentMarker, createSegmentLabel } from '.';
 let events = {};
 let mockContent = {
   on: jest.fn((event, callback) => {
@@ -34,9 +31,6 @@ jest.mock('peaks.js', () => {
     ...originalModule,
     default: {
       init: (_options: any, callback) => {
-        // return new Promise((resolve, reject) => {
-        //   resolve(mockContent);
-        // });
         const err = null;
         return callback(err, mockContent);
       },
@@ -110,5 +104,28 @@ describe('<WaveformView />', () => {
     fireEvent.click(zoomOut);
     const addSegment = screen.getByTestId('AddSegment');
     fireEvent.click(addSegment);
+  });
+
+  it('destroy peak', () => {
+    const { rerender, unmount } = render(
+      getWaveformView(segmentId, mockSetSegments),
+    );
+
+    rerender(
+      getWaveformView(
+        'peaks.segment.1',
+        mockSetSegments,
+        'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_2MG.mp3',
+      ),
+    );
+    unmount();
+
+    rerender(
+      getWaveformView(
+        'peaks.segment.3',
+        mockSetSegments,
+        'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3',
+      ),
+    );
   });
 });

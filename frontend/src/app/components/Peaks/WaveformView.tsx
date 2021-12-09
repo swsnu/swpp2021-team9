@@ -9,7 +9,6 @@ interface Props {
   audioUrl: string;
   waveformDataUrl?: string;
   audioContentType: string;
-  // audioContext?: AudioContext;
   setSegments: (props: any) => void;
   selectedSegmentId: string | undefined;
 }
@@ -38,13 +37,6 @@ class WaveformView extends Component<Props, State> {
   }
 
   render() {
-    console.log(
-      'WaveformView.render, audioUrl:',
-      this.props.audioUrl,
-      'waveformDataUrl:',
-      this.props.waveformDataUrl,
-    );
-
     return (
       <div data-testid="WaveformView" className="justify-center items-center">
         <div
@@ -111,9 +103,9 @@ class WaveformView extends Component<Props, State> {
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;
     }
-    console.log('props', this.props);
-    console.log('prevProps', prevProps);
-    console.log(this.peaks);
+    // console.log('props', this.props);
+    // console.log('prevProps', prevProps);
+    // console.log(this.peaks);
     if (!this.peaks) {
       this.initPeaks();
       return;
@@ -156,7 +148,7 @@ class WaveformView extends Component<Props, State> {
       emitCueEvents: true,
     };
 
-    console.log(this);
+    // console.log(this);
 
     this.audioElementRef.current.src = this.props.audioUrl;
 
@@ -168,7 +160,7 @@ class WaveformView extends Component<Props, State> {
 
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks;
-      console.log(peaks);
+      // console.log(peaks);
       WaveformView.PeaksInstance = peaks;
       this.onPeaksReady();
     });
@@ -179,6 +171,7 @@ class WaveformView extends Component<Props, State> {
 
     if (this.peaks) {
       this.peaks.destroy();
+      this.peaks = null;
       WaveformView.PeaksInstance = null;
     }
   }

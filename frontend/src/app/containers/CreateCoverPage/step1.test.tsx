@@ -70,14 +70,6 @@ describe('<CreateCoverRecord>', () => {
     expect(screen.getByTestId('CreateCoverRecordPage')).toBeTruthy();
   });
 
-  it('should handleVideoStatus button work', () => {
-    render(page);
-    const recEnableBtn = screen.getByTestId('rec-enable-btn');
-    fireEvent.click(recEnableBtn);
-    const handleVidBtn = screen.getByTestId('handle-video');
-    fireEvent.click(handleVidBtn);
-  });
-
   it('should Record button work properly', () => {
     render(page);
     const recEnableBtn = screen.getByTestId('rec-enable-btn');
@@ -148,8 +140,6 @@ describe('<CreateCoverRecord>', () => {
     render(page);
     const recEnableBtn = screen.getByTestId('rec-enable-btn');
     fireEvent.click(recEnableBtn);
-    const handleVidBtn = screen.getByTestId('handle-video');
-    fireEvent.click(handleVidBtn);
     const recBtn = screen.getByTestId('rec-btn');
     // start rec
     fireEvent.click(recBtn);
