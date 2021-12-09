@@ -31,5 +31,5 @@ test('render when no covers', () => {
       <TopCover covers={[]} instrument={dummyInstruments[0]} />
     </Provider>,
   );
-  expect(page.getByText('There are no covers yet.')).toBeTruthy();
+  expect(page.getByText(/covers don't exist/)).toBeTruthy();
 });

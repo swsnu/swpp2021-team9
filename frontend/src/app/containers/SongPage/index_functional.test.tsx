@@ -7,9 +7,15 @@ import { fireEvent } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song } from 'utils/urls';
-import { dummyInstruments } from 'api/dummy';
 import { Props as InstrumentDropdownProps } from 'app/components/Dropdown/InstrumentDropdown';
 import { Props as CoverDropdownProps } from 'app/components/Dropdown/CoverDropdown';
+import { api } from 'api/band';
+import {
+  dummySongs,
+  dummyCombinations,
+  dummyCovers,
+  dummyInstruments,
+} from 'api/dummy';
 
 const store = configureAppStore();
 
@@ -108,6 +114,34 @@ function setup() {
   );
   return { page };
 }
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummySongs[1]);
+      }),
+  );
+  api.getCombinationsBySong = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCombinations);
+      }),
+  );
+  api.getCoversBySongId = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCovers);
+      }),
+  );
+  api.getInstruments = jest.fn(
+    () =>
+      new Promise((res, rej) => {
+        res(dummyInstruments);
+      }),
+  );
+});
 
 test('selecting cover test', () => {
   const { page } = setup();

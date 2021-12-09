@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CreateSongPage from '.';
-
-const store = configureAppStore();
+import { api } from 'api/band';
+import { dummySongs } from 'api/dummy';
 
 const mockHistoryPush = jest.fn();
 
@@ -19,8 +20,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 function setup() {
-  jest.clearAllMocks();
-
+  const store = configureAppStore();
   const path = '/searchresult';
   const page = render(
     <Provider store={store}>
@@ -54,12 +54,22 @@ function setup() {
   };
 }
 
+beforeEach(() => {
+  jest.clearAllMocks();
+  api.postSong = jest.fn(
+    (_songForm: SongForm) =>
+      new Promise((res, rej) => {
+        res(dummySongs[0]);
+      }),
+  );
+});
+
 test('should render', () => {
   const { page } = setup();
   expect(page.getByTestId('CreateSongPage')).toBeTruthy();
 });
 
-test('should handle form correctly', () => {
+test('should handle form correctly', async () => {
   const set = setup();
   fireEvent.change(set.title, { target: { value: 'TEST_TITLE' } });
   expect(set.title.value).toBe('TEST_TITLE');
@@ -68,8 +78,8 @@ test('should handle form correctly', () => {
   expect(set.singer.value).toBe('TEST_ARTIST');
 
   // fireEvent.select(set.category, { target: { value: '2' } }); // coverage에 반영 안 됨
-  userEvent.selectOptions(set.category, '2');
-  expect(set.category.value).toBe('2');
+  userEvent.selectOptions(set.category, 'Pop');
+  expect(set.category.value).toBe('Pop');
 
   fireEvent.change(set.reference, { target: { value: 'TEST_REFERENCE' } });
   expect(set.reference.value).toBe('TEST_REFERENCE');
@@ -78,5 +88,7 @@ test('should handle form correctly', () => {
   expect(set.description.value).toBe('TEST_DESCRIPTION');
 
   fireEvent.click(set.submit);
-  expect(mockHistoryPush).toBeCalledTimes(1);
+  await waitFor(() => {
+    expect(mockHistoryPush).toBeCalledTimes(1);
+  });
 });

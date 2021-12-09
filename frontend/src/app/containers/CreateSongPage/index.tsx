@@ -42,9 +42,7 @@ export default function CreateSongPage(props: Props) {
 
   useEffect(() => {
     if (!songState.loading) {
-      if (songState.error) {
-        console.log(songState.error);
-      } else if (songState.data) {
+      if (songState.data) {
         const newSongId = songState.data.id;
         history.push(urls.Song(newSongId));
       }
@@ -117,7 +115,7 @@ export default function CreateSongPage(props: Props) {
                   className="mt-1 block w-full py-1 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
                   {categories.map((item, index) => (
-                    <option data-testid="option" value={index} key={index}>
+                    <option data-testid="option" value={item} key={index}>
                       {item}
                     </option>
                   ))}

@@ -7,6 +7,13 @@ import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song, Main, CreateCover } from 'utils/urls';
+import { api } from 'api/band';
+import {
+  dummySongs,
+  dummyCombinations,
+  dummyCovers,
+  dummyInstruments,
+} from 'api/dummy';
 
 const store = configureAppStore();
 
@@ -19,20 +26,46 @@ jest.mock('react-router-dom', () => ({
 }));
 
 function setup() {
-  jest.clearAllMocks();
-
   const page = render(
     <Provider store={store}>
       <MemoryRouter>
         <Switch>
           <Route path={Song(':id')} component={SongPage} />
-          <Redirect to={Song(0)} />
+          <Redirect to={Song(1)} />
         </Switch>
       </MemoryRouter>
     </Provider>,
   );
   return { page };
 }
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummySongs[1]);
+      }),
+  );
+  api.getCombinationsBySong = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCombinations);
+      }),
+  );
+  api.getCoversBySongId = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCovers);
+      }),
+  );
+  api.getInstruments = jest.fn(
+    () =>
+      new Promise((res, rej) => {
+        res(dummyInstruments);
+      }),
+  );
+});
 
 test('should render', () => {
   const { page } = setup();
@@ -49,7 +82,7 @@ test('should alert if page does not exist', async () => {
       <MemoryRouter>
         <Switch>
           <Route path={Song(':id')} component={SongPage} />
-          <Redirect to={Song('wrongURL')} />
+          <Redirect to={Song('10000')} />
         </Switch>
       </MemoryRouter>
     </Provider>

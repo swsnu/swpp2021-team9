@@ -93,11 +93,10 @@ export const api = {
     return response.data;
   },
   postCombination: async (form: CombinationForm) => {
-    const response = await apiClient.post<Combination[]>(
+    return await apiClient.post<Combination[]>(
       `/api/combination/${form.songId}/`,
       form,
     );
-    return response.data;
   },
 
   // `/api/song/`

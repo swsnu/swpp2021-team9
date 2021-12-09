@@ -1,8 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { SagaInjectionModes } from 'redux-injectors';
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import songPageSaga from './saga';
+import { useInjectReducer } from 'utils/redux-injectors';
 
 export interface CombinationItem {
   id: number;
@@ -88,11 +86,6 @@ export const {
 
 export const useMakeCombinationSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({
-    key: slice.name,
-    saga: songPageSaga,
-    mode: SagaInjectionModes.RESTART_ON_REMOUNT,
-  });
   return { actions: slice.actions, reducer: slice.reducer };
 };
 
