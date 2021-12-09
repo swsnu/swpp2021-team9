@@ -8,6 +8,7 @@ import {
   selectCurrent,
 } from './slice/selectors';
 import { useSongSlice } from './slice';
+import { useMakeCombinationSlice } from './slice/makeCombination';
 import * as apiActions from 'api/actions';
 import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
@@ -25,6 +26,7 @@ export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function SongPage(props: Props) {
   useSongSlice();
+  const makeCombination = useMakeCombinationSlice();
   const history = useHistory();
   const dispatch = useDispatch();
   const songState = useSelector(selectSong);
@@ -51,9 +53,11 @@ export default function SongPage(props: Props) {
       if (songResponse.error) {
         window.alert('Song page does not exist.');
         history.push(urls.Main());
+      } else if (songResponse.data) {
+        dispatch(makeCombination.actions.setSong(songResponse.data));
       }
     }
-  }, [songResponse, history]);
+  }, [songResponse, history, dispatch, makeCombination.actions]);
 
   // playing
   const player = useMemo(() => Player.getInstance(), []);
