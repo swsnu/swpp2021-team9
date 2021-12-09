@@ -38,7 +38,7 @@ class WaveformView extends Component<Props, State> {
 
   render() {
     return (
-      <div data-testid="WaveformView" className="justify-center items-center">
+      <div data-testid="WaveformView">
         <div
           className="zoomview-container"
           ref={this.zoomviewWaveformRef}
@@ -48,8 +48,8 @@ class WaveformView extends Component<Props, State> {
           ref={this.overviewWaveformRef}
         ></div>
 
-        <div className="flex-col justify-center items-center">
-          <audio ref={this.audioElementRef} controls>
+        <div>
+          <audio className="py-2" ref={this.audioElementRef} controls>
             <source
               src={this.props.audioUrl}
               type={this.props.audioContentType}
@@ -65,7 +65,7 @@ class WaveformView extends Component<Props, State> {
 
   renderButtons() {
     return (
-      <div className="inline-flex space-x-2">
+      <div className="space-x-2 items-center">
         <button
           data-testid="ZoomIn"
           className="px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"

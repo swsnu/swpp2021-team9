@@ -191,7 +191,7 @@ export default function CreateCoverRecord(props: Props) {
     }
 
     return (
-      <React.Fragment>
+      <React.Fragment data-testid="RenderSegments">
         <table>
           <thead>
             <tr>
@@ -215,7 +215,7 @@ export default function CreateCoverRecord(props: Props) {
 
   const renderSegmentRows = (segments: Segment[]) => {
     return segments.map(segment => (
-      <React.Fragment key={segment.id}>
+      <React.Fragment key={segment.id} data-testid={`SegmentRow_${segment.id}`}>
         <SegmentComponent
           id={segment.id}
           key={segment.id}
@@ -275,7 +275,7 @@ export default function CreateCoverRecord(props: Props) {
         <input
           id="upload-file"
           type="file"
-          accept="audio/*"
+          accept="audio/wav, audio/mpeg"
           onChange={onChangeUpload}
         />
       ) : null}
