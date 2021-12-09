@@ -28,6 +28,9 @@ export const deleteCover = asyncAction<number, number, AxiosError>(
 export const loadCombinations = asyncAction<number, Combination[], AxiosError>(
   AT.LOAD_COMBINATIONS,
 );
+export const loadCombinationsMain = asyncAction<undefined, Song[], AxiosError>(
+  AT.LOAD_COMBINATIONS_MAIN,
+);
 
 // song actions
 export const createSong = asyncAction<SongForm, Song, AxiosError>(

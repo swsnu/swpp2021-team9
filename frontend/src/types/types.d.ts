@@ -8,7 +8,7 @@ type SignInForm = SignUpForm;
 interface Combination {
   id: number;
   views: number;
-  song: number;
+  song: Song;
   covers: Cover[];
   likes: number;
 }

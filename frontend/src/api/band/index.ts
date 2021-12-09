@@ -99,6 +99,14 @@ export const api = {
     );
   },
 
+  // `/api/combination/main/`
+  getCombinationMain: async () => {
+    const response = await apiClient.get<Combination[]>(
+      `/api/combination/main/`,
+    );
+    return response.data;
+  },
+
   // `/api/song/`
   getSongList: async () => {
     const response = await apiClient.get<Song[]>(`/api/song/`);
@@ -106,12 +114,6 @@ export const api = {
   },
   postSong: async (songForm: SongForm) => {
     return await apiClient.post<Song>(`/api/song/`, songForm);
-  },
-
-  // `/api/song/main/`
-  getSongMain: async () => {
-    const response = await apiClient.get<Song[]>(`/api/song/main/`);
-    return response.data;
   },
 
   // `/api/song/search/?search=key:str/`

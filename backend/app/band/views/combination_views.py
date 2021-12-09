@@ -3,6 +3,7 @@ combination views for band
 TODO ("implement")
 """
 from django.http.request import HttpRequest
+from django.db.models import Count
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
@@ -45,6 +46,25 @@ class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CombinationMain(mixins.ListModelMixin, generics.GenericAPIView):
+    """combination/main/"""
+
+    serializer_class = CombinationSerializer
+
+    def get_queryset(self):
+        queryset = Combination.objects.all()
+        if self.request.user.is_authenticated:
+            # if user is logged in, should recommend based on the user
+            pass
+
+        # default recommendation model: order by number of views
+        queryset = queryset.order_by("-view")
+        return queryset
+
+    def get(self, request: HttpRequest):
+        return self.list(request)
 
 
 class CombinationInfo(mixins.RetrieveModelMixin, generics.GenericAPIView):

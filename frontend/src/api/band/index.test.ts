@@ -135,6 +135,11 @@ describe('band api', () => {
     );
   });
 
+  test(`/api/combination/main/`, async () => {
+    expect(await api.getCombinationMain()).toEqual(MOCK_GET_DATA);
+    expect(apiClient.get).lastCalledWith(`/api/combination/main/`);
+  });
+
   test(`/api/song/`, async () => {
     const mockForm: SongForm = {} as any;
 
@@ -143,11 +148,6 @@ describe('band api', () => {
 
     expect(await api.postSong(mockForm)).toEqual(MOCK_POST_RESPONSE);
     expect(apiClient.post).lastCalledWith(`/api/song/`, mockForm);
-  });
-
-  test(`/api/song/main/`, async () => {
-    expect(await api.getSongMain()).toEqual(MOCK_GET_DATA);
-    expect(apiClient.get).lastCalledWith(`/api/song/main/`);
   });
 
   test(`/api/song/search/?search=key:str/`, async () => {
