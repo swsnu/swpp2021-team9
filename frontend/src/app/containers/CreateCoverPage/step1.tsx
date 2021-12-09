@@ -18,7 +18,7 @@ import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import MergedAudio from 'app/components/CreateCover/MergedAudio';
 import { selectCreateCover } from './slice/selectors';
-import { useMakeCombinationSlice } from '../SongPage/slice/makeCombination';
+import { selectMakeCombinationSlice } from '../SongPage/slice/selectors';
 interface MatchParams {
   id?: string;
 }
@@ -41,21 +41,25 @@ export default function CreateCoverRecord(props: Props) {
   const [selectedSegmentId, setSelectedSegmentId] = useState<
     string | undefined
   >('');
+
+  const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
 
   const editor = useMemo(() => AudioEditor.getInstance(), []);
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions: createCoverActions } = useCreateCoverSlice();
+  const makeCombiState = useSelector(selectMakeCombinationSlice);
   const createCoverState = useSelector(selectCreateCover);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
+    if (makeCombiState.song && makeCombiState.song) {
+      setRefUrl(makeCombiState.song.reference);
+    }
     if (createCoverState.audioURL) {
       setUploadedUrl(createCoverState.audioURL);
     }
-  }, []);
+  }, [createCoverState.audioURL, makeCombiState.song]);
 
   useEffect(() => {
     return () => {
@@ -82,7 +86,7 @@ export default function CreateCoverRecord(props: Props) {
       peaks.player.playSegment(seg);
       setIsPlaySegmentClicked(false);
     }
-  }, [isPlaySegmentClicked]);
+  }, [isPlaySegmentClicked, segments, selectedSegmentId]);
 
   useMemo(() => {
     if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
@@ -96,7 +100,7 @@ export default function CreateCoverRecord(props: Props) {
       setSegments(segs);
       setIsDeleteClicked(false);
     }
-  }, [isDeleteClicked]);
+  }, [isDeleteClicked, selectedSegmentId]);
 
   const getBlobFromRecorder = async (blobUrl, blob) => {
     console.log('url: ', blobUrl);
@@ -265,7 +269,7 @@ export default function CreateCoverRecord(props: Props) {
       className="flex flex-col items-center"
     >
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
-      <YoutubePlayer url="https://www.youtube.com/watch?v=SK6Sm2Ki9tI" />
+      <YoutubePlayer url={refUrl} />
 
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (

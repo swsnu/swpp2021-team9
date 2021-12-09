@@ -28,7 +28,6 @@ const slice = createSlice({
   initialState,
   reducers: {
     setSong(state, action: PayloadAction<Song>) {
-      console.log(action.payload);
       if (state.song && state.song.id !== action.payload.id) {
         state.combination = [];
         state.current = null;

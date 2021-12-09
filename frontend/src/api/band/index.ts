@@ -29,21 +29,25 @@ export const api = {
     return response.data;
   },
   postCover: async (coverForm: CoverForm) => {
+    console.log('post started');
     const audioBlob = await fetch(coverForm.audio).then(r => r.blob());
     const audiofile = new File([audioBlob], 'audiofile.mp3', {
       type: 'audio/mpeg',
     });
+    console.log(audiofile);
     const coverFormData = new FormData();
     coverFormData.append('audio', audiofile);
     coverFormData.append('title', coverForm.title);
     coverFormData.append('category', coverForm.category);
     coverFormData.append('description', coverForm.description);
     coverFormData.append('tags', JSON.stringify(coverForm.tags));
-    coverFormData.append('combination', String(coverForm.combinationId));
+    // coverFormData.append('combination', String(coverForm.combinationId));
     coverFormData.append('instrument', String(coverForm.instrumentId));
+
     return await apiClient.post<Cover>(
       `/api/cover/${coverForm.songId}/`,
       coverFormData,
+      // { headers: { 'Content-Type': 'multipart/form-data' } },
     );
   },
   getCoverBySongAndInstrument: async (songId: number, instrumentId: number) => {

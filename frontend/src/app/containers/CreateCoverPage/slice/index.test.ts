@@ -23,29 +23,29 @@ test('should return initial state', () => {
   );
 });
 
-test('should setInfo reducer work', () => {
-  expect(
-    useCreateCoverSlice().reducer(
-      undefined,
-      createCoverActions.setInfo({
-        title: '신호등',
-        category: '0',
-        tags: ['R&B'],
-        instrumentType: 'guitar',
-        description: 'hi',
-      }),
-    ),
-  ).toEqual({
-    audioURL: null,
-    info: {
-      title: '신호등',
-      category: '0',
-      tags: ['R&B'],
-      instrumentType: 'guitar',
-      description: 'hi',
-    },
-  });
-});
+// test('should setInfo reducer work', () => {
+//   expect(
+//     useCreateCoverSlice().reducer(
+//       undefined,
+//       createCoverActions.setInfo({
+//         title: '신호등',
+//         category: '0',
+//         tags: ['R&B'],
+//         instrumentType: 'guitar',
+//         description: 'hi',
+//       }),
+//     ),
+//   ).toEqual({
+//     audioURL: null,
+//     info: {
+//       title: '신호등',
+//       category: '0',
+//       tags: ['R&B'],
+//       instrumentType: 'guitar',
+//       description: 'hi',
+//     },
+//   });
+// });
 
 test('should setAudioUrl reducer work', () => {
   expect(

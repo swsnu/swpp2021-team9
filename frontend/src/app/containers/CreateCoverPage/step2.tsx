@@ -1,41 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
-import { Song, CreateCover } from 'utils/urls';
-import { useDispatch } from 'react-redux';
+import { Cover, CreateCover } from 'utils/urls';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
-
-export interface CoverForm {
-  title: string;
-  category: string;
-  tags: string[];
-  instrumentType: string;
-  description: string;
-}
-
-const initialForm: CoverForm = {
-  title: '',
-  category: '0',
-  tags: [],
-  instrumentType: '',
-  description: '',
-};
+import { selectCreateCover } from './slice/selectors';
+import * as apiActions from 'api/actions';
 
 interface MatchParams {
-  id: string | undefined;
+  id?: string;
 }
 export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function CreateCoverInfoPage(props: Props) {
+  const { actions } = useCreateCoverSlice();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { actions } = useCreateCoverSlice();
+  const createCoverState = useSelector(selectCreateCover);
+
+  const audioUrl = createCoverState.audioURL;
+  const instrumentsResponse = createCoverState.instrumentsResponse;
+
+  useEffect(() => {
+    dispatch(apiActions.loadInstruments.request());
+  }, [dispatch]);
 
   const songId = props.match.params.id;
 
-  const [Form, setForm] = useState(initialForm);
+  const [Form, setForm] = useState({
+    title: '',
+    category: '',
+    tags: new Array<string>(),
+    instrumentId: 1,
+    description: '',
+  });
   const [tagInput, setTagInput] = useState<string>('');
-
-  const categories = ['Pop', 'Rock', 'Hip-hop', 'Jazz'];
 
   const onChangeForm = (
     e: React.FormEvent<
@@ -46,12 +44,14 @@ export default function CreateCoverInfoPage(props: Props) {
     setForm({ ...Form, [key]: e.currentTarget.value });
   };
 
-  const onKeyDown = e => {
-    if (e.key === 'Enter' && e.code === 'Enter') {
+  const onKeyPress = e => {
+    if (e.key === 'Enter') {
       console.log(e);
       e.preventDefault();
       setForm({ ...Form, tags: [...Form.tags, tagInput] });
       setTagInput('');
+      console.log(Form);
+      console.log(instrumentsResponse);
     }
   };
 
@@ -64,18 +64,32 @@ export default function CreateCoverInfoPage(props: Props) {
   ) => {
     e.preventDefault();
     const isFinish = window.confirm('커버 정보를 업로드 하시겠습니까?');
-    if (!isFinish) {
+    console.log(isFinish);
+    if (!isFinish || !audioUrl) {
+      console.log('early return');
       return;
     }
-    console.log(Form);
-    dispatch(actions.setInfo(Form));
-    history.push(Song(songId!));
+    const coverUploadForm = {
+      ...Form,
+      audio: audioUrl,
+      songId: Number(songId!),
+      instrumentId: Number(Form.instrumentId),
+      combinationId: 222,
+    };
+    dispatch(apiActions.createCover.request(coverUploadForm));
   };
 
+  useEffect(() => {
+    if (!createCoverState.createResponse.loading) {
+      if (createCoverState.createResponse.data) {
+        const newCoverId = createCoverState.createResponse.data.id;
+        history.push(Cover(newCoverId));
+      }
+    }
+  }, [createCoverState, history]);
+
   const submitDisabled = () => {
-    return (
-      Form.title === '' || Form.category === '' || Form.instrumentType === ''
-    );
+    return Form.title === '';
   };
 
   const styles = {
@@ -119,40 +133,40 @@ export default function CreateCoverInfoPage(props: Props) {
                   className={styles.input}
                 />
               </div>
-
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-6">
                 <label htmlFor="category" className={styles.label}>
                   Category
                 </label>
-                <select
-                  data-testid="select"
-                  name="category"
-                  id="category"
-                  value={Form.category}
-                  onChange={e => onChangeForm(e, 'category')}
-                  className="mt-1 block w-full py-1 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  {categories.map((item, index) => (
-                    <option value={index} key={index}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col-span-6">
-                <label htmlFor="reference" className={styles.label}>
-                  Instrument Type
-                </label>
                 <input
-                  data-testid="instrument"
+                  data-testid="category"
                   type="text"
                   name="instrumentType"
                   id="instrumentType"
-                  value={Form.instrumentType}
-                  onChange={e => onChangeForm(e, 'instrumentType')}
+                  value={Form.category}
+                  onChange={e => onChangeForm(e, 'category')}
                   className={styles.input}
                 />
+              </div>
+
+              <div className="col-span-6">
+                <label htmlFor="instrumentType" className={styles.label}>
+                  Instrument Type
+                </label>
+                <select
+                  data-testid="select"
+                  name="instType"
+                  id="instType"
+                  value={Form.instrumentId}
+                  onChange={e => onChangeForm(e, 'instrumentId')}
+                  className="mt-1 block w-full py-1 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  {instrumentsResponse.data &&
+                    instrumentsResponse.data.map(item => (
+                      <option value={item.id} key={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               <div className="col-span-6">
@@ -171,7 +185,7 @@ export default function CreateCoverInfoPage(props: Props) {
                   id="tagInput"
                   value={tagInput}
                   onChange={e => setTagInput(e.target.value)}
-                  onKeyDown={onKeyDown}
+                  onKeyPress={onKeyPress}
                   className={styles.input}
                 />
               </div>
