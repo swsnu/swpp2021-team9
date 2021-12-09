@@ -59,14 +59,13 @@ export default function SongPage(props: Props) {
   const player = useMemo(() => Player.getInstance(), []);
 
   const onClickPlay = useCallback(() => {
-    if (!songResponse.data) return;
-    const currentSongInfo: SongInfo = songResponse.data;
+    const currentSongInfo: SongInfo = songResponse.data!;
 
     let sources: string[] = combination
       .filter(item => item.cover)
-      .map(item => (item.cover ? item.cover.audio : ''));
+      .map(item => item.cover!.audio);
 
-    console.log(sources);
+    if (sources.length === 0) return;
 
     const currentTrackInfo: TrackInfo = {
       song: currentSongInfo,

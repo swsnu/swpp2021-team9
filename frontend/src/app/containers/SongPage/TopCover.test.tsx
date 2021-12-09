@@ -4,6 +4,15 @@ import { Provider } from 'react-redux';
 import { dummyCovers, dummyInstruments } from 'api/dummy';
 import TopCover from './TopCover';
 
+const mockHistoryPush = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
+
 const store = configureAppStore();
 
 function setup() {
@@ -13,7 +22,8 @@ function setup() {
     </Provider>,
   );
   const getButtons = page.queryAllByTestId('CoverGetButton');
-  return { page, getButtons };
+  const coverButtons = page.queryAllByTestId('ToCoverButton');
+  return { page, getButtons, coverButtons };
 }
 
 test('click get buttons', () => {
@@ -23,6 +33,17 @@ test('click get buttons', () => {
   getButtons.forEach(button => {
     fireEvent.click(button); // TODO: actually check redux state
   });
+});
+
+test('click cover buttons', () => {
+  const { coverButtons } = setup();
+  expect(coverButtons.length).toBeGreaterThan(0);
+
+  coverButtons.forEach(button => {
+    fireEvent.click(button);
+  });
+
+  expect(mockHistoryPush).toHaveBeenCalled();
 });
 
 test('render when no covers', () => {

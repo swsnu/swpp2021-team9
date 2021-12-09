@@ -27,6 +27,7 @@ export default function CombinationArea(props: Props) {
         <AddCoverButton instruments={props.instruments} />
         <button
           className="ml-auto inline-flex justify-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600"
+          data-testid="PlayButton"
           onClick={props.onClickPlay}
         >
           <div className="text-lg text-center">

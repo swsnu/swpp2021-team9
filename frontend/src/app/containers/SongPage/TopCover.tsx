@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMakeCombinationSlice } from './slice/makeCombination';
 import * as urls from 'utils/urls';
@@ -50,6 +50,7 @@ export default function TopCover(props: Props) {
             <td className="flex font-medium whitespace-normal">
               <button
                 className="my-2 px-2 font-medium rounded-lg hover:bg-gray-300"
+                data-testid="ToCoverButton"
                 onClick={() => history.push(urls.Cover(cover.id))}
               >
                 {cover.title}
@@ -81,14 +82,14 @@ export default function TopCover(props: Props) {
               data-testid="CoverGetButton"
               onClick={() => onClickRow(cover)}
             >
-              {cover.views ?? 0}
+              {cover.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
               data-testid="CoverGetButton"
               onClick={() => onClickRow(cover)}
             >
-              {cover.likes ?? 0}
+              {cover.likes}
             </td>
             <td
               className="whitespace-nowrap text-sm text-center font-medium sr-only sm:not-sr-only sm:px-3 sm:py-2"

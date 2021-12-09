@@ -105,8 +105,7 @@ export const api = {
     return response.data;
   },
   postSong: async (songForm: SongForm) => {
-    const response = await apiClient.post<Song>(`/api/song/`, songForm);
-    return response.data;
+    return await apiClient.post<Song>(`/api/song/`, songForm);
   },
 
   // `/api/song/main/`

@@ -11,6 +11,7 @@ import { api } from 'api/band';
 import { dummySongs } from 'api/dummy';
 
 const mockHistoryPush = jest.fn();
+api.postSong = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -56,10 +57,14 @@ function setup() {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  api.postSong = jest.fn(
-    (_songForm: SongForm) =>
+  (api.postSong as jest.Mock).mockImplementation(
+    (form: CoverFormPut) =>
       new Promise((res, rej) => {
-        res(dummySongs[0]);
+        res({
+          data: {
+            ...dummySongs[0],
+          },
+        });
       }),
   );
 });

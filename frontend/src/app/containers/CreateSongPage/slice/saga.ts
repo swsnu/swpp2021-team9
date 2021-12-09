@@ -15,7 +15,7 @@ export function* postSongRequest(
   yield put(createSongActions.loadingSongResponse('start load'));
   try {
     const response = yield api.postSong(action.payload);
-    yield put(createSongActions.successSongResponse(response));
+    yield put(createSongActions.successSongResponse(response.data));
   } catch (e: any) {
     yield put(createSongActions.errorSongResponse(e));
   }

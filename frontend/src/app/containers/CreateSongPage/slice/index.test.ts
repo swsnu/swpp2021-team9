@@ -98,7 +98,7 @@ test('should song Response onError', async () => {
     },
     postSongRequest,
     {
-      type: AT.LOAD_COVER.REQUEST,
+      type: AT.CREATE_SONG.REQUEST,
       payload: dummySongs[0],
     },
   ).toPromise();

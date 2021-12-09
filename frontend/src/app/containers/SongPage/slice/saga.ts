@@ -18,7 +18,7 @@ export function* getSongRequest(
 ) {
   yield put(songActions.loadingSongResponse('start load'));
   try {
-    const response: Song = yield api.getSongInfo(action.payload);
+    const response = yield api.getSongInfo(action.payload);
     yield put(songActions.successSongResponse(response));
   } catch (e: any) {
     yield put(songActions.errorSongResponse(e));
@@ -30,9 +30,7 @@ export function* getCombinationsRequest(
 ) {
   yield put(songActions.loadingCombinationsResponse('start load'));
   try {
-    const response: Combination[] = yield api.getCombinationsBySong(
-      action.payload,
-    );
+    const response = yield api.getCombinationsBySong(action.payload);
     yield put(songActions.successCombinationsResponse(response));
   } catch (e: any) {
     yield put(songActions.errorCombinationsResponse(e));
@@ -44,7 +42,7 @@ export function* getCoversRequest(
 ) {
   yield put(songActions.loadingCoversResponse('start load'));
   try {
-    const response: Cover[] = yield api.getCoversBySongId(action.payload);
+    const response = yield api.getCoversBySongId(action.payload);
     yield put(songActions.successCoversResponse(response));
   } catch (e: any) {
     yield put(songActions.errorCoversResponse(e));
@@ -56,7 +54,7 @@ export function* getInstrumentsRequest(
 ) {
   yield put(songActions.loadingInstrumentsResponse('start load'));
   try {
-    const response: Instrument[] = yield api.getInstruments();
+    const response = yield api.getInstruments();
     yield put(songActions.successInstrumentsResponse(response));
   } catch (e: any) {
     yield put(songActions.errorInstrumentsResponse(e));

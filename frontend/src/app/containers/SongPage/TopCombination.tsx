@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMakeCombinationSlice } from './slice/makeCombination';
 import * as urls from 'utils/urls';
@@ -31,6 +31,7 @@ export default function TopCombination(props: Props) {
           <button
             key={index}
             className="justify-center px-1 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300"
+            data-testid="ToCoverButton"
             onClick={() => history.push(urls.Cover(cover.id))}
           >
             {cover.title}
@@ -50,7 +51,7 @@ export default function TopCombination(props: Props) {
           <tr key={combination.id} className="hover:bg-gray-100 cursor-pointer">
             <td
               className="px-3 py-2 font-bold whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
+              data-testid="CombinationGetButton"
               onClick={() => onClickRow(combination)}
             >
               {index + 1}
@@ -61,27 +62,27 @@ export default function TopCombination(props: Props) {
               </ul>
               <button
                 className="self-stretch flex-grow"
-                data-testid="combinationGetButton"
+                data-testid="CombinationGetButton"
                 onClick={() => onClickRow(combination)}
               />
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
+              data-testid="CombinationGetButton"
               onClick={() => onClickRow(combination)}
             >
-              {combination.views ?? 0}
+              {combination.views}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-center"
-              data-testid="combinationGetButton"
+              data-testid="CombinationGetButton"
               onClick={() => onClickRow(combination)}
             >
-              {combination.likes ?? 0}
+              {combination.likes}
             </td>
             <td
               className="px-3 py-2 whitespace-nowrap text-sm font-medium"
-              data-testid="combinationGetButton"
+              data-testid="CombinationGetButton"
               onClick={() => onClickRow(combination)}
             >
               <div className="text-indigo-600 hover:text-indigo-900 font-bold">

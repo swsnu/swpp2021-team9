@@ -6,8 +6,17 @@ import {
   RootStateKeyType,
 } from 'utils/types/injector-typings';
 import { selectSong } from './selectors';
+import * as AT from 'api/actionTypes';
+import { runSaga } from 'redux-saga';
+import { api } from 'api/band';
 import { renderHook } from '@testing-library/react-hooks';
 import * as ReactRedux from 'react-redux';
+import {
+  getSongRequest,
+  getCoversRequest,
+  getCombinationsRequest,
+  getInstrumentsRequest,
+} from './saga';
 
 jest.mock('utils/redux-injectors', () => {
   const originalModule = jest.requireActual('utils/redux-injectors');
@@ -193,4 +202,103 @@ it('should handle instruments response state', () => {
       songActions.errorInstrumentsResponse('MOCK_ERROR' as any),
     ),
   ).toEqual(stateError);
+});
+
+test('should handle song Response onError', async () => {
+  const dispatched: any[] = [];
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
+  );
+  await runSaga(
+    {
+      dispatch: action => dispatched.push(action),
+    },
+    getSongRequest,
+    {
+      type: AT.LOAD_SONG.REQUEST,
+      payload: 0,
+    },
+  ).toPromise();
+
+  expect(dispatched).toEqual([
+    songActions.loadingSongResponse('start load'),
+    songActions.errorSongResponse('REJECT' as any),
+  ]);
+});
+
+test('should handle combinations Response onError', async () => {
+  const dispatched: any[] = [];
+  api.getCombinationsBySong = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
+  );
+  await runSaga(
+    {
+      dispatch: action => dispatched.push(action),
+    },
+    getCombinationsRequest,
+    {
+      type: AT.LOAD_COMBINATIONS.REQUEST,
+      payload: 0,
+    },
+  ).toPromise();
+
+  expect(dispatched).toEqual([
+    songActions.loadingCombinationsResponse('start load'),
+    songActions.errorCombinationsResponse('REJECT' as any),
+  ]);
+});
+
+test('should handle covers Response onError', async () => {
+  const dispatched: any[] = [];
+  api.getCoversBySongId = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
+  );
+  await runSaga(
+    {
+      dispatch: action => dispatched.push(action),
+    },
+    getCoversRequest,
+    {
+      type: AT.LOAD_COVERS_SONG.REQUEST,
+      payload: 0,
+    },
+  ).toPromise();
+
+  expect(dispatched).toEqual([
+    songActions.loadingCoversResponse('start load'),
+    songActions.errorCoversResponse('REJECT' as any),
+  ]);
+});
+
+test('should handle instruments Response onError', async () => {
+  const dispatched: any[] = [];
+  api.getInstruments = jest.fn(
+    () =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
+  );
+  await runSaga(
+    {
+      dispatch: action => dispatched.push(action),
+    },
+    getInstrumentsRequest,
+    {
+      type: AT.LOAD_INSTRUMENTS.REQUEST,
+    },
+  ).toPromise();
+
+  expect(dispatched).toEqual([
+    songActions.loadingInstrumentsResponse('start load'),
+    songActions.errorInstrumentsResponse('REJECT' as any),
+  ]);
 });
