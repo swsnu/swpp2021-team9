@@ -4,7 +4,7 @@ import {
   useMakeCombinationSlice,
   makeCombinationActions,
 } from './makeCombination';
-import { dummyCovers } from 'api/dummy';
+import { dummyCovers, dummySongs } from 'api/dummy';
 
 import {
   InjectReducerParams,
@@ -31,6 +31,7 @@ test('should return initial state', () => {
 
 test('editCurrent', () => {
   const stateInit: MakeCombinationState = {
+    song: dummySongs[0],
     combination: [
       { id: 0, instrument: dummyCovers[0].instrument, cover: dummyCovers[0] },
       { id: 1, instrument: dummyCovers[1].instrument, cover: dummyCovers[1] },
@@ -48,12 +49,14 @@ test('editCurrent', () => {
 
 test('getCovers', () => {
   const stateInit: MakeCombinationState = {
+    song: dummySongs[0],
     combination: [
       { id: 0, instrument: dummyCovers[0].instrument, cover: dummyCovers[0] },
     ],
     current: null,
   };
   const stateChanged: MakeCombinationState = {
+    song: dummySongs[0],
     combination: [
       { id: 0, instrument: dummyCovers[1].instrument, cover: dummyCovers[1] },
     ],
@@ -64,6 +67,28 @@ test('getCovers', () => {
     useMakeCombinationSlice().reducer(
       stateInit,
       makeCombinationActions.getCovers([undefined, dummyCovers[1]]),
+    ),
+  ).toEqual(stateChanged);
+});
+
+test('setSongId', () => {
+  const stateInit: MakeCombinationState = {
+    song: dummySongs[0],
+    combination: [
+      { id: 0, instrument: dummyCovers[0].instrument, cover: dummyCovers[0] },
+    ],
+    current: 0,
+  };
+  const stateChanged: MakeCombinationState = {
+    song: dummySongs[1],
+    combination: [],
+    current: null,
+  };
+
+  expect(
+    useMakeCombinationSlice().reducer(
+      stateInit,
+      makeCombinationActions.setSong(dummySongs[1]),
     ),
   ).toEqual(stateChanged);
 });
