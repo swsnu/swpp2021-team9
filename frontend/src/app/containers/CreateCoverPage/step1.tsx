@@ -6,74 +6,54 @@ import {
   faMicrophoneAlt,
   faCircle,
   faStopCircle,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { useReactMediaRecorder } from 'react-media-recorder';
-import { useHistory } from 'react-router-dom';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import MergedAudio from 'app/components/CreateCover/MergedAudio';
-export interface Props {}
+import { selectCreateCover } from './slice/selectors';
+interface MatchParams {
+  id: string;
+}
+export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function CreateCoverRecord(props: Props) {
-  const editor = useMemo(() => AudioEditor.getInstance(), []);
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const { actions } = useCreateCoverSlice();
-  const [selectedSegmentId, setSelectedSegmentId] = useState<
-    string | undefined
-  >('');
-  const [file, setFile] = useState<any>(null);
-  const [mergedFile, setMergedFile] = useState<File | null>(null);
-  const [mergedUrl, setMergedUrl] = useState<string>('');
+  const [useMergedAudio, setUseMergedAudio] = useState(false);
+  const [mergedUrl, setMergedUrl] = useState<string | null>(null);
+  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
   const [mergeList, setMergeList] = useState<string[]>([]);
   const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
   const [isDeleteClicked, setIsDeleteClicked] = useState<boolean>(false);
   const [isPlaySegmentClicked, setIsPlaySegmentClicked] =
     useState<boolean>(false);
-  const [uploadUrl, setUploadUrl] = useState<string>('');
+  const [uploadedUrl, setUploadedUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [selectedSegmentId, setSelectedSegmentId] = useState<
+    string | undefined
+  >('');
 
-  const getBlobFromRecorder = (blobUrl, blob) => {
-    console.log('url: ', blobUrl);
-    console.log('bolb: ', blob);
-    let fileFromBlob = new File(
-      [blob],
-      new Date().toISOString() + '_recording.wav',
-      {
-        type: 'audio/wav',
-      },
-    );
-    setFile(fileFromBlob);
-    editor.readAndDecode(fileFromBlob);
-  };
-  const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } =
-    useReactMediaRecorder({
-      onStop: getBlobFromRecorder,
-      audio: true,
-    });
+  const editor = useMemo(() => AudioEditor.getInstance(), []);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { actions } = useCreateCoverSlice();
+  const createCoverState = useSelector(selectCreateCover);
 
-  const handleMergeList = (id: string | undefined, isMerge: boolean) => {
-    if (!id) {
-      return;
+  useEffect(() => {});
+
+  useEffect(() => {
+    if (createCoverState.audioURL) {
+      setUploadedUrl(createCoverState.audioURL);
     }
-    if (isMerge) {
-      if (!mergeList.includes(id)) {
-        setMergeList([...mergeList, id]);
-      }
-    } else {
-      if (mergeList.includes(id)) {
-        const _mergeList = mergeList.filter(mL => mL !== id);
-        setMergeList(_mergeList);
-      }
-    }
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -116,6 +96,43 @@ export default function CreateCoverRecord(props: Props) {
     }
   }, [isDeleteClicked]);
 
+  const getBlobFromRecorder = async (blobUrl, blob) => {
+    console.log('url: ', blobUrl);
+    console.log('bolb: ', blob);
+    let fileFromBlob = new File(
+      [blob],
+      new Date().toISOString() + '_recording.wav',
+      {
+        type: 'audio/wav',
+      },
+    );
+    const bUrl: any = await editor.readAndDecode(fileFromBlob, true);
+    console.log(bUrl);
+    setRecordedUrl(bUrl);
+  };
+
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({
+      onStop: getBlobFromRecorder,
+      audio: true,
+    });
+
+  const handleMergeList = (id: string | undefined, isMerge: boolean) => {
+    if (!id) {
+      return;
+    }
+    if (isMerge) {
+      if (!mergeList.includes(id)) {
+        setMergeList([...mergeList, id]);
+      }
+    } else {
+      if (mergeList.includes(id)) {
+        const _mergeList = mergeList.filter(mL => mL !== id);
+        setMergeList(_mergeList);
+      }
+    }
+  };
+
   const onRecordClicked = () => {
     if (isRecording) {
       stopRecording();
@@ -136,24 +153,36 @@ export default function CreateCoverRecord(props: Props) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    dispatch(actions.setAudioURL(mediaBlobUrl));
+    if (useMergedAudio) {
+      dispatch(actions.setAudioURL(mergedUrl));
+    } else if (uploadedUrl) {
+      dispatch(actions.setAudioURL(uploadedUrl));
+    } else {
+      dispatch(actions.setAudioURL(recordedUrl));
+    }
+
     history.push(CreateCover('info'));
   };
 
-  const onChangeUpload: ChangeEventHandler<HTMLInputElement> = (e: any) => {
+  const onChangeUpload: ChangeEventHandler<HTMLInputElement> = async (
+    e: any,
+  ) => {
     if (!e.target.files[0]) {
       return;
     }
     let file = e.target.files[0];
-    const upload = URL.createObjectURL(file);
-    setUploadUrl(upload);
-    console.log(upload);
-    console.log(file);
-    editor.readAndDecode(file);
-    setFile(file);
+    if (file.type === 'audio/wav') {
+      const url = await editor.readAndDecode(file, true);
+      setUploadedUrl(url);
+    } else {
+      const upload = URL.createObjectURL(file);
+      setUploadedUrl(upload);
+      editor.readAndDecode(file);
+    }
   };
 
   const mergeSegments = async () => {
+    setUseMergedAudio(false);
     let sortedTargetSegments;
     if (mergeList.length === 0) {
       return;
@@ -165,17 +194,9 @@ export default function CreateCoverRecord(props: Props) {
       (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
     );
     const mp3Blob: any = await editor.mergeAudio(sortedTargetSegments);
-    let fileFromBlob = new File(
-      [mp3Blob],
-      new Date().toISOString() + '_recording.mp3',
-      {
-        type: 'audio/mpeg',
-      },
-    );
-    setMergedFile(fileFromBlob);
-    console.log(fileFromBlob);
-    setMergedUrl(URL.createObjectURL(fileFromBlob));
+
     setMergeList([]);
+    setMergedUrl(URL.createObjectURL(mp3Blob));
     setIsMergeClicked(prev => !prev);
   };
 
@@ -191,7 +212,7 @@ export default function CreateCoverRecord(props: Props) {
     }
 
     return (
-      <React.Fragment data-testid="RenderSegments">
+      <React.Fragment>
         <table>
           <thead>
             <tr>
@@ -206,7 +227,11 @@ export default function CreateCoverRecord(props: Props) {
           </thead>
           <tbody>{renderSegmentRows(_segments)}</tbody>
         </table>
-        <button type="button" onClick={e => mergeSegments()}>
+        <button
+          className="my-3 px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          type="button"
+          onClick={e => mergeSegments()}
+        >
           Merge
         </button>
       </React.Fragment>
@@ -215,7 +240,7 @@ export default function CreateCoverRecord(props: Props) {
 
   const renderSegmentRows = (segments: Segment[]) => {
     return segments.map(segment => (
-      <React.Fragment key={segment.id} data-testid={`SegmentRow_${segment.id}`}>
+      <React.Fragment key={segment.id}>
         <SegmentComponent
           id={segment.id}
           key={segment.id}
@@ -281,10 +306,10 @@ export default function CreateCoverRecord(props: Props) {
       ) : null}
       <div className="container flex-col justify-center items-center">
         {isUploading ? (
-          uploadUrl ? (
+          uploadedUrl ? (
             <WaveformView
               selectedSegmentId={selectedSegmentId}
-              audioUrl={uploadUrl}
+              audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
             />
@@ -292,7 +317,20 @@ export default function CreateCoverRecord(props: Props) {
         ) : null}
       </div>
       {renderSegments()}
-      {mergedUrl ? <MergedAudio audioUrl={mergedUrl} /> : null}
+      {mergedUrl && (isUploading || isRecordingEnabled) ? (
+        <div className="justify-center items-center">
+          <MergedAudio audioUrl={mergedUrl} />
+          <button
+            onClick={() => {
+              setUseMergedAudio(prev => !prev);
+            }}
+            className="my-3 mx-3 px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+          >
+            Use MergedAudio
+          </button>
+          {useMergedAudio ? <FontAwesomeIcon icon={faCheck} /> : null}
+        </div>
+      ) : null}
       <div
         data-testid="CreateCoverButtons"
         className="py-6 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center	"
@@ -336,7 +374,7 @@ export default function CreateCoverRecord(props: Props) {
           data-testid="next-btn"
           type="button"
           onClick={e => onNextClicked(e)}
-          disabled={!file}
+          disabled={!(mergedUrl || recordedUrl || uploadedUrl)}
           className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Next

@@ -92,5 +92,5 @@ export function wavToMp3(channels, sampleRate, samples) {
   // send the download link to the console
   console.log('mp3 download:', bUrl);
 
-  return fileFromBlob;
+  return { fileFromBlob, bUrl };
 }

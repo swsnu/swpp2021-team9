@@ -9,3 +9,6 @@ export const editCover = asyncAction<CoverFormPut, Cover, AxiosError>(
 export const deleteCover = asyncAction<number, number, AxiosError>(
   AT.DELETE_COVER,
 );
+export const createCover = asyncAction<CoverForm, Cover, AxiosError>(
+  AT.CREATE_COVER,
+);

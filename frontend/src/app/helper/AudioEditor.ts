@@ -16,8 +16,9 @@ export default class AudioEditor {
     return this._instance!;
   }
 
-  async readAndDecode(audioFile) {
+  async readAndDecode(audioFile, isReturn = false) {
     let file = audioFile;
+    let blobUrl;
     if (audioFile.type === 'audio/wav') {
       try {
         this.arrayBuffer = await this.readAudio(audioFile);
@@ -30,7 +31,9 @@ export default class AudioEditor {
           this.arrayBuffer.result,
         );
         console.log(tmpBuf);
-        file = audioBufferToWav(tmpBuf);
+        const { fileFromBlob, bUrl } = audioBufferToWav(tmpBuf);
+        file = fileFromBlob;
+        blobUrl = bUrl;
       } catch (e) {
         console.error(e);
       }
@@ -45,6 +48,7 @@ export default class AudioEditor {
       this.audioBuffer = await new AudioContext().decodeAudioData(
         this.arrayBuffer.result,
       );
+      if (isReturn) return blobUrl;
     } catch {
       window.alert('디코딩 오류 발생');
       return;
@@ -79,7 +83,6 @@ export default class AudioEditor {
     console.log('Audio Segments');
     const segmentDetails: SegmentDetail[] = [];
     let maxLength = 0;
-    // let totalDuration = WaveformView.getPeaks().player.getDuration();
 
     for (let seg of segmentList) {
       const segmentDuration = seg.endTime - seg.startTime;

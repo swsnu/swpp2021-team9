@@ -6,7 +6,7 @@ interface Props {
 export default function MergedAudio({ audioUrl }: Props) {
   return (
     <div data-testid="MergedAudio">
-      <audio src={audioUrl} controls />
+      <audio className="" src={audioUrl} controls />
     </div>
   );
 }

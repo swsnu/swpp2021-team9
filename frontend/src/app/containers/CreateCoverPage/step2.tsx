@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Song } from 'utils/urls';
+import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
 
@@ -48,6 +48,10 @@ export default function CreateCoverInfoPage(props: Props) {
       setForm({ ...Form, tags: [...Form.tags, tagInput] });
       setTagInput('');
     }
+  };
+
+  const onPrevClicked = e => {
+    history.replace(CreateCover('record'));
   };
 
   const onSubmitForm = (
@@ -183,7 +187,15 @@ export default function CreateCoverInfoPage(props: Props) {
               </div>
             </div>
           </div>
-          <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <div className="px-4 py-3 bg-gray-50 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center">
+            <button
+              data-testid="cancel-btn"
+              type="button"
+              onClick={e => onPrevClicked(e)}
+              className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-red-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+            >
+              Previous
+            </button>
             <button
               data-testid="submit-btn"
               type="submit"
