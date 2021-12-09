@@ -39,7 +39,7 @@ export const api = {
     coverFormData.append('category', coverForm.category);
     coverFormData.append('description', coverForm.description);
     coverFormData.append('tags', JSON.stringify(coverForm.tags));
-    coverFormData.append('combination_id', String(coverForm.combinationId));
+    coverFormData.append('combination', String(coverForm.combinationId));
     coverFormData.append('instrument', String(coverForm.instrumentId));
     return await apiClient.post<Cover>(
       `/api/cover/${coverForm.songId}/`,

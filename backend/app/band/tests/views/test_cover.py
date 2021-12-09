@@ -109,6 +109,21 @@ class CoverTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(response.content), "File size larger than 15MB.")
 
+        # cover song post with no instrument
+        response = client.post(
+            f"/api/cover/{song.pk}/",
+            {
+                "audio": SimpleUploadedFile(
+                    "file.mp3", content=b"", content_type="audio/mpeg"
+                ),
+                "title": "TEST_TITLE",
+                "description": "TEST_DESCRIPTION",
+                "tags": tags,
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(json.loads(response.content), "'instrument' should be a number.")
+
         # cover song post with bad tags format
         response = client.post(
             f"/api/cover/{song.pk}/",

@@ -37,7 +37,7 @@ export default function InstrumentDropDown(props: Props) {
                   onClick={() => props.onClickMenu(instrument)}
                 >
                   <div className="ml-1 mr-2 w-6 text-lg text-center text-gray-700">
-                    <FontAwesomeIcon icon={getIcon(instrument.icon)} />
+                    <FontAwesomeIcon icon={getIcon(instrument.name)} />
                   </div>
                   <span>{instrument.name}</span>
                 </button>

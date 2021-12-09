@@ -10,7 +10,7 @@ from band.models import Combination, Instrument, Song, Cover
 
 # pylint: disable=C0114
 User = get_user_model()
-instrument_name_list = ["Bass", "Guitar", "Vocals", "Drum", "Keyboard"]
+instrument_name_list = ["Bass", "Guitar", "Vocal", "Drum", "Keyboard"]
 
 
 class BandModelTest(TestCase):

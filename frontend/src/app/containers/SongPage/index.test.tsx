@@ -1,12 +1,19 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { Switch, Route, Redirect, MemoryRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
 import { Song, Main, CreateCover } from 'utils/urls';
+import { api } from 'api/band';
+import {
+  dummySongs,
+  dummyCombinations,
+  dummyCovers,
+  dummyInstruments,
+} from 'api/dummy';
 
 const store = configureAppStore();
 
@@ -19,20 +26,47 @@ jest.mock('react-router-dom', () => ({
 }));
 
 function setup() {
-  jest.clearAllMocks();
-
   const page = render(
     <Provider store={store}>
-      <MemoryRouter>
+      <BrowserRouter>
         <Switch>
-          <Route path={Song(':id')} component={SongPage} />
-          <Redirect to={Song(0)} />
+          <Route exact path={Song(':id')} component={SongPage} />
+          <Redirect exact from="/" to={Song(1)} />
+          <Route component={() => <div />} />
         </Switch>
-      </MemoryRouter>
+      </BrowserRouter>
     </Provider>,
   );
   return { page };
 }
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummySongs[0]);
+      }),
+  );
+  api.getCombinationsBySong = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCombinations);
+      }),
+  );
+  api.getCoversBySongId = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        res(dummyCovers);
+      }),
+  );
+  api.getInstruments = jest.fn(
+    () =>
+      new Promise((res, rej) => {
+        res(dummyInstruments);
+      }),
+  );
+});
 
 test('should render', () => {
   const { page } = setup();
@@ -43,27 +77,24 @@ test('should alert if page does not exist', async () => {
   jest.spyOn(window, 'alert').mockImplementation((message?: string) => {
     return null;
   });
-
-  const page = (
-    <Provider store={store}>
-      <MemoryRouter>
-        <Switch>
-          <Route path={Song(':id')} component={SongPage} />
-          <Redirect to={Song('wrongURL')} />
-        </Switch>
-      </MemoryRouter>
-    </Provider>
+  api.getSongInfo = jest.fn(
+    (_songId: number) =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
   );
-  render(page);
-
+  setup();
   await waitFor(() => {
     expect(mockHistoryPush).toBeCalledWith(Main());
   });
 });
 
-test('record button test', () => {
+test('record button test', async () => {
   const { page } = setup();
-  const recordButton = page.getByText('REC');
+  await waitFor(() => {
+    expect(page.getByText(/REC/)).toBeTruthy();
+  });
+  const recordButton = page.getByText(/REC/);
   fireEvent.click(recordButton);
   expect(mockHistoryPush).toBeCalledWith(CreateCover('record'));
 });

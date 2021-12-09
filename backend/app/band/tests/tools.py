@@ -10,7 +10,7 @@ from user.models import CustomUser
 User = get_user_model()
 
 # pre datas
-instrument_name_list = ["Bass", "Guitar", "Vocals", "Drum", "Keyboard"]
+instrument_name_list = ["Bass", "Guitar", "Vocal", "Drum", "Keyboard"]
 
 
 def make_user_data(i: int):
