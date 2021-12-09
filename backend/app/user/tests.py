@@ -14,7 +14,6 @@ User = get_user_model()
 class UserManagersTests(TestCase):
     """
     TestCase Class for User managements
-
     Test creation of normal user and super user
     """
 
