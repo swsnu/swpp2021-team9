@@ -6,7 +6,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CreateCoverInfoPage from './step2';
-import * as infoPage from './step2';
+import * as url from 'utils/urls';
 
 const store = configureAppStore();
 
@@ -16,7 +16,11 @@ function setup() {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} render={() => <CreateCoverInfoPage />} />
+          <Route
+            exact
+            path={url.CreateCover(':id', 'info')}
+            component={CreateCoverInfoPage}
+          />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>

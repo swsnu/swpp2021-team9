@@ -18,12 +18,13 @@ import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import MergedAudio from 'app/components/CreateCover/MergedAudio';
 import { selectCreateCover } from './slice/selectors';
-// interface MatchParams {
-//   id: string;
-// }
-// export interface Props extends RouteComponentProps<MatchParams> {}
+import { useMakeCombinationSlice } from '../SongPage/slice/makeCombination';
+interface MatchParams {
+  id?: string;
+}
+export interface Props extends RouteComponentProps<MatchParams> {}
 
-export default function CreateCoverRecord(props) {
+export default function CreateCoverRecord(props: Props) {
   const [useMergedAudio, setUseMergedAudio] = useState(false);
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
@@ -40,14 +41,15 @@ export default function CreateCoverRecord(props) {
   const [selectedSegmentId, setSelectedSegmentId] = useState<
     string | undefined
   >('');
+  const songId = props.match.params.id;
 
   const editor = useMemo(() => AudioEditor.getInstance(), []);
   const history = useHistory();
   const dispatch = useDispatch();
-  const { actions } = useCreateCoverSlice();
+  const { actions: createCoverActions } = useCreateCoverSlice();
   const createCoverState = useSelector(selectCreateCover);
 
-  useEffect(() => {});
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (createCoverState.audioURL) {
@@ -146,7 +148,7 @@ export default function CreateCoverRecord(props) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    history.push(Song(0));
+    history.push(Song(1));
   };
 
   const onNextClicked = (
@@ -154,14 +156,14 @@ export default function CreateCoverRecord(props) {
   ) => {
     e.preventDefault();
     if (useMergedAudio) {
-      dispatch(actions.setAudioURL(mergedUrl));
+      dispatch(createCoverActions.setAudioURL(mergedUrl));
     } else if (uploadedUrl) {
-      dispatch(actions.setAudioURL(uploadedUrl));
+      dispatch(createCoverActions.setAudioURL(uploadedUrl));
     } else {
-      dispatch(actions.setAudioURL(recordedUrl));
+      dispatch(createCoverActions.setAudioURL(recordedUrl));
     }
 
-    history.push(CreateCover('info'));
+    history.push(CreateCover(songId, 'info'));
   };
 
   const onChangeUpload: ChangeEventHandler<HTMLInputElement> = async (

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { Song, CreateCover } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 import { useCreateCoverSlice } from './slice';
-
-export type Props = {};
 
 export interface CoverForm {
   title: string;
@@ -22,10 +20,17 @@ const initialForm: CoverForm = {
   description: '',
 };
 
+interface MatchParams {
+  id: string | undefined;
+}
+export interface Props extends RouteComponentProps<MatchParams> {}
+
 export default function CreateCoverInfoPage(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { actions } = useCreateCoverSlice();
+
+  const songId = props.match.params.id;
 
   const [Form, setForm] = useState(initialForm);
   const [tagInput, setTagInput] = useState<string>('');
@@ -51,7 +56,7 @@ export default function CreateCoverInfoPage(props: Props) {
   };
 
   const onPrevClicked = e => {
-    history.replace(CreateCover('record'));
+    history.replace(CreateCover(songId, 'record'));
   };
 
   const onSubmitForm = (
@@ -64,7 +69,7 @@ export default function CreateCoverInfoPage(props: Props) {
     }
     console.log(Form);
     dispatch(actions.setInfo(Form));
-    history.push(Song(0));
+    history.push(Song(songId!));
   };
 
   const submitDisabled = () => {

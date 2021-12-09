@@ -5,7 +5,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CreateCoverRecordPage from './step1';
-
+import * as url from 'utils/urls';
 const store = configureAppStore();
 
 jest.mock('../../components/CreateCover/YoutubePlayer', () => () => (
@@ -22,7 +22,11 @@ function setup() {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path={path} render={() => <CreateCoverRecordPage />} />
+          <Route
+            exact
+            path={url.CreateCover(':id', 'record')}
+            component={CreateCoverRecordPage}
+          />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>

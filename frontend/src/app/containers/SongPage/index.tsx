@@ -110,6 +110,7 @@ export default function SongPage(props: Props) {
 
         {instrumentsResponse.data && coversResponse.data && (
           <CombinationArea
+            songId={props.match.params.id}
             instruments={instrumentsResponse.data}
             covers={coversResponse.data}
             onClickPlay={onClickPlay}
