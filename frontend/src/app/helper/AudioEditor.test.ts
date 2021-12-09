@@ -156,10 +156,12 @@ describe('AudioEditor.ts test', () => {
     spyArrBufToWav = jest
       .spyOn(WavToMp3, 'audioBufferToWav')
       .mockImplementation(
-        jest.fn(
-          () =>
-            new File([new ArrayBuffer(1)], 'file.mp3', { type: 'audio/mpeg' }),
-        ),
+        jest.fn(() => ({
+          fileFromBlob: new File([new ArrayBuffer(1)], 'file.mp3', {
+            type: 'audio/mpeg',
+          }),
+          bUrl: '',
+        })),
       );
 
     fileWav = new File([new ArrayBuffer(23123)], 'file.wav', {

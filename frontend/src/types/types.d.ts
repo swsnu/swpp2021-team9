@@ -9,7 +9,7 @@ interface Combination {
   id: number;
   views: number;
   song: number;
-  covers: number[];
+  covers: Cover[];
   likes: number;
 }
 
@@ -30,7 +30,7 @@ interface Cover {
   tags: string[];
   likes: number;
   views: number;
-  combinationId: number | null;
+  combination: number | null;
 }
 
 interface CoverForm {
@@ -54,7 +54,6 @@ interface CoverFormPut {
 interface Instrument {
   id: number;
   name: string;
-  icon: string;
 }
 
 interface Song {

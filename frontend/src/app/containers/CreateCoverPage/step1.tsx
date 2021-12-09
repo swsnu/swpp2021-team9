@@ -18,12 +18,12 @@ import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import MergedAudio from 'app/components/CreateCover/MergedAudio';
 import { selectCreateCover } from './slice/selectors';
-interface MatchParams {
-  id: string;
-}
-export interface Props extends RouteComponentProps<MatchParams> {}
+// interface MatchParams {
+//   id: string;
+// }
+// export interface Props extends RouteComponentProps<MatchParams> {}
 
-export default function CreateCoverRecord(props: Props) {
+export default function CreateCoverRecord(props) {
   const [useMergedAudio, setUseMergedAudio] = useState(false);
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
