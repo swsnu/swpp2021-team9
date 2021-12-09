@@ -5,3 +5,4 @@ pylint-django==2.3.0
 Pillow==8.4.0
 djangorestframework==3.12.4
 mysqlclient==2.0.3
+django-cors-headers==3.10.1
