@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from rest_framework import routers
 from bandcruit import settings
+import debug_toolbar
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -27,6 +28,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/", include("user.urls")),
     path("api/", include("band.urls")),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
