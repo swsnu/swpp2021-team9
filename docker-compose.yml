@@ -6,7 +6,7 @@ services:
     # build: ./frontend
     container_name: front
     ports:
-      - 80:80
+      - 443:443
     command: nginx -g "daemon off;"
     restart: always
 
