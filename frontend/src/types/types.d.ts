@@ -89,11 +89,6 @@ type UserInfo = {
   photo?: string;
 };
 
-type PlayInfo = {
-  covers: string[];
-  song: SongInfo;
-};
-
 type SongInfo = {
   title: string;
   singer: string;

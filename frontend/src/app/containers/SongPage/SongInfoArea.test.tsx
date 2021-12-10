@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
-import SongInfo from './SongInfo';
+import SongInfoArea from './SongInfoArea';
 
 const dummySong: Song = {
   id: 0,
@@ -11,7 +11,7 @@ const dummySong: Song = {
 };
 
 function setup() {
-  const page = render(<SongInfo song={dummySong} />);
+  const page = render(<SongInfoArea song={dummySong} />);
   const youtubeButton = page.getByTestId('button-youtube');
   return { page, youtubeButton };
 }

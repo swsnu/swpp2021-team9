@@ -1,4 +1,5 @@
 import { MainState } from 'app/containers/MainPage/slice';
+import { SearchResultState } from 'app/containers/SearchResultPage/slice';
 import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
 import { CreateSongState } from 'app/containers/CreateSongPage/slice';
 import { SongState } from 'app/containers/SongPage/slice';
@@ -16,6 +17,7 @@ import { CoverEditState } from 'app/containers/CoverEditPage/slice';
 */
 export interface RootState {
   main?: MainState;
+  searchResult?: SearchResultState;
   createCover?: CreateCoverState;
   createSong?: CreateSongState;
   song?: SongState;

@@ -1,19 +1,24 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Album from '../../components/Album/index';
 import Player from 'app/helper/Player';
 import * as urls from 'utils/urls';
 import * as apiActions from 'api/actions';
-import { getThumbnail } from 'utils/imageTools';
 import { selectMain } from './slice/selectors';
+import { useMainSlice } from './slice';
+import { useWrapperSlice } from 'app/wrapper/slice';
+import { selectWrapper } from 'app/wrapper/slice/selectors';
 
 export type Props = {};
 
 export default function MainPage(props: Props) {
+  useMainSlice();
+  useWrapperSlice();
   const history = useHistory();
   const dispatch = useDispatch();
   const mainState = useSelector(selectMain);
+  useSelector(selectWrapper);
 
   const player = useMemo(() => Player.getInstance(), []);
 
@@ -27,46 +32,55 @@ export default function MainPage(props: Props) {
   useEffect(() => {
     if (!combinationsResponse.loading) {
       if (combinationsResponse.error) {
-        window.alert('Error: could not get songs');
-      } else if (combinationsResponse.data) {
-        console.log(combinationsResponse.data);
+        window.alert('Error: could not fetch bands.');
+      } else if (combinationsResponse.data && player) {
+        // setting tracks
+        const tracks = combinationsResponse.data.map(combination => {
+          const sources = combination.covers.map(cover => cover.audio);
+          const trackInfo: TrackInfo = {
+            song: combination.song,
+            sources,
+            like: false,
+          };
+          return trackInfo;
+        });
+        player.setTracks(tracks);
       }
     }
-  }, [combinationsResponse]);
+  }, [combinationsResponse, player]);
 
-  const songexample: SongInfo = {
-    title: '',
-    singer: '',
-    category: '',
-    reference: '',
-    description: '',
-  };
-  const trackexample: TrackInfo = {
-    song: songexample,
-    sources: ['hello', 'world'],
-    like: false,
-  };
+  const onClickPlay = useCallback(
+    (index: number) => {
+      if (player.getIndex !== index) player.setIndex(index);
+    },
+    [player],
+  );
+
+  const getIsPlaying = useCallback(
+    (index: number) => {
+      return player.getIndex === index;
+    },
+    [player.getIndex],
+  );
 
   return (
     <div
       data-testid="MainPage"
-      className="items-center overflow-hidden grid grid-cols-12"
+      className="items-center overflow-hidden grid grid-cols-12 pt-8"
     >
-      {combinationsResponse.data &&
-        combinationsResponse.data.map(combination => (
+      {combinationsResponse.data && combinationsResponse.data.length > 0 ? (
+        combinationsResponse.data.map((combination, index) => (
           <Album
             key={combination.id}
-            id={combination.song.id}
-            title={combination.song.title}
-            singer={combination.song.singer}
-            thumbnail={getThumbnail(combination.song.reference)}
+            combination={combination}
             onClickTitle={() => history.push(urls.Song(combination.song.id))}
-            onClickPlay={() => {}}
-            //player.addTrack(trackexample)
-            //player.setIndex(album.id)
-            //} // TODO: play the corresponding song
+            onClickPlay={() => onClickPlay(index)}
+            isPlaying={getIsPlaying(index)}
           />
-        ))}
+        ))
+      ) : (
+        <div className="w-full col-span-12 text-center">Loading...</div>
+      )}
 
       <div className="flex">
         <p></p>

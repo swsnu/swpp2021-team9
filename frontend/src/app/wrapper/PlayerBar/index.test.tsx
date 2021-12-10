@@ -20,7 +20,9 @@ beforeEach(() => {
 });
 
 test('should render', () => {
-  const { container } = render(<PlayerBar />);
+  const { container } = render(
+    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   const playButton = container.querySelector('#play-button');
@@ -35,7 +37,9 @@ test('should render', () => {
 });
 
 test('should handle control buttons', () => {
-  const { container } = render(<PlayerBar />);
+  const { container } = render(
+    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   const playButton = container.querySelector('#play-button');
@@ -63,7 +67,9 @@ test('should handle control buttons', () => {
 });
 
 test('should handle like button', () => {
-  const { container, queryByTestId } = render(<PlayerBar />);
+  const { container, queryByTestId } = render(
+    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   let likeButton = container.querySelector('#like-button');
@@ -105,7 +111,9 @@ test('should interval', () => {
   jest.spyOn(Hooks, 'useInterval').mockImplementation((callback, delay) => {
     updateProgress = callback;
   });
-  const { queryByTestId } = render(<PlayerBar />);
+  const { queryByTestId } = render(
+    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  );
   Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
     configurable: true,
     value: 200,
@@ -167,7 +175,9 @@ test('should interval', () => {
 });
 
 test('should play button with status', () => {
-  const { queryByTestId } = render(<PlayerBar />);
+  const { queryByTestId } = render(
+    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   // loading

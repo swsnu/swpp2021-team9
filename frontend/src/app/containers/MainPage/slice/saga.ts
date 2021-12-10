@@ -5,8 +5,12 @@ import * as actions from 'api/actions';
 import { api } from 'api/band';
 import { mainActions } from '.';
 
+// Root saga
 export default function* mainPageSaga() {
-  yield takeEvery(AT.LOAD_SONGS_MAIN.REQUEST, getCombinationsMainRequest);
+  yield takeEvery(
+    AT.LOAD_COMBINATIONS_MAIN.REQUEST,
+    getCombinationsMainRequest,
+  );
 }
 
 export function* getCombinationsMainRequest(
@@ -14,7 +18,7 @@ export function* getCombinationsMainRequest(
 ) {
   yield put(mainActions.loadingCombinationsResponse('start load'));
   try {
-    const response = yield api.getCombinationMain();
+    const response = yield api.getCombinationsMain();
     yield put(mainActions.successCombinationsResponse(response));
   } catch (e: any) {
     yield put(mainActions.errorCombinationsResponse(e));

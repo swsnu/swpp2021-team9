@@ -140,7 +140,7 @@ it('Edit possible', async () => {
 it('no user', () => {
   const { page } = setup({
     ...stubState,
-    wrapper: { name: 'wrapper' },
+    wrapper: {},
   });
   render(page);
 

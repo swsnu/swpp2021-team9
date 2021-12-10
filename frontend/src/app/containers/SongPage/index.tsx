@@ -13,7 +13,7 @@ import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
 
 import Player from 'app/helper/Player';
-import SongInfo from './SongInfo';
+import SongInfoArea from './SongInfoArea';
 import TopCombination from './TopCombination';
 import CombinationArea from './CombinationArea';
 import TopCover from './TopCover';
@@ -59,7 +59,7 @@ export default function SongPage(props: Props) {
   const player = useMemo(() => Player.getInstance(), []);
 
   const onClickPlay = useCallback(() => {
-    const currentSongInfo: SongInfo = songResponse.data!;
+    const currentSongInfo = songResponse.data!;
 
     let sources: string[] = combination
       .filter(item => item.cover)
@@ -98,7 +98,7 @@ export default function SongPage(props: Props) {
     <div data-testid="SongPage" className="flex justify-center">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         {songResponse.data && (
-          <SongInfo
+          <SongInfoArea
             song={songResponse.data}
             image={getThumbnail(songResponse.data.reference)}
           />

@@ -19,6 +19,6 @@ export const LOAD_COMBINATIONS_MAIN = asyncActionCreator(
 );
 
 // song actionTypes
-export const LOAD_SONGS_MAIN = asyncActionCreator('LOAD_SONGS_MAIN');
 export const CREATE_SONG = asyncActionCreator('CREATE_SONG');
 export const LOAD_SONG = asyncActionCreator('LOAD_SONG');
+export const LOAD_SONGS_SEARCH = asyncActionCreator('LOAD_SONGS_SEARCH');

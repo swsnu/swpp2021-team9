@@ -100,7 +100,7 @@ export const api = {
   },
 
   // `/api/combination/main/`
-  getCombinationMain: async () => {
+  getCombinationsMain: async () => {
     const response = await apiClient.get<Combination[]>(
       `/api/combination/main/`,
     );
@@ -118,7 +118,7 @@ export const api = {
 
   // `/api/song/search/?search=key:str/`
   getSongBySearch: async (key: string) => {
-    const response = await apiClient.get<Song[]>(`/api/search/`, {
+    const response = await apiClient.get<Song[]>(`/api/song/search/`, {
       params: { search: key },
     });
     return response.data;

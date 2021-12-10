@@ -30,8 +30,8 @@ export function App() {
   return (
     <BrowserRouter>
       <div className="app">
-        <Helmet titleTemplate="%s - Bandcruit" defaultTitle="Bandcruit">
-          <meta name="description" content="Bandcruit" />
+        <Helmet titleTemplate="%s - MetaBand" defaultTitle="MetaBand">
+          <meta name="description" content="MetaBand" />
         </Helmet>
 
         <Wrapper>

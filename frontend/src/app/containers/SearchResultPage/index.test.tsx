@@ -25,10 +25,7 @@ function setup() {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route
-            path={path}
-            render={() => <SearchResultPage hasResult={false} />}
-          />
+          <Route path={path} render={() => <SearchResultPage />} />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>
@@ -53,10 +50,7 @@ function setup2() {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route
-            path={path}
-            render={() => <SearchResultPage hasResult={true} />}
-          />
+          <Route path={path} render={() => <SearchResultPage />} />
           <Redirect to={path} />
         </Switch>
       </BrowserRouter>

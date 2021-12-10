@@ -136,7 +136,7 @@ describe('band api', () => {
   });
 
   test(`/api/combination/main/`, async () => {
-    expect(await api.getCombinationMain()).toEqual(MOCK_GET_DATA);
+    expect(await api.getCombinationsMain()).toEqual(MOCK_GET_DATA);
     expect(apiClient.get).lastCalledWith(`/api/combination/main/`);
   });
 
