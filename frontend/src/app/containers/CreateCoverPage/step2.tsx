@@ -45,13 +45,10 @@ export default function CreateCoverInfoPage(props: Props) {
   };
 
   const onKeyPress = e => {
-    if (e.key === 'Enter') {
-      console.log(e);
+    if (e.key === 'Enter' && e.code === 'Enter') {
       e.preventDefault();
       setForm({ ...Form, tags: [...Form.tags, tagInput] });
       setTagInput('');
-      console.log(Form);
-      console.log(instrumentsResponse);
     }
   };
 
@@ -149,13 +146,13 @@ export default function CreateCoverInfoPage(props: Props) {
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="instrumentType" className={styles.label}>
+                <label htmlFor="instrument" className={styles.label}>
                   Instrument Type
                 </label>
                 <select
                   data-testid="select"
-                  name="instType"
-                  id="instType"
+                  name="instrument"
+                  id="instrument"
                   value={Form.instrumentId}
                   onChange={e => onChangeForm(e, 'instrumentId')}
                   className="mt-1 block w-full py-1 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -208,7 +205,7 @@ export default function CreateCoverInfoPage(props: Props) {
           </div>
           <div className="px-4 py-3 bg-gray-50 flex flex-row w-full lg:space-x-96 md:space-x-48 sm:space-x-20 justify-center">
             <button
-              data-testid="cancel-btn"
+              data-testid="prev-btn"
               type="button"
               onClick={e => onPrevClicked(e)}
               className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-red-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
