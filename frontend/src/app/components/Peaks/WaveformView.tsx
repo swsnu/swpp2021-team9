@@ -17,7 +17,7 @@ interface Props {
 interface State {}
 
 class WaveformView extends Component<Props, State> {
-  static PeaksInstance: any;
+  static PeaksInstance: PeaksInstance | null;
   static getPeaks() {
     if (this.PeaksInstance) {
       return this.PeaksInstance;
@@ -160,7 +160,7 @@ class WaveformView extends Component<Props, State> {
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks ?? null;
       // console.log(peaks);
-      WaveformView.PeaksInstance = peaks;
+      WaveformView.PeaksInstance = peaks ?? null;
       this.onPeaksReady();
     });
   }

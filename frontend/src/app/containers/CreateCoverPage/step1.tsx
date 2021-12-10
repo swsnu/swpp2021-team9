@@ -250,20 +250,18 @@ export default function CreateCoverRecord(props: Props) {
 
   const renderSegmentRows = (segments: Segment[]) => {
     return segments.map(segment => (
-      <React.Fragment key={segment.id}>
-        <SegmentComponent
-          id={segment.id!}
-          key={segment.id}
-          startTime={segment.startTime}
-          endTime={segment.endTime}
-          labelText={segment.labelText}
-          isMergeClicked={isMergeClicked}
-          setSelectedId={setSelectedSegmentId}
-          setIsPlaySegmentClicked={setIsPlaySegmentClicked}
-          setIsDeleteClicked={setIsDeleteClicked}
-          handleMergeList={handleMergeList}
-        />
-      </React.Fragment>
+      <SegmentComponent
+        id={segment.id!}
+        key={segment.id}
+        startTime={segment.startTime}
+        endTime={segment.endTime}
+        labelText={segment.labelText}
+        isMergeClicked={isMergeClicked}
+        setSelectedId={setSelectedSegmentId}
+        setIsPlaySegmentClicked={setIsPlaySegmentClicked}
+        setIsDeleteClicked={setIsDeleteClicked}
+        handleMergeList={handleMergeList}
+      />
     ));
   };
 
