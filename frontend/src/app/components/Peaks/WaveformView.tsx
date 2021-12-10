@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Peaks, { PeaksOptions } from 'peaks.js';
+import Peaks, { PeaksOptions, PeaksInstance, Segment } from 'peaks.js';
 import { createSegmentMarker } from './MarkerFactories';
 import { createSegmentLabel } from './SegmentLabelFactory';
-import { PeaksInstance } from 'peaks.js';
 
 import './WaveformView.css';
 
@@ -10,6 +9,7 @@ interface Props {
   audioUrl: string;
   waveformDataUrl?: string;
   audioContentType: string;
+  segments: Segment[];
   setSegments: (props: any) => void;
   selectedSegmentId: string | undefined;
 }
@@ -49,7 +49,7 @@ class WaveformView extends Component<Props, State> {
           ref={this.overviewWaveformRef}
         ></div>
 
-        <div>
+        <div className="flex flex-col items-center">
           <audio className="py-2" ref={this.audioElementRef} controls>
             <source
               src={this.props.audioUrl}
@@ -190,7 +190,7 @@ class WaveformView extends Component<Props, State> {
   addSegment = () => {
     if (this.peaks) {
       const time = this.peaks.player.getCurrentTime();
-      const id = this.peaks.segments.getSegments().length;
+      const id = this.props.segments.length;
       this.peaks.segments.add({
         startTime: time,
         endTime: time + 5,
@@ -212,10 +212,11 @@ class WaveformView extends Component<Props, State> {
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
     console.log('Peaks.js is ready');
-    this.peaks!.on('segments.dragend', segment => {
-      const segments = this.peaks!.segments.getSegments();
-      this.props.setSegments(prev => [...segments]);
-    });
+    this.peaks &&
+      this.peaks.on('segments.dragend', segment => {
+        const segments = this.peaks!.segments.getSegments();
+        this.props.setSegments(prev => [...segments]);
+      });
   };
 }
 

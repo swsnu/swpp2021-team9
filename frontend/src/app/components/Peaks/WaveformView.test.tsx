@@ -49,6 +49,7 @@ const getWaveformView = (
       audioUrl={url}
       audioContentType={'audio/mpeg'}
       setSegments={setSeg}
+      segments={[]}
     />
   );
 };

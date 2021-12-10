@@ -81,9 +81,9 @@ export default function CreateCoverRecord(props: Props) {
       selectedSegmentId &&
       selectedSegmentId.length > 0
     ) {
-      const Segs: Segment[] = segments.filter((seg: Segment) => {
-        if (seg.id === selectedSegmentId) return seg;
-      });
+      const Segs: Segment[] = segments.filter(
+        (seg: Segment) => seg.id === selectedSegmentId,
+      );
       const seg: Segment = Segs[0];
       const peaks = WaveformView.getPeaks();
       if (!peaks) {
@@ -303,6 +303,7 @@ export default function CreateCoverRecord(props: Props) {
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
+              segments={segments}
             />
           ) : null
         ) : null}
@@ -327,6 +328,7 @@ export default function CreateCoverRecord(props: Props) {
               audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
+              segments={segments}
             />
           ) : null
         ) : null}
