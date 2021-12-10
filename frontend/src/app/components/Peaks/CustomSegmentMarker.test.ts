@@ -1,7 +1,5 @@
 import { CustomSegmentMarker } from '.';
 
-jest.mock('Konva');
-
 let stubStartOptions = {
   segment: { color: '#213123', labelText: 'label' },
   startMarker: true,
