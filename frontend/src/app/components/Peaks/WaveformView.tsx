@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Peaks, { PeaksOptions } from 'peaks.js';
 import { createSegmentMarker } from './MarkerFactories';
 import { createSegmentLabel } from './SegmentLabelFactory';
+import { PeaksInstance } from 'peaks.js';
 
 import './WaveformView.css';
 
@@ -23,10 +24,10 @@ class WaveformView extends Component<Props, State> {
     }
     return null;
   }
-  zoomviewWaveformRef: any;
-  overviewWaveformRef: any;
-  audioElementRef: any;
-  peaks: any;
+  zoomviewWaveformRef: React.RefObject<any>;
+  overviewWaveformRef: React.RefObject<any>;
+  audioElementRef: React.RefObject<any>;
+  peaks: PeaksInstance | null;
   constructor(props: Props) {
     super(props);
 
@@ -120,7 +121,7 @@ class WaveformView extends Component<Props, State> {
       },
       zoomLevels: [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
     };
-    this.peaks.setSource(options, (err, peaks) => {
+    this.peaks.setSource(options, err => {
       this.onPeaksReady();
     });
     WaveformView.PeaksInstance = this.peaks;
@@ -157,7 +158,7 @@ class WaveformView extends Component<Props, State> {
     }
 
     Peaks.init(options, (err, peaks) => {
-      this.peaks = peaks;
+      this.peaks = peaks ?? null;
       // console.log(peaks);
       WaveformView.PeaksInstance = peaks;
       this.onPeaksReady();
@@ -189,7 +190,7 @@ class WaveformView extends Component<Props, State> {
   addSegment = () => {
     if (this.peaks) {
       const time = this.peaks.player.getCurrentTime();
-      const id = this.peaks.segments._segmentIdCounter;
+      const id = this.peaks.segments.getSegments().length;
       this.peaks.segments.add({
         startTime: time,
         endTime: time + 5,
@@ -203,7 +204,7 @@ class WaveformView extends Component<Props, State> {
   logMarkers = () => {
     if (this.peaks) {
       this.props.setSegments(prevState => [
-        ...this.peaks.segments.getSegments(),
+        ...this.peaks!.segments.getSegments(),
       ]);
     }
   };
@@ -211,8 +212,8 @@ class WaveformView extends Component<Props, State> {
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
     console.log('Peaks.js is ready');
-    this.peaks.on('segments.dragend', segment => {
-      const segments = this.peaks.segments.getSegments();
+    this.peaks!.on('segments.dragend', segment => {
+      const segments = this.peaks!.segments.getSegments();
       this.props.setSegments(prev => [...segments]);
     });
   };

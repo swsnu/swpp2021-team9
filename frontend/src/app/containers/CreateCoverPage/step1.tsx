@@ -57,15 +57,16 @@ export default function CreateCoverRecord(props: Props) {
   const { actions: createCoverActions } = useCreateCoverSlice();
   const makeCombiState = useSelector(selectMakeCombinationSlice);
   const createCoverState = useSelector(selectCreateCover);
+  const makeCombiStateSong = makeCombiState.song;
 
   useEffect(() => {
-    if (makeCombiState && makeCombiState.song) {
-      setRefUrl(makeCombiState.song.reference);
+    if (makeCombiStateSong) {
+      setRefUrl(makeCombiStateSong.reference);
     }
     if (createCoverState.audioURL) {
       setUploadedUrl(createCoverState.audioURL);
     }
-  }, [createCoverState.audioURL, makeCombiState.song]);
+  }, [createCoverState.audioURL, makeCombiStateSong]);
 
   useEffect(() => {
     return () => {
