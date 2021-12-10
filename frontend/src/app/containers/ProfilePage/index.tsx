@@ -1,17 +1,34 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-export type Props = {};
+import { useDispatch, useSelector } from 'react-redux';
+import { useProfileSlice } from './slice';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
+import * as apiActions from 'api/actions';
+import { selectProfile } from './slice/selectors';
+import { selectWrapper } from 'app/wrapper/slice/selectors';
+import * as urls from 'utils/urls';
+import { useProfile } from './hook';
+import { format } from 'path';
 
-const CONTAINER_HEIGHT = 300;
-const user_info = {
-  Bio: 'Welcome to Metaband! Please write your Bio',
-  Name: 'Jane Doe',
-  Followers: '',
-};
+interface MatchParams {
+  id: string;
+}
+
+export interface Props extends RouteComponentProps<MatchParams> {}
 const instrument_name_list = ['Bass', 'Guitar', 'Vocals', 'Drum', 'Keyboard'];
 
 export default function ProfilePage(props: Props) {
+  const {
+    onChangeDescription,
+    onChangeName,
+    onChangeInstruments,
+    onChangePicture,
+    form,
+    userForm,
+  } = useProfile(props);
+
+  /* Start of crop related functions, variables*/
   const [upImg, setUpImg] = useState(null as any);
   const imgRef = useRef(null as any);
   const previewCanvasRef = useRef(null as any);
@@ -20,8 +37,9 @@ export default function ProfilePage(props: Props) {
     width: 30,
     aspect: 1 / 1,
   } as any);
+
   const [completedCrop, setCompletedCrop] = useState(null as any);
-  const [Bio, setBio] = useState(user_info.Bio);
+  const [Bio, setBio] = useState(form.description);
   const [Name, setName] = useState(null as any);
 
   /* Save checked Instruments */
@@ -76,11 +94,13 @@ export default function ProfilePage(props: Props) {
       crop.height * scaleY,
     );
   }, [completedCrop]);
+  /* End of crop related functions, variables*/
 
   function onEditBio(event) {
     let modified_bio = prompt('Edit your Bio', Bio);
     if (modified_bio != null) {
       setBio(modified_bio);
+      onChangeDescription(modified_bio);
     }
   }
 
@@ -88,20 +108,27 @@ export default function ProfilePage(props: Props) {
     let modified_name = prompt('Edit your Name', Name);
     if (modified_name != null) {
       setName(modified_name);
+      onChangeName(modified_name);
     }
   }
 
-  let Instruments: string[] = [];
+  let Instruments: number[] = [];
   function onChooseInstruments(event) {
-    if (checkedBass) Instruments.push('Bass');
-    if (checkedGuitar) Instruments.push('Guitar');
-    if (checkedVocals) Instruments.push('Vocals');
-    if (checkedDrum) Instruments.push('Drum');
-    if (checkedKeyboard) Instruments.push('Keyboard');
+    if (checkedBass) Instruments.push(0);
+    if (checkedGuitar) Instruments.push(1);
+    if (checkedVocals) Instruments.push(2);
+    if (checkedDrum) Instruments.push(3);
+    if (checkedKeyboard) Instruments.push(4);
 
     alert('Your instruments have been saved !');
+    onChangeInstruments(Instruments);
   }
 
+  function onEditPicture(event) {
+    /* TODO : how to send photo as blob */
+    const photo = new Blob([]);
+    onChangePicture(photo);
+  }
   const handleChangeBass = () => {
     setCheckedBass(!checkedBass);
   };
@@ -175,6 +202,7 @@ export default function ProfilePage(props: Props) {
                     Select your profile picture
                   </span>
                   <input
+                    data-testid="uploadFile"
                     type="file"
                     className="hidden"
                     accept="image/*"
@@ -190,17 +218,28 @@ export default function ProfilePage(props: Props) {
                   onChange={c => setCrop(c)}
                   onComplete={c => setCompletedCrop(c)}
                 />
-                <div>
-                  <canvas
-                    ref={previewCanvasRef}
-                    style={{
-                      width: Math.round(completedCrop?.width ?? 0),
-                      height: Math.round(completedCrop?.height ?? 0),
-                    }}
-                  />
-                </div>
-                <br></br>
 
+                <canvas
+                  ref={previewCanvasRef}
+                  style={{
+                    width: Math.round(completedCrop?.width ?? 0),
+                    height: Math.round(completedCrop?.height ?? 0),
+                  }}
+                />
+
+                <div className="bg-white p-3 hover:shadow">
+                  <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
+                    <button
+                      id="signin_button"
+                      className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
+                      onClick={onEditPicture}
+                    >
+                      Edit Profile Picture
+                    </button>
+                  </div>
+                </div>
+
+                <br></br>
                 <div className="bg-white p-3 hover:shadow">
                   <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
                     <span className="text-blue-800">
@@ -223,7 +262,7 @@ export default function ProfilePage(props: Props) {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
-                  {Bio}
+                  {form.description}
                 </p>
                 <br></br>
                 <button
@@ -260,11 +299,8 @@ export default function ProfilePage(props: Props) {
               </div>
               <div className="grid grid-cols-3">
                 <div className="text-center my-2">
-                  <img
-                    className="h-16 w-16 rounded-full mx-auto"
-                    src="https://cdn.australianageingagenda.com.au/wp-content/uploads/2015/06/28085920/Phil-Beckett-2-e1435107243361.jpg"
-                    alt=""
-                  />
+                  {/*TODO : How to call following persons' photo from userForm.followings[0] 
+                    And we don't have follow function */}
                   <a href="#" className="text-main-color">
                     Kojstantin
                   </a>
@@ -318,7 +354,7 @@ export default function ProfilePage(props: Props) {
                 <div className="grid md:grid-cols-2 text-sm">
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Name</div>
-                    <div className="px-4 py-2">{Name}</div>
+                    <div className="px-4 py-2">{form.username}</div>
                     <button
                       id="signin_button"
                       className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
@@ -327,10 +363,6 @@ export default function ProfilePage(props: Props) {
                       Edit Name
                     </button>
                   </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Followers</div>
-                    <div className="px-4 py-2">117</div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -338,46 +370,7 @@ export default function ProfilePage(props: Props) {
             <div className="my-4"></div>
 
             <div className="bg-white p-3 shadow-sm rounded-sm">
-              <div className="grid grid-cols-2">
-                <div>
-                  <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                    <span className="text-blue-800">
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </span>
-                    <span className="tracking-wide">Cover List</span>
-                  </div>
-                  <ul className="list-inside space-y-2">
-                    <li>
-                      <div className="text-teal-600">Cover #1</div>
-                      <div className="text-gray-500 text-xs">March 2020</div>
-                    </li>
-                    <li>
-                      <div className="text-teal-600">Cover #2</div>
-                      <div className="text-gray-500 text-xs">March 2020</div>
-                    </li>
-                    <li>
-                      <div className="text-teal-600">Cover #3</div>
-                      <div className="text-gray-500 text-xs">March 2020</div>
-                    </li>
-                    <li>
-                      <div className="text-teal-600">Cover #4</div>
-                      <div className="text-gray-500 text-xs">March 2020</div>
-                    </li>
-                  </ul>
-                </div>
+              <div className="grid grid-cols">
                 <div>
                   <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                     <span className="text-blue-800">

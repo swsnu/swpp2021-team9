@@ -17,6 +17,13 @@ export const api = {
     return response.data;
   },
 
+  postUserInfo: async (userPostForm: UserPostForm) => {
+    return await apiClient.post<User>(
+      `/api/user/info/${userPostForm.id}/`,
+      userPostForm,
+    );
+  },
+
   // `/api/instrument/`
   getInstruments: async () => {
     const response = await apiClient.get<Instrument[]>(`/api/instrument/`);

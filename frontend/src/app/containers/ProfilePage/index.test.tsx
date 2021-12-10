@@ -9,6 +9,7 @@ import ProfilePage from '.';
 
 const store = configureAppStore();
 
+/*
 function setup() {
   const path = '/profile';
   const page = (
@@ -38,7 +39,77 @@ test('When click checkbox_bass and click choose instrument button', () => {
 
   const checkbass = screen.getByTestId('checkbass');
   fireEvent.click(checkbass);
+ 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
   fireEvent.click(chooseInstrument);
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
+
+test('When click checkbox_guitar and click choose instrument button', () => {
+  const { page } = setup();
+  render(page);
+
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+
+  const checkguitar = screen.getByTestId('checkguitar');
+  fireEvent.click(checkguitar);
+ 
+  const chooseInstrument = screen.getByTestId('chooseInstrument');
+  fireEvent.click(chooseInstrument);
+  expect(alertMock).toHaveBeenCalledTimes(1);
+});
+
+test('When click checkbox_vocals and click choose instrument button', () => {
+  const { page } = setup();
+  render(page);
+
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+
+  const checkvocals = screen.getByTestId('checkvocals');
+  fireEvent.click(checkvocals);
+ 
+  const chooseInstrument = screen.getByTestId('chooseInstrument');
+  fireEvent.click(chooseInstrument);
+  expect(alertMock).toHaveBeenCalledTimes(1);
+});
+
+test('When click checkbox_drum and click choose instrument button', () => {
+  const { page } = setup();
+  render(page);
+
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+
+  const checkdrum = screen.getByTestId('checkdrum');
+  fireEvent.click(checkdrum);
+ 
+  const chooseInstrument = screen.getByTestId('chooseInstrument');
+  fireEvent.click(chooseInstrument);
+  expect(alertMock).toHaveBeenCalledTimes(1);
+});
+
+test('When click checkbox_keyboard and click choose instrument button', () => {
+  const { page } = setup();
+  render(page);
+
+  const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+
+  const checkkeyboard = screen.getByTestId('checkkeyboard');
+  fireEvent.click(checkkeyboard);
+ 
+  const chooseInstrument = screen.getByTestId('chooseInstrument');
+  fireEvent.click(chooseInstrument);
+  expect(alertMock).toHaveBeenCalledTimes(1);
+});
+
+test('Uploading file works properly', ()=>{
+  const {page} = setup();
+  render(page);
+  
+  let file;
+  file = new File(['(⌐□_□)'], 'swpp2021.png', { type: 'image/png' });
+
+  const uploadFile = screen.getByTestId('uploadFile');
+  fireEvent.change(uploadFile);
+})
+
+*/

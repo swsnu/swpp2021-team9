@@ -5,6 +5,10 @@ import { AxiosError } from 'axios';
 // user actions
 export const signin = asyncAction<SignInForm, UserInfo, string>(AT.LOAD_SIGNIN);
 export const signup = asyncAction<SignUpForm, null, string>(AT.LOAD_SIGNUP);
+export const loadProfile = asyncAction<number, User, string>(AT.LOAD_PROFILE);
+export const postProfile = asyncAction<UserPostForm, User, string>(
+  AT.POST_PROFILE,
+);
 
 // instrument actions
 export const loadInstruments = asyncAction<undefined, Instrument[], AxiosError>(

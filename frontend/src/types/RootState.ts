@@ -7,6 +7,7 @@ import { WrapperState } from 'app/wrapper/slice';
 import { CoverState } from 'app/containers/CoverPage/slice';
 import { SignUpState } from 'app/containers/SignUpPage/slice';
 import { CoverEditState } from 'app/containers/CoverEditPage/slice';
+import { ProfileState } from 'app/containers/ProfilePage/slice';
 // import { ProfileState } from 'app/containers/ProfilePage/slice';
 // import { CreateCover } from '../utils/urls';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
@@ -25,5 +26,6 @@ export interface RootState {
   signin?: SignInState;
   signup?: SignUpState;
   coverEdit?: CoverEditState;
+  profile?: ProfileState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

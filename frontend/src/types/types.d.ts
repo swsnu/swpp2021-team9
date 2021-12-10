@@ -83,7 +83,7 @@ interface User {
   instruments: number[];
 }
 
-interface UserPut {
+interface UserPostForm {
   id: number;
   username?: string;
   description?: string;
