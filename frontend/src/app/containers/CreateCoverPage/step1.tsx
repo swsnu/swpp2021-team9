@@ -41,9 +41,7 @@ export default function CreateCoverRecord(props: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [selectedSegmentId, setSelectedSegmentId] = useState<
-    string | undefined
-  >('');
+  const [selectedSegmentId, setSelectedSegmentId] = useState<string>('');
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
@@ -72,28 +70,25 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  const onClickDelete = useCallback(
-    (id: string) => {
-      setSelectedSegmentId(id);
-      if (selectedSegmentId && selectedSegmentId.length > 0) {
-        const peaks = WaveformView.getPeaks();
-        if (!peaks) {
-          return window.alert('peaks가 없습니다.');
-        }
-        peaks.segments.removeById(selectedSegmentId);
-        const segs = peaks.segments.getSegments();
-        setSegments(segs);
+  const onClickDelete = useCallback((id: string) => {
+    setSelectedSegmentId(id);
+    if (id.length > 0) {
+      const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
       }
-    },
-    [selectedSegmentId],
-  );
+      peaks.segments.removeById(id);
+      const segs = peaks.segments.getSegments();
+      setSegments(segs);
+    }
+  }, []);
 
   const onClickPlaySegment = useCallback(
     (id: string) => {
       setSelectedSegmentId(id);
-      if (selectedSegmentId && selectedSegmentId.length > 0) {
+      if (id.length > 0) {
         const Segs: Segment[] = segments.filter(
-          (seg: Segment) => seg.id === selectedSegmentId,
+          (seg: Segment) => seg.id === id,
         );
         const seg: Segment = Segs[0];
         const peaks = WaveformView.getPeaks();
@@ -104,7 +99,7 @@ export default function CreateCoverRecord(props: Props) {
         peaks.player.playSegment(seg);
       }
     },
-    [segments, selectedSegmentId],
+    [segments],
   );
 
   const getBlobFromRecorder = useCallback(
@@ -191,17 +186,13 @@ export default function CreateCoverRecord(props: Props) {
   const mergeSegments = async () => {
     setIsMergeClicked(true);
     setUseMergedAudio(false);
-    let sortedTargetSegments;
     if (mergeList.length === 0) {
       return;
     }
     const targetSegments = mergeList.map(id => {
       return segments.filter(seg => seg.id === id)[0];
     });
-    sortedTargetSegments = targetSegments.sort(
-      (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
-    );
-    const mp3Blob: any = await editor.mergeAudio(sortedTargetSegments);
+    const mp3Blob: any = await editor.mergeAudio(targetSegments);
 
     setMergeList([]);
     setMergedUrl(URL.createObjectURL(mp3Blob));

@@ -151,12 +151,6 @@ class WaveformView extends Component<Props, State> {
 
     this.audioElementRef.current.src = this.props.audioUrl;
 
-    if (this.peaks) {
-      this.peaks.destroy();
-      this.peaks = null;
-      WaveformView.PeaksInstance = null;
-    }
-
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks ?? null;
       // console.log(peaks);
