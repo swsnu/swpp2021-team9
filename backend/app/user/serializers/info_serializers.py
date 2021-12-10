@@ -2,7 +2,7 @@
 DRF serializers for user
 """
 from rest_framework import serializers
-from .models import CustomUser
+from ..models import CustomUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,9 +13,5 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "username",
-            "email",
-            "description",
             "photo",
-            "followings",
-            "instruments",
         ]
