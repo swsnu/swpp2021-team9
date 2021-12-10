@@ -109,3 +109,16 @@ type ResultLine = {
   view: number;
   likes: number;
 };
+
+type SegmentDetail = {
+  segmentDuration: number;
+  startTime: number;
+  endTime: number;
+  segmentLength: number;
+};
+
+type AudioData = {
+  channels: Float32Array[];
+  sampleRate: number;
+  length: number;
+};

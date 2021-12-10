@@ -11,6 +11,7 @@ export const LOAD_COVERS_SONG_INST = asyncActionCreator(
 export const LOAD_COVER = asyncActionCreator('LOAD_COVER');
 export const EDIT_COVER = asyncActionCreator('EDIT_COVER');
 export const DELETE_COVER = asyncActionCreator('DELETE_COVER');
+export const CREATE_COVER = asyncActionCreator('CREATE_COVER');
 
 // combination actionTypes
 export const LOAD_COMBINATIONS = asyncActionCreator('LOAD_COMBINATIONS');

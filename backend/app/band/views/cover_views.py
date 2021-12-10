@@ -48,29 +48,27 @@ class CoverSong(mixins.ListModelMixin, generics.GenericAPIView):
         data = request.data.copy()
         data["user_id"] = request.user.id
         data["song_id"] = song_id
-
-        # check instrument
         try:
             instrument_id = data.pop("instrument")
             data["instrument_id"] = int(instrument_id[0])
         except (KeyError, ValueError):
             return Response(
-                "'instrument' should be a number.",
-                status=status.HTTP_400_BAD_REQUEST,
+                "'instrument' should be a number.", status=status.HTTP_400_BAD_REQUEST,
             )
 
         # check tags
         if data.get("tags") is not None:
             tags = data.pop("tags")
+            print(tags)
             try:
                 tags_list = json.loads(tags[0])
+                print(tags_list)
             except JSONDecodeError:
                 return Response(
-                    "'tags' is not in json format.",
-                    status=status.HTTP_400_BAD_REQUEST,
+                    "'tags' is not in json format.", status=status.HTTP_400_BAD_REQUEST,
                 )
             data["tags_list"] = tags_list
-
+        print(data)
         serializer: CoverSerializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
