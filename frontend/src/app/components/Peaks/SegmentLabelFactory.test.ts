@@ -1,7 +1,5 @@
 import { createSegmentLabel } from '.';
 
-jest.mock('Konva');
-
 const stubOptions = {
   segment: { labelText: 'TEST_TEXT' },
 };
