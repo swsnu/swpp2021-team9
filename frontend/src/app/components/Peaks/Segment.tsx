@@ -10,9 +10,8 @@ interface Props {
   labelText?: string;
   id: string;
   isMergeClicked: boolean;
-  setSelectedId: (props: string | undefined) => any;
-  setIsPlaySegmentClicked: (props: any) => any;
-  setIsDeleteClicked: (props: any) => any;
+  onClickPlaySegment: (id: string) => void;
+  onClickDelete: (id: string) => void;
   handleMergeList: (id: string, isMerge: boolean) => any;
 }
 
@@ -22,9 +21,8 @@ export default function SegmentComponent({
   endTime,
   labelText,
   isMergeClicked,
-  setSelectedId,
-  setIsPlaySegmentClicked,
-  setIsDeleteClicked,
+  onClickPlaySegment,
+  onClickDelete,
   handleMergeList,
 }: Props) {
   const [isMerge, setIsMerge] = useState(false);
@@ -61,25 +59,13 @@ export default function SegmentComponent({
         {labelText}
       </td>
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        <button
-          data-testid="PlayButton"
-          onClick={() => {
-            setSelectedId(id);
-            setIsPlaySegmentClicked(true);
-          }}
-        >
+        <button data-testid="PlayButton" onClick={() => onClickPlaySegment(id)}>
           <FontAwesomeIcon icon={faPlay} />
         </button>
       </td>
 
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        <button
-          data-testid="DeleteButton"
-          onClick={() => {
-            setSelectedId(id);
-            setIsDeleteClicked(true);
-          }}
-        >
+        <button data-testid="DeleteButton" onClick={() => onClickDelete(id)}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

@@ -36,9 +36,6 @@ export default function CreateCoverRecord(props: Props) {
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
   const [mergeList, setMergeList] = useState<string[]>([]);
   const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
-  const [isDeleteClicked, setIsDeleteClicked] = useState<boolean>(false);
-  const [isPlaySegmentClicked, setIsPlaySegmentClicked] =
-    useState<boolean>(false);
   const [uploadedUrl, setUploadedUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -75,38 +72,40 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  useMemo(() => {
-    if (
-      isPlaySegmentClicked &&
-      selectedSegmentId &&
-      selectedSegmentId.length > 0
-    ) {
-      const Segs: Segment[] = segments.filter(
-        (seg: Segment) => seg.id === selectedSegmentId,
-      );
-      const seg: Segment = Segs[0];
-      const peaks = WaveformView.getPeaks();
-      if (!peaks) {
-        return window.alert('peaks가 없습니다.');
+  const onClickDelete = useCallback(
+    (id: string) => {
+      setSelectedSegmentId(id);
+      if (selectedSegmentId && selectedSegmentId.length > 0) {
+        const peaks = WaveformView.getPeaks();
+        if (!peaks) {
+          return window.alert('peaks가 없습니다.');
+        }
+        peaks.segments.removeById(selectedSegmentId);
+        const segs = peaks.segments.getSegments();
+        setSegments(segs);
       }
-      console.log(seg);
-      peaks.player.playSegment(seg);
-      setIsPlaySegmentClicked(false);
-    }
-  }, [isPlaySegmentClicked, segments, selectedSegmentId]);
+    },
+    [selectedSegmentId],
+  );
 
-  useMemo(() => {
-    if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
-      const peaks = WaveformView.getPeaks();
-      if (!peaks) {
-        return window.alert('peaks가 없습니다.');
+  const onClickPlaySegment = useCallback(
+    (id: string) => {
+      setSelectedSegmentId(id);
+      if (selectedSegmentId && selectedSegmentId.length > 0) {
+        const Segs: Segment[] = segments.filter(
+          (seg: Segment) => seg.id === selectedSegmentId,
+        );
+        const seg: Segment = Segs[0];
+        const peaks = WaveformView.getPeaks();
+        if (!peaks) {
+          return window.alert('peaks가 없습니다.');
+        }
+        console.log(seg);
+        peaks.player.playSegment(seg);
       }
-      peaks.segments.removeById(selectedSegmentId);
-      const segs = peaks.segments.getSegments();
-      setSegments(segs);
-      setIsDeleteClicked(false);
-    }
-  }, [isDeleteClicked, selectedSegmentId]);
+    },
+    [segments, selectedSegmentId],
+  );
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
@@ -257,9 +256,8 @@ export default function CreateCoverRecord(props: Props) {
         endTime={segment.endTime}
         labelText={segment.labelText}
         isMergeClicked={isMergeClicked}
-        setSelectedId={setSelectedSegmentId}
-        setIsPlaySegmentClicked={setIsPlaySegmentClicked}
-        setIsDeleteClicked={setIsDeleteClicked}
+        onClickPlaySegment={onClickPlaySegment}
+        onClickDelete={onClickDelete}
         handleMergeList={handleMergeList}
       />
     ));

@@ -3,16 +3,12 @@ import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import Segment from './Segment';
 describe('<Segment />', () => {
-  let mockSetSelectedId,
-    mockSetIsPlayClicked,
-    mockSetIsDeleteClicked,
-    mockHandleMergeList;
+  let mockOnClickPlay, mockOnClickDelete, mockHandleMergeList;
   let mockIsMergedClicked = false;
   beforeEach(() => {
     jest.clearAllMocks();
-    mockSetSelectedId = jest.fn();
-    mockSetIsPlayClicked = jest.fn();
-    mockSetIsDeleteClicked = jest.fn();
+    mockOnClickPlay = jest.fn();
+    mockOnClickDelete = jest.fn();
     mockHandleMergeList = jest.fn();
   });
   it('should render', () => {
@@ -23,9 +19,8 @@ describe('<Segment />', () => {
         endTime={2}
         labelText={'test'}
         isMergeClicked={mockIsMergedClicked}
-        setSelectedId={mockSetSelectedId}
-        setIsPlaySegmentClicked={mockSetIsPlayClicked}
-        setIsDeleteClicked={mockSetIsDeleteClicked}
+        onClickPlaySegment={mockOnClickPlay}
+        onClickDelete={mockOnClickDelete}
         handleMergeList={mockHandleMergeList}
       />,
     );
@@ -39,9 +34,8 @@ describe('<Segment />', () => {
         endTime={2}
         labelText={'test'}
         isMergeClicked={mockIsMergedClicked}
-        setSelectedId={mockSetSelectedId}
-        setIsPlaySegmentClicked={mockSetIsPlayClicked}
-        setIsDeleteClicked={mockSetIsDeleteClicked}
+        onClickPlaySegment={mockOnClickPlay}
+        onClickDelete={mockOnClickDelete}
         handleMergeList={mockHandleMergeList}
       />,
     );
@@ -56,9 +50,8 @@ describe('<Segment />', () => {
         endTime={2}
         labelText={'test'}
         isMergeClicked={mockIsMergedClicked}
-        setSelectedId={mockSetSelectedId}
-        setIsPlaySegmentClicked={mockSetIsPlayClicked}
-        setIsDeleteClicked={mockSetIsDeleteClicked}
+        onClickPlaySegment={mockOnClickPlay}
+        onClickDelete={mockOnClickDelete}
         handleMergeList={mockHandleMergeList}
       />,
     );
@@ -72,9 +65,8 @@ describe('<Segment />', () => {
         endTime={2}
         labelText={'test'}
         isMergeClicked={mockIsMergedClicked}
-        setSelectedId={mockSetSelectedId}
-        setIsPlaySegmentClicked={mockSetIsPlayClicked}
-        setIsDeleteClicked={mockSetIsDeleteClicked}
+        onClickPlaySegment={mockOnClickPlay}
+        onClickDelete={mockOnClickDelete}
         handleMergeList={mockHandleMergeList}
       />,
     );
@@ -82,8 +74,7 @@ describe('<Segment />', () => {
     const deleteButton = screen.getByTestId('DeleteButton');
     fireEvent.click(playButton);
     fireEvent.click(deleteButton);
-    expect(mockSetSelectedId).toHaveBeenCalledTimes(2);
-    expect(mockSetIsPlayClicked).toHaveBeenCalledTimes(1);
-    expect(mockSetIsDeleteClicked).toHaveBeenCalledTimes(1);
+    expect(mockOnClickPlay).toHaveBeenCalledTimes(1);
+    expect(mockOnClickDelete).toHaveBeenCalledTimes(1);
   });
 });
