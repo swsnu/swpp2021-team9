@@ -11,7 +11,7 @@ let mockContent = {
   }),
   destroy: jest.fn(() => {}),
   setSource: jest.fn((options, cb) => {
-    cb(null, 'Peaks');
+    cb(null, mockContent);
   }),
   player: { getCurrentTime: jest.fn() },
   segments: {

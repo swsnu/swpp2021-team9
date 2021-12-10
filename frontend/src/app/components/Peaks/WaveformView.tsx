@@ -148,8 +148,6 @@ class WaveformView extends Component<Props, State> {
       emitCueEvents: true,
     };
 
-    // console.log(this);
-
     this.audioElementRef.current.src = this.props.audioUrl;
 
     if (this.peaks) {

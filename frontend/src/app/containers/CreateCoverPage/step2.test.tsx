@@ -43,11 +43,6 @@ function setup() {
   return page;
 }
 
-// const spySelectCreateCover = jest.spyOn(
-//   require('app/containers/CreateCoverPage/slice/selectors'),
-//   'selectCreateCover',
-// );
-
 describe('CreateCoverInfoPage', () => {
   let page;
   beforeEach(() => {
@@ -58,11 +53,7 @@ describe('CreateCoverInfoPage', () => {
           resolve({ data: { ...dummyCovers[1] } });
         }),
     );
-    // spySelectCreateCover.mockReturnValue({
-    //   name: 'createCover',
-    //   audioUrl: 'AUDIO',
-    //   instrumentsResponse: { loading: false, data: ['a', 'b', 'c'] },
-    // });
+
     api.getInstruments = jest.fn(
       () =>
         new Promise((res, rej) => {
@@ -91,20 +82,6 @@ describe('CreateCoverInfoPage', () => {
       expect(mockHistoryReplace).toBeCalledTimes(1);
     });
   });
-  // it('should instrument select work properly', () => {
-  //   render(page);
-  //   userEvent.selectOptions(
-  //     // Find the select element, like a real user would.
-  //     // screen.getByTestId('select'),
-  //     screen.getByRole('combobox'),
-  //     // Find and select the Ireland option, like a real user would.
-  //     screen.getByRole('option', { name: 'r' }),
-  //   );
-  //   expect(
-  //     (screen.getByRole('option', { name: 'Rock' }) as HTMLOptionElement)
-  //       .selected,
-  //   ).toBe(true);
-  // });
 
   it('should tag input works properly', () => {
     const { getByTestId } = render(page);

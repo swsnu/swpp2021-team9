@@ -10,6 +10,7 @@ import {
   InjectReducerParams,
   RootStateKeyType,
 } from 'utils/types/injector-typings';
+import { selectMakeCombinationSlice } from './selectors';
 
 jest.mock('utils/redux-injectors', () => {
   const originalModule = jest.requireActual('utils/redux-injectors');
@@ -23,10 +24,15 @@ jest.mock('utils/redux-injectors', () => {
   };
 });
 
+// Selector Test
 test('should return initial state', () => {
   expect(useMakeCombinationSlice().reducer(undefined, { type: '' })).toEqual(
     initialState,
   );
+});
+
+test('return init when state is null', () => {
+  expect(selectMakeCombinationSlice({})).toBe(initialState);
 });
 
 test('editCurrent', () => {

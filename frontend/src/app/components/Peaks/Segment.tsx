@@ -8,12 +8,12 @@ interface Props {
   editable?: boolean;
   color?: WaveformColor;
   labelText?: string;
-  id?: string;
+  id: string;
   isMergeClicked: boolean;
   setSelectedId: (props: string | undefined) => any;
   setIsPlaySegmentClicked: (props: any) => any;
   setIsDeleteClicked: (props: any) => any;
-  handleMergeList: (id: string | undefined, isMerge: boolean) => any;
+  handleMergeList: (id: string, isMerge: boolean) => any;
 }
 
 export default function SegmentComponent({

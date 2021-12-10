@@ -13,13 +13,13 @@ export default function* createCoverPageSaga() {
 export function* createCoverRequest(
   action: ActionType<typeof actions.createCover.request>,
 ) {
-  yield put(createCoverActions.loadingCreateResponse('post Cover'));
+  yield put(createCoverActions.loadingCreateResponse('start load'));
   try {
     console.log('post start');
     const response = yield api.postCover(action.payload);
     yield put(createCoverActions.successCreateResponse(response.data));
   } catch (e: any) {
-    yield put(createCoverActions.errorCreateResponse(e.message));
+    yield put(createCoverActions.errorCreateResponse(e));
   }
 }
 
@@ -31,6 +31,6 @@ export function* getInstrumentsRequest(
     const response = yield api.getInstruments();
     yield put(createCoverActions.successInstrumentsResponse(response));
   } catch (e: any) {
-    yield put(createCoverActions.errorInstrumentsResponse(e.message));
+    yield put(createCoverActions.errorInstrumentsResponse(e));
   }
 }

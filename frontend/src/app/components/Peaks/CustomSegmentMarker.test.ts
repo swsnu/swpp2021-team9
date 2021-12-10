@@ -14,7 +14,7 @@ let stubGroup = {
   x: jest.fn(x => {}),
   y: jest.fn(y => {}),
   on: jest.fn((e, cb) => {
-    evts[e] = cb();
+    evts[e] = cb;
   }),
 };
 
@@ -22,5 +22,6 @@ describe('CustomSegmentMarker', () => {
   it('init', () => {
     const instance = new CustomSegmentMarker(stubStartOptions);
     instance.init(stubGroup);
+    instance.bindEventHandlers();
   });
 });
