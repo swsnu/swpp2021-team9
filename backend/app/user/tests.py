@@ -2,13 +2,22 @@
 Test codes for user app
 """
 import json
+import tempfile
+import shutil
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, Client
 from rest_framework import status
+
+from band.tests.tools import make_instruments
 from .models import CustomUser
 
 
 User = get_user_model()
+
+temp_root = tempfile.mkdtemp()
+settings.MEDIA_ROOT = temp_root
 
 
 class UserManagersTests(TestCase):
@@ -68,6 +77,12 @@ class UserTestCase(TestCase):
         super(UserTestCase, cls).setUpClass()
         User.objects.create_user(email="EMAIL_1", password="PASSWORD_1")
         User.objects.create_user(email="EMAIL_2", password="PASSWORD_2")
+        make_instruments()
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(temp_root, ignore_errors=True)  # delete the temp dir
+        super().tearDownClass()
 
     def test_user_sign(self):
         client = Client(enforce_csrf_checks=False)
@@ -149,24 +164,58 @@ class UserTestCase(TestCase):
 
         # login
         client.force_login(user)
-
-        response = client.put(
+        small_gif = (
+            b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9\x04"
+            b"\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02"
+            b"\x02\x4c\x01\x00\x3b"
+        )
+        response = client.post(
             f"/api/user/info/{user.pk}/",
-            {"description": "DESCRIPTION_TEST"},
-            content_type="application/json",
+            {
+                "photo": SimpleUploadedFile(
+                    "profile.gif", content=small_gif, content_type="image/gif"
+                ),
+                "description": "DESCRIPTION_TEST",
+                "username": "whoami",
+                "instruments": "[1,2,3]",
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        user_edited: CustomUser = User.objects.first()
+        user_edited: CustomUser = User.objects.get(pk=user.pk)
         self.assertEqual(user_edited.description, "DESCRIPTION_TEST")
+        self.assertEqual(user_edited.username, "whoami")
+        self.assertEqual(user_edited.instruments.all().count(), 3)
+        self.assertEqual(user_edited.photo.name, "profile_pic/1_profile.gif")
+
+        # previous file will replaced
+        response = client.post(
+            f"/api/user/info/{user.pk}/",
+            {
+                "photo": SimpleUploadedFile(
+                    "profile.gif", content=small_gif, content_type="image/gif"
+                ),
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        user_edited: CustomUser = User.objects.get(pk=user.pk)
+        self.assertEqual(user_edited.photo.name, "profile_pic/1_profile.gif")
 
         # try changing different user's data
         user_new: CustomUser = User.objects.get(pk=2)
-        response = client.put(
+        response = client.post(
             f"/api/user/info/{user_new.pk}/",
             {"description": "DESCRIPTION_TEST"},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # try wrong json format in instruments
+        response = client.post(
+            f"/api/user/info/{user.pk}/",
+            {"instruments": "[1,2,3]]"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # delete user
         response = client.delete(f"/api/user/info/{user.pk}/")

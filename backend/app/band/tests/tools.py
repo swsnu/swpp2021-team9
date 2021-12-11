@@ -14,7 +14,7 @@ instrument_name_list = ["Bass", "Guitar", "Vocal", "Drum", "Keyboard"]
 
 
 def make_user_data(i: int):
-    return {"email": f"setup_{i}", "password": f"pwdpwd{i}"}
+    return {"email": f"setup_{i}@metaband.sp", "password": f"pwdpwd{i}"}
 
 
 def make_song_data(i: int):
@@ -36,7 +36,9 @@ def make_cover_data(song_id: int, i: int):
     }
 
 
-def make_instruments(name_list) -> List[Instrument]:
+def make_instruments(name_list=None) -> List[Instrument]:
+    if name_list is None:
+        name_list = instrument_name_list
     instruments: List[Instrument] = []
     for name in name_list:
         instrument = Instrument(name=name)

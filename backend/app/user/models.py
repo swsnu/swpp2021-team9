@@ -1,12 +1,16 @@
 """ user models
 Make custom user model for bandcruit
 """
+import os.path
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .managers import UserManager
 
+def user_profile_path(instance, filename):
+    extension = os.path.splitext(filename)[1]
+    return 'profile_pic/{}_profile{}'.format(instance.pk, extension)
 
 class CustomUser(AbstractUser):
     """Custom user model class for bandcruit
@@ -27,7 +31,7 @@ class CustomUser(AbstractUser):
     first_name = None
     last_name = None
     description = models.TextField(db_column="description", default="", blank=True)
-    photo = models.ImageField(upload_to="profile_pic", default=None)
+    photo = models.ImageField(upload_to=user_profile_path, default=None)
     followings = models.ManyToManyField(
         "CustomUser", related_name="followers", db_table="User_Following", blank=True
     )
