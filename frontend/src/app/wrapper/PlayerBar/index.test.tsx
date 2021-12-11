@@ -86,6 +86,15 @@ test('should handle like button', () => {
   });
 });
 
+test('should handle like button when no track', () => {
+  const { container } = render(<PlayerBar setTrack={mockSetTrack} />);
+  expect(screen.getByTestId('PlayerBar')).toBeTruthy();
+
+  let likeButton = container.querySelector('#like-button');
+  fireEvent.click(likeButton!);
+  expect(mockSetTrack).toBeCalledTimes(0);
+});
+
 test('should handle unliked state', () => {
   const { queryByTestId } = render(
     <PlayerBar
@@ -110,6 +119,30 @@ test('should handle liked state', () => {
   let unlikeIcon = queryByTestId('unLikeIcon');
   expect(likeIcon).toBeTruthy();
   expect(unlikeIcon).toBeNull();
+});
+
+test('display 0:00 when length === 0', () => {
+  let updateProgress: Function;
+  jest.spyOn(Hooks, 'useInterval').mockImplementation((callback, delay) => {
+    updateProgress = callback;
+  });
+  (player.getDuration as jest.Mock).mockReturnValue(0);
+
+  const { queryByTestId } = render(
+    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
+  );
+  Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+    configurable: true,
+    value: 200,
+  });
+
+  act(() => {
+    player.onStatusChange?.('play');
+  });
+  act(() => updateProgress());
+
+  let fill = queryByTestId('progressFill');
+  expect(fill?.style.width).toBe('0%');
 });
 
 test('should interval', () => {
