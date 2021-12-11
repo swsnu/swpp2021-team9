@@ -12,9 +12,6 @@ import { dummyCombinations } from 'api/dummy';
 const store = configureAppStore();
 let player = Player.getInstance();
 
-const mockPlayerSetIndex = jest.fn();
-player.setIndex = mockPlayerSetIndex;
-
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -60,11 +57,17 @@ test('should render', () => {
 });
 
 test('should handle clicking play button correctly', async () => {
+  const spySetIndex = jest.spyOn(player, 'setIndex');
   const { page } = setup();
   await waitFor(() => {});
-  const clickplay = page.getAllByTestId('Play')[0] as HTMLElement;
+  const clickplay = page.getAllByTestId('Play')[1] as HTMLElement;
+
   fireEvent.click(clickplay);
-  expect(mockPlayerSetIndex).toHaveBeenCalled();
+  expect(spySetIndex).toHaveBeenCalledWith(1);
+  const calledTimes = spySetIndex.mock.calls.length;
+
+  fireEvent.click(clickplay);
+  expect(spySetIndex).toHaveBeenCalledTimes(calledTimes);
 });
 
 test('should handle clicking title button correctly', async () => {
