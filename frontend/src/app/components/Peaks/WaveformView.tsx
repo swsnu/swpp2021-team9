@@ -11,7 +11,6 @@ interface Props {
   audioContentType: string;
   segments: Segment[];
   setSegments: (props: any) => void;
-  selectedSegmentId: string | undefined;
 }
 
 interface State {}
@@ -147,6 +146,7 @@ class WaveformView extends Component<Props, State> {
       },
       showPlayheadTime: true,
       emitCueEvents: true,
+      zoomLevels: [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
     };
 
     this.audioElementRef.current.src = this.props.audioUrl;
@@ -191,17 +191,18 @@ class WaveformView extends Component<Props, State> {
         labelText: `편집할 부분 ${id}`,
         editable: true,
       });
-      this.logMarkers();
+      // this.logMarkers();
+      this.props.setSegments([...this.peaks.segments.getSegments()]);
     }
   };
 
-  logMarkers = () => {
-    if (this.peaks) {
-      this.props.setSegments(prevState => [
-        ...this.peaks!.segments.getSegments(),
-      ]);
-    }
-  };
+  // logMarkers = () => {
+  //   if (this.peaks) {
+  //     this.props.setSegments(prevState => [
+  //       ...this.peaks.segments.getSegments(),
+  //     ]);
+  //   }
+  // };
 
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use

@@ -12,7 +12,7 @@ interface MatchParams {
 export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function CreateCoverInfoPage(props: Props) {
-  const { actions } = useCreateCoverSlice();
+  useCreateCoverSlice();
   const history = useHistory();
   const dispatch = useDispatch();
   const createCoverState = useSelector(selectCreateCover);

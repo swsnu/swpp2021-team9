@@ -41,7 +41,6 @@ export default function CreateCoverRecord(props: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [selectedSegmentId, setSelectedSegmentId] = useState<string>('');
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
@@ -70,37 +69,29 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  const onClickDelete = useCallback((id: string) => {
-    setSelectedSegmentId(id);
-    if (id.length > 0) {
+  const onPlaySegment = useCallback((id: string) => {
+    if (id && id.length > 0) {
       const peaks = WaveformView.getPeaks();
       if (!peaks) {
         return window.alert('peaks가 없습니다.');
       }
-      peaks.segments.removeById(id);
-      const segs = peaks.segments.getSegments();
-      setSegments(segs);
+      peaks.player.playSegment(peaks.segments.getSegment(id)!);
     }
   }, []);
 
-  const onClickPlaySegment = useCallback(
-    (id: string) => {
-      setSelectedSegmentId(id);
-      if (id.length > 0) {
-        const Segs: Segment[] = segments.filter(
-          (seg: Segment) => seg.id === id,
-        );
-        const seg: Segment = Segs[0];
-        const peaks = WaveformView.getPeaks();
-        if (!peaks) {
-          return window.alert('peaks가 없습니다.');
-        }
-        console.log(seg);
-        peaks.player.playSegment(seg);
+  const onDeleteSegment = useCallback(async (id: string) => {
+    if (id && id.length > 0) {
+      const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
       }
-    },
-    [segments],
-  );
+
+      await peaks.segments.removeById(id);
+      const segs = await peaks.segments.getSegments();
+
+      setSegments([...segs]);
+    }
+  }, []);
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
@@ -200,16 +191,9 @@ export default function CreateCoverRecord(props: Props) {
   };
 
   const renderSegments = () => {
-    const _segments = [...segments];
-
-    if (!_segments || _segments.length === 0) {
-      return null;
+    if (segments.length === 0) {
+      return;
     }
-
-    // if (_segments.length === 0) {
-    //   return null;
-    // }
-
     return (
       <React.Fragment>
         <table>
@@ -224,7 +208,7 @@ export default function CreateCoverRecord(props: Props) {
               <th>Delete</th>
             </tr>
           </thead>
-          <tbody>{renderSegmentRows(_segments)}</tbody>
+          <tbody>{renderSegmentRows(segments)}</tbody>
         </table>
         <button
           data-testid="MergeBtn"
@@ -247,9 +231,9 @@ export default function CreateCoverRecord(props: Props) {
         endTime={segment.endTime}
         labelText={segment.labelText}
         isMergeClicked={isMergeClicked}
-        onClickPlaySegment={onClickPlaySegment}
-        onClickDelete={onClickDelete}
         handleMergeList={handleMergeList}
+        onPlaySegment={onPlaySegment}
+        onDeleteSegment={onDeleteSegment}
       />
     ));
   };
@@ -286,7 +270,7 @@ export default function CreateCoverRecord(props: Props) {
         {isRecordingEnabled ? (
           mediaBlobUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
@@ -311,7 +295,7 @@ export default function CreateCoverRecord(props: Props) {
         {isUploading ? (
           uploadedUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
