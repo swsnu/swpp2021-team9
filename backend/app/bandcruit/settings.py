@@ -84,7 +84,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "bandcruit.urls"
 
-CORS_ORIGIN_WHITELIST = ["http://www.metaband.space", "http://localhost"]
+CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "http://localhost"]
 
 TEMPLATES = [
     {
@@ -171,3 +171,8 @@ REST_FRAMEWORK = {
     ],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
+
+# For https header
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
