@@ -65,6 +65,7 @@ export const api = {
     const response = await apiClient.get<Cover>(`/api/cover/info/${coverId}/`);
     return response.data;
   },
+
   putCoverInfo: async (coverForm: CoverFormPut) => {
     return await apiClient.put<Cover>(
       `/api/cover/info/${coverForm.id}/`,

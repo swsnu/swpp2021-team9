@@ -39,6 +39,7 @@ export default function ProfilePage(props: Props) {
   } as any);
 
   const [completedCrop, setCompletedCrop] = useState(null as any);
+  const [croppedImg, setCroppedImg] = useState(null as any);
   const [Bio, setBio] = useState(form.description);
   const [Name, setName] = useState(null as any);
 
@@ -49,6 +50,7 @@ export default function ProfilePage(props: Props) {
   const [checkedVocals, setCheckedVocals] = useState(false);
   const [checkedDrum, setCheckedDrum] = useState(false);
   const [checkedKeyboard, setCheckedKeyboard] = useState(false);
+  const fileName: string = '';
 
   const onSelectFile = e => {
     if (e.target.files && e.target.files.length > 0) {
@@ -93,6 +95,15 @@ export default function ProfilePage(props: Props) {
       crop.width * scaleX,
       crop.height * scaleY,
     );
+
+    /* Newly Added*/
+    const croppedimage = new Promise((resolve, reject) => {
+      canvas.toBlob(file => {
+        file.name = 'croppedImg';
+        resolve(file);
+      }, 'image/png');
+    });
+    setCroppedImg(croppedimage);
   }, [completedCrop]);
   /* End of crop related functions, variables*/
 
@@ -126,8 +137,7 @@ export default function ProfilePage(props: Props) {
 
   function onEditPicture(event) {
     /* TODO : how to send photo as blob */
-    const photo = new Blob([]);
-    onChangePicture(photo);
+    onChangePicture(croppedImg);
   }
   const handleChangeBass = () => {
     setCheckedBass(!checkedBass);
@@ -229,8 +239,9 @@ export default function ProfilePage(props: Props) {
 
                 <div className="bg-white p-3 hover:shadow">
                   <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
+                    <img src={userForm.photo} />
                     <button
-                      id="signin_button"
+                      id="editpicture_button"
                       className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
                       onClick={onEditPicture}
                     >
@@ -299,30 +310,45 @@ export default function ProfilePage(props: Props) {
               </div>
               <div className="grid grid-cols-3">
                 <div className="text-center my-2">
-                  {/*TODO : How to call following persons' photo from userForm.followings[0] 
-                    And we don't have follow function */}
+                  <img
+                    src={
+                      userForm.followings[0]
+                        ? userForm.followings[0].photo
+                        : undefined
+                    }
+                  />
                   <a href="#" className="text-main-color">
-                    Kojstantin
+                    {userForm.followings[0]
+                      ? userForm.followings[0].username
+                      : undefined}
                   </a>
                 </div>
                 <div className="text-center my-2">
                   <img
-                    className="h-16 w-16 rounded-full mx-auto"
-                    src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                    alt=""
+                    src={
+                      userForm.followings[1]
+                        ? userForm.followings[1].photo
+                        : undefined
+                    }
                   />
                   <a href="#" className="text-main-color">
-                    Natie
+                    {userForm.followings[1]
+                      ? userForm.followings[1].username
+                      : undefined}
                   </a>
                 </div>
                 <div className="text-center my-2">
                   <img
-                    className="h-16 w-16 rounded-full mx-auto"
-                    src="https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/f04b52da-12f2-449f-b90c-5e4d5e2b1469_361x361.png"
-                    alt=""
+                    src={
+                      userForm.followings[2]
+                        ? userForm.followings[2].photo
+                        : undefined
+                    }
                   />
                   <a href="#" className="text-main-color">
-                    Casey
+                    {userForm.followings[2]
+                      ? userForm.followings[2].username
+                      : undefined}
                   </a>
                 </div>
               </div>

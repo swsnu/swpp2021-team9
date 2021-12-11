@@ -79,7 +79,7 @@ interface User {
   email: string;
   description: string;
   photo: string;
-  followings: number[];
+  followings: UserInfo[];
   instruments: number[];
 }
 

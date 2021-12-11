@@ -50,28 +50,33 @@ export const useProfile = (props: Props) => {
       history.replace(urls.Main());
     } else if (profileResponse.data) {
       const user = profileResponse.data;
+
       if (user.id !== wrapperState.user.id) {
         alert('You cannot edit this cover');
         history.replace(urls.Main());
       } else {
-        setUserForm({
-          id: user.id,
-          username: user.username,
-          description: user.description,
-          photo: user.photo,
-          instruments: user.instruments,
-          email: user.email,
-          followings: user.followings,
-        });
-        setForm({
-          id: user.id,
-          username: user.username,
-          description: user.description,
-          photo: new Blob([]),
-          /* TODO : user.photo(string)-> how to change to blob format*/
-          //photo:user.photo
-          instruments: user.instruments,
-        });
+        if (postProfileResponse.data) {
+          const userForm = postProfileResponse.data;
+          setUserForm({
+            id: user.id,
+            username: user.username,
+            description: user.description,
+            photo: user.photo,
+            instruments: user.instruments,
+            email: user.email,
+            followings: user.followings,
+          });
+
+          setForm({
+            id: user.id,
+            username: user.username,
+            description: user.description,
+            photo: userForm.photo,
+            /* TODO : user.photo(string)-> how to change to blob format*/
+            //photo:user.photo
+            instruments: user.instruments,
+          });
+        }
       }
     } else if (!profileResponse.loading) {
       dispatch(apiActions.loadProfile.request(Number(props.match.params.id)));
