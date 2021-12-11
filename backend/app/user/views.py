@@ -1,6 +1,7 @@
 """ User views
 views for user
 """
+import json
 from json.decoder import JSONDecodeError
 from django.http.request import HttpRequest
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -9,7 +10,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+
+from band.models import Instrument
+from .serializers.profile_serializers import UserProfileSerializer
 
 User = get_user_model()
 
@@ -74,16 +77,30 @@ class UserInfo(
     """user/info/`int:user_id`/"""
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserProfileSerializer
 
     def get(self, request: HttpRequest, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request: HttpRequest, *args, **kwargs):
+    def post(self, request: HttpRequest, **kwargs):
         if request.user.id != kwargs["pk"]:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        return self.update(request, *args, **kwargs)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        new_user = serializer.save()
+
+        instrument_list = request.data.get("instruments")
+        if instrument_list is not None:
+            try:
+                instrument_list = json.loads(instrument_list)
+                instruments = Instrument.objects.filter(id__in=instrument_list)
+                new_user.instruments.set(instruments)
+            except JSONDecodeError:
+                return Response("instrument format not json", 400)
+
+        return Response(UserProfileSerializer(new_user).data)
 
     def delete(self, request: HttpRequest, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
