@@ -35,7 +35,6 @@ export default function CreateCoverRecord(props: Props) {
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
   const [mergeList, setMergeList] = useState<string[]>([]);
   const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
-
   const [uploadedUrl, setUploadedUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -69,18 +68,15 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  const onPlaySegment = useCallback(
-    (id: string) => {
-      if (id && id.length > 0) {
-        const peaks = WaveformView.getPeaks();
-        if (!peaks) {
-          return window.alert('peaks가 없습니다.');
-        }
-        peaks.player.playSegment(peaks.segments.getSegment(id));
+  const onPlaySegment = useCallback((id: string) => {
+    if (id && id.length > 0) {
+      const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
       }
-    },
-    [segments],
-  );
+      peaks.player.playSegment(peaks.segments.getSegment(id)!);
+    }
+  }, []);
 
   const onDeleteSegment = useCallback(async (id: string) => {
     if (id && id.length > 0) {
@@ -180,17 +176,13 @@ export default function CreateCoverRecord(props: Props) {
   const mergeSegments = async () => {
     setIsMergeClicked(true);
     setUseMergedAudio(false);
-    let sortedTargetSegments;
     if (mergeList.length === 0) {
       return;
     }
     const targetSegments = mergeList.map(id => {
       return segments.filter(seg => seg.id === id)[0];
     });
-    sortedTargetSegments = targetSegments.sort(
-      (a, b) => Number(a.id?.split('.')[2]) - Number(b.id?.split('.')[2]),
-    );
-    const mp3Blob: any = await editor.mergeAudio(sortedTargetSegments);
+    const mp3Blob: any = await editor.mergeAudio(targetSegments);
 
     setMergeList([]);
     setMergedUrl(URL.createObjectURL(mp3Blob));
@@ -281,6 +273,7 @@ export default function CreateCoverRecord(props: Props) {
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
+              segments={segments}
             />
           ) : null
         ) : null}
@@ -305,6 +298,7 @@ export default function CreateCoverRecord(props: Props) {
               audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
+              segments={segments}
             />
           ) : null
         ) : null}

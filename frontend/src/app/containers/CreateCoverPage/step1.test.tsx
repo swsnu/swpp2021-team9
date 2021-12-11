@@ -311,7 +311,7 @@ describe('<CreateCoverRecord>', () => {
     const mergeBtn = getByTestId('MergeBtn');
 
     fireEvent.click(playBtns[0]);
-    jest.spyOn(WaveformView, 'getPeaks').mockReturnValueOnce(undefined);
+    jest.spyOn(WaveformView, 'getPeaks').mockReturnValueOnce(null);
     fireEvent.click(playBtns[0]);
 
     fireEvent.click(mergeBtn);
@@ -335,7 +335,7 @@ describe('<CreateCoverRecord>', () => {
     fireEvent.click(mergeCheckBoxes[1]);
 
     fireEvent.click(delBtns[2]);
-    jest.spyOn(WaveformView, 'getPeaks').mockReturnValueOnce(undefined);
+    jest.spyOn(WaveformView, 'getPeaks').mockReturnValueOnce(null);
     fireEvent.click(delBtns[1]);
 
     const useMergedBtn = getByTestId('UseMerged');

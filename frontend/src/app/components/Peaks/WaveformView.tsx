@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Peaks, { PeaksOptions } from 'peaks.js';
+import Peaks, { PeaksOptions, PeaksInstance, Segment } from 'peaks.js';
 import { createSegmentMarker } from './MarkerFactories';
 import { createSegmentLabel } from './SegmentLabelFactory';
 
@@ -9,23 +9,24 @@ interface Props {
   audioUrl: string;
   waveformDataUrl?: string;
   audioContentType: string;
+  segments: Segment[];
   setSegments: (props: any) => void;
 }
 
 interface State {}
 
 class WaveformView extends Component<Props, State> {
-  static PeaksInstance: any;
+  static PeaksInstance: PeaksInstance | null;
   static getPeaks() {
     if (this.PeaksInstance) {
       return this.PeaksInstance;
     }
     return null;
   }
-  zoomviewWaveformRef: any;
-  overviewWaveformRef: any;
-  audioElementRef: any;
-  peaks: any;
+  zoomviewWaveformRef: React.RefObject<any>;
+  overviewWaveformRef: React.RefObject<any>;
+  audioElementRef: React.RefObject<any>;
+  peaks: PeaksInstance | null;
   constructor(props: Props) {
     super(props);
 
@@ -47,7 +48,7 @@ class WaveformView extends Component<Props, State> {
           ref={this.overviewWaveformRef}
         ></div>
 
-        <div>
+        <div className="flex flex-col items-center">
           <audio className="py-2" ref={this.audioElementRef} controls>
             <source
               src={this.props.audioUrl}
@@ -119,7 +120,7 @@ class WaveformView extends Component<Props, State> {
       },
       zoomLevels: [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
     };
-    this.peaks.setSource(options, (err, peaks) => {
+    this.peaks.setSource(options, err => {
       this.onPeaksReady();
     });
     WaveformView.PeaksInstance = this.peaks;
@@ -150,16 +151,10 @@ class WaveformView extends Component<Props, State> {
 
     this.audioElementRef.current.src = this.props.audioUrl;
 
-    if (this.peaks) {
-      this.peaks.destroy();
-      this.peaks = null;
-      WaveformView.PeaksInstance = null;
-    }
-
     Peaks.init(options, (err, peaks) => {
-      this.peaks = peaks;
+      this.peaks = peaks ?? null;
       // console.log(peaks);
-      WaveformView.PeaksInstance = peaks;
+      WaveformView.PeaksInstance = peaks ?? null;
       this.onPeaksReady();
     });
   }
@@ -189,7 +184,7 @@ class WaveformView extends Component<Props, State> {
   addSegment = () => {
     if (this.peaks) {
       const time = this.peaks.player.getCurrentTime();
-      const id = this.peaks.segments._segmentIdCounter;
+      const id = this.props.segments.length;
       this.peaks.segments.add({
         startTime: time,
         endTime: time + 5,
@@ -212,10 +207,11 @@ class WaveformView extends Component<Props, State> {
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
     console.log('Peaks.js is ready');
-    this.peaks.on('segments.dragend', segment => {
-      const segments = this.peaks.segments.getSegments();
-      this.props.setSegments(prev => [...segments]);
-    });
+    this.peaks &&
+      this.peaks.on('segments.dragend', segment => {
+        const segments = this.peaks!.segments.getSegments();
+        this.props.setSegments(prev => [...segments]);
+      });
   };
 }
 
