@@ -47,13 +47,13 @@ export default function SegmentComponent({
         ></input>
       </td>
       <td className="py-2 border text-md font-medium whitespace-nowrap text-center">
-        {id}
+        {id.split('.')[2]}
       </td>
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        {startTime}
+        {startTime.toFixed(3)}
       </td>
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        {endTime}
+        {endTime.toFixed(3)}
       </td>
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         {labelText}
