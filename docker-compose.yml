@@ -10,6 +10,7 @@ services:
     command: nginx -g "daemon off;"
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
+      - media_data:/srv/media/
     restart: always
 
   back:
@@ -22,6 +23,7 @@ services:
       - ./.env
     volumes:
       - ./backend/:/srv/
+      - media_data:/srv/app/media/
     restart: always
 
   db:
@@ -40,3 +42,4 @@ services:
 
 volumes:
   mysql_data:
+  media_data:
