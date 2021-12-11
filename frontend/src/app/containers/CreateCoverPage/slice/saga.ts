@@ -15,7 +15,6 @@ export function* createCoverRequest(
 ) {
   yield put(createCoverActions.loadingCreateResponse('start load'));
   try {
-    console.log('post start');
     const response = yield api.postCover(action.payload);
     yield put(createCoverActions.successCreateResponse(response.data));
   } catch (e: any) {

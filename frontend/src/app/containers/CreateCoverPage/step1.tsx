@@ -94,8 +94,6 @@ export default function CreateCoverRecord(props: Props) {
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
-      console.log('url: ', blobUrl);
-      console.log('bolb: ', blob);
       let fileFromBlob = new File(
         [blob],
         new Date().toISOString() + '_recording.wav',
@@ -104,7 +102,6 @@ export default function CreateCoverRecord(props: Props) {
         },
       );
       const bUrl: any = await editor.readAndDecode(fileFromBlob, true);
-      console.log(bUrl);
       setRecordedUrl(bUrl);
     },
     [editor],

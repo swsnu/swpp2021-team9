@@ -22,7 +22,6 @@ export default class AudioEditor {
     if (audioFile.type === 'audio/wav') {
       try {
         this.arrayBuffer = await this.readAudio(audioFile);
-        console.log(this.arrayBuffer);
       } catch (e) {
         console.error(e);
       }
@@ -30,7 +29,6 @@ export default class AudioEditor {
         const tmpBuf = await new AudioContext().decodeAudioData(
           this.arrayBuffer.result,
         );
-        console.log(tmpBuf);
         const { fileFromBlob, bUrl } = audioBufferToWav(tmpBuf);
         file = fileFromBlob;
         blobUrl = bUrl;
@@ -62,25 +60,20 @@ export default class AudioEditor {
 
       //Resolve if audio gets loaded
       reader.onload = function () {
-        console.log('Audio Loaded');
         resolve(reader);
       };
 
       reader.onerror = function (error) {
-        console.log('Error while reading audio');
         reject(error);
       };
 
       reader.onabort = function (abort) {
-        console.log('Aborted');
-        console.log(abort);
         reject(abort);
       };
     });
   }
 
   async mergeAudio(segmentList: Segment[]) {
-    console.log('Audio Segments');
     const segmentDetails: SegmentDetail[] = [];
     let maxLength = 0;
 

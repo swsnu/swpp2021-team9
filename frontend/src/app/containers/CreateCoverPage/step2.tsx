@@ -61,9 +61,7 @@ export default function CreateCoverInfoPage(props: Props) {
   ) => {
     e.preventDefault();
     const isFinish = window.confirm('커버 정보를 업로드 하시겠습니까?');
-    console.log(isFinish);
     if (!isFinish || !audioUrl) {
-      console.log('early return');
       return;
     }
     const coverUploadForm = {

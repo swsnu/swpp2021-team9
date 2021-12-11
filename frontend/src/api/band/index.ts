@@ -29,12 +29,10 @@ export const api = {
     return response.data;
   },
   postCover: async (coverForm: CoverForm) => {
-    console.log('post started');
     const audioBlob = await fetch(coverForm.audio).then(r => r.blob());
     const audiofile = new File([audioBlob], 'audiofile.mp3', {
       type: 'audio/mpeg',
     });
-    console.log(audiofile);
     const coverFormData = new FormData();
     coverFormData.append('audio', audiofile);
     coverFormData.append('title', coverForm.title);

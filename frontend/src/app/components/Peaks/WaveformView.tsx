@@ -93,19 +93,12 @@ class WaveformView extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log('WaveformComponent.componentDidMount');
-
     this.initPeaks();
   }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('WaveformComponent.componentDidUpdate');
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;
     }
-    // console.log('props', this.props);
-    // console.log('prevProps', prevProps);
-    // console.log(this.peaks);
     if (!this.peaks) {
       this.initPeaks();
       return;
@@ -153,15 +146,12 @@ class WaveformView extends Component<Props, State> {
 
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks ?? null;
-      // console.log(peaks);
       WaveformView.PeaksInstance = peaks ?? null;
       this.onPeaksReady();
     });
   }
 
   componentWillUnmount() {
-    console.log('WaveformView.componentWillUnmount');
-
     if (this.peaks) {
       this.peaks.destroy();
       this.peaks = null;
@@ -206,7 +196,6 @@ class WaveformView extends Component<Props, State> {
 
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
-    console.log('Peaks.js is ready');
     this.peaks &&
       this.peaks.on('segments.dragend', segment => {
         const segments = this.peaks!.segments.getSegments();
