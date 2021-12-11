@@ -23,6 +23,6 @@ class ProxyFileField(serializers.FileField):
                 url = value.url
             except AttributeError:
                 return None
-            return f"https://www.metaband.space{url}"
+            return f"https://metaband.space{url}"
 
         return value.name

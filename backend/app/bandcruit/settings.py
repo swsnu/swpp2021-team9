@@ -84,7 +84,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "bandcruit.urls"
 
-CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "http://localhost"]
+CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "https://metaband.space", "http://localhost"]
 
 TEMPLATES = [
     {
