@@ -145,7 +145,8 @@
       "!src/setupTests.js",
       "!src/utils/**/*",
       "!src/types/**/*",
-      "!src/locales/*"
+      "!src/locales/*",
+      "!src/__mocks__/*"
     ],
     "coverageThreshold": {
       "global": {
