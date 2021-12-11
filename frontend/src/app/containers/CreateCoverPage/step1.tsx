@@ -73,15 +73,6 @@ export default function CreateCoverRecord(props: Props) {
   const onPlaySegment = useCallback(
     (id: string) => {
       if (id && id.length > 0) {
-        // const Segs: Segment[] = segments.filter((seg: Segment) => {
-        //   console.log(seg.id);
-        //   if (seg.id === id) return seg;
-        // });
-        // const seg: Segment = Segs[0];
-        console.log(id);
-
-        console.log(segments);
-
         const peaks = WaveformView.getPeaks();
         if (!peaks) {
           return window.alert('peaks가 없습니다.');
@@ -91,26 +82,6 @@ export default function CreateCoverRecord(props: Props) {
     },
     [segments],
   );
-
-  // useMemo(() => {
-  //   if (
-  //     isPlaySegmentClicked &&
-  //     selectedSegmentId &&
-  //     selectedSegmentId.length > 0
-  //   ) {
-  //     const Segs: Segment[] = segments.filter((seg: Segment) => {
-  //       if (seg.id === selectedSegmentId) return seg;
-  //     });
-  //     const seg: Segment = Segs[0];
-  //     const peaks = WaveformView.getPeaks();
-  //     if (!peaks) {
-  //       return window.alert('peaks가 없습니다.');
-  //     }
-  //     console.log(seg);
-  //     peaks.player.playSegment(seg);
-  //     setIsPlaySegmentClicked(false);
-  //   }
-  // }, [isPlaySegmentClicked, segments, selectedSegmentId]);
 
   const onDeleteSegment = useCallback(async (id: string) => {
     if (id && id.length > 0) {
@@ -125,19 +96,6 @@ export default function CreateCoverRecord(props: Props) {
       setSegments([...segs]);
     }
   }, []);
-
-  // useMemo(() => {
-  //   if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
-  //     const peaks = WaveformView.getPeaks();
-  //     if (!peaks) {
-  //       return window.alert('peaks가 없습니다.');
-  //     }
-  //     peaks.segments.removeById(selectedSegmentId);
-  //     const segs = peaks.segments.getSegments();
-  //     setSegments(segs);
-  //     setIsDeleteClicked(false);
-  //   }
-  // }, [isDeleteClicked, selectedSegmentId]);
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
