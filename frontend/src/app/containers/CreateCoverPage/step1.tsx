@@ -22,7 +22,6 @@ import { useCreateCoverSlice } from './slice';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
-import MergedAudio from 'app/components/CreateCover/MergedAudio';
 import { selectCreateCover } from './slice/selectors';
 import { selectMakeCombinationSlice } from '../SongPage/slice/selectors';
 interface MatchParams {
@@ -312,20 +311,27 @@ export default function CreateCoverRecord(props: Props) {
       </div>
       {renderSegments()}
       {mergedUrl && (isUploading || isRecordingEnabled) ? (
-        <div className="justify-center items-center">
-          <MergedAudio audioUrl={mergedUrl} />
-          <button
-            data-testid="UseMerged"
-            onClick={() => {
-              setUseMergedAudio(prev => !prev);
-            }}
-            className="my-3 mx-3 px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-          >
-            Use MergedAudio
-          </button>
-          {useMergedAudio ? (
-            <FontAwesomeIcon icon={faCheck} color="green" />
-          ) : null}
+        <div className="flex flex-col justify-center items-center">
+          <audio
+            data-testid="MergedAudio"
+            className="items-center justify-center"
+            src={mergedUrl}
+            controls
+          />
+          <div className="flex-row">
+            {useMergedAudio ? (
+              <FontAwesomeIcon icon={faCheck} color="green" />
+            ) : null}
+            <button
+              data-testid="UseMerged"
+              onClick={() => {
+                setUseMergedAudio(prev => !prev);
+              }}
+              className="items-center my-3 mx-3 px-4 py-3 rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+            >
+              Use Merged Audio
+            </button>
+          </div>
         </div>
       ) : null}
       <div
