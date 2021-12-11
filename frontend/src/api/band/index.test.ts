@@ -154,7 +154,7 @@ describe('band api', () => {
     const mockKey = 'MOCK_KEY';
 
     expect(await api.getSongBySearch(mockKey)).toEqual(MOCK_GET_DATA);
-    expect(apiClient.get).lastCalledWith(`/api/search/`, {
+    expect(apiClient.get).lastCalledWith(`/api/song/search/`, {
       params: { search: mockKey },
     });
   });

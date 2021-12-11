@@ -168,3 +168,11 @@ export const dummyCombinations: Combination[] = [
     likes: 14,
   },
 ];
+
+export const dummyTrackInfos: TrackInfo[] = [
+  {
+    song: dummySongs[0],
+    sources: ['dummysource'],
+    like: false,
+  },
+];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,7 +59,7 @@ export default function SearchResultPage(props: Props) {
             </div>
           </div>
         ) : (
-          <div data-testid="Album" className="flex flex-col items-center pt-16">
+          <div className="flex flex-col items-center pt-16">
             <img
               className="rounded-full border border-gray-100 shadow-sm"
               src={AlbumImage}

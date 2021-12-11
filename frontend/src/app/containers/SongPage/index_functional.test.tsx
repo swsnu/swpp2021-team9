@@ -70,10 +70,10 @@ jest.mock('app/components/Dropdown/CoverDropdown', () => {
   };
 });
 
-jest.mock('./SongInfo', () => {
+jest.mock('./SongInfoArea', () => {
   return {
     __esModule: true,
-    ...jest.requireActual('./SongInfo'),
+    ...jest.requireActual('./SongInfoArea'),
     default: props => <div></div>,
   };
 });

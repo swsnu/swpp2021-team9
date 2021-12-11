@@ -33,7 +33,6 @@ export default function PlayerBar(props: Props) {
       setLength(player.getDuration());
     };
     player.onTrackChanged = newTrack => {
-      console.log(newTrack);
       props.setTrack(newTrack);
     };
   }, [player, props]);

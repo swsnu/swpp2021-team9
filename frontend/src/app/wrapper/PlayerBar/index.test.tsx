@@ -5,9 +5,12 @@ import PlayerBar from '.';
 import Player from 'app/helper/Player';
 import { act } from 'react-dom/test-utils';
 import * as Hooks from 'app/helper/Hooks';
+import { dummyTrackInfos } from 'api/dummy';
 
 jest.mock('app/helper/TrackPlayer');
 let player = Player.getInstance();
+
+const mockSetTrack = jest.fn().mockImplementation((track: TrackInfo) => {});
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -37,9 +40,7 @@ test('should render', () => {
 });
 
 test('should handle control buttons', () => {
-  const { container } = render(
-    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
-  );
+  const { container } = render(<PlayerBar setTrack={mockSetTrack} />);
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   const playButton = container.querySelector('#play-button');
@@ -67,43 +68,48 @@ test('should handle control buttons', () => {
 });
 
 test('should handle like button', () => {
-  const { container, queryByTestId } = render(
-    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+  const { container } = render(
+    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
   );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   let likeButton = container.querySelector('#like-button');
-  let likeIcon = queryByTestId('likeIcon');
-  let unlikeIcon = queryByTestId('unLikeIcon');
-
   fireEvent.click(likeButton!);
-  expect(likeIcon).toBeNull();
-  expect(unlikeIcon).toBeTruthy();
+  expect(mockSetTrack).toBeCalledWith({ ...dummyTrackInfos[0], like: true });
 
   act(() => {
-    player.onTrackChanged?.({
-      song: {
-        title: 'SONG_TITLE',
-        singer: 'SONG_SINGER',
-        category: 'SONG_CATEGORY',
-        reference: 'SONG_REFERENCE',
-        description: 'SONG_DESCRIPTION',
-      },
-      sources: ['url1'],
-      like: true,
-    });
+    player.onTrackChanged?.({ ...dummyTrackInfos[0], sources: ['CHANGE'] });
   });
+  expect(mockSetTrack).toBeCalledWith({
+    ...dummyTrackInfos[0],
+    sources: ['CHANGE'],
+  });
+});
 
-  likeIcon = queryByTestId('likeIcon');
-  unlikeIcon = queryByTestId('unLikeIcon');
-  expect(likeIcon).toBeTruthy();
-  expect(unlikeIcon).toBeNull();
-
-  fireEvent.click(likeButton!);
-  likeIcon = queryByTestId('likeIcon');
-  unlikeIcon = queryByTestId('unLikeIcon');
+test('should handle unliked state', () => {
+  const { queryByTestId } = render(
+    <PlayerBar
+      track={{ ...dummyTrackInfos[0], like: false }}
+      setTrack={mockSetTrack}
+    />,
+  );
+  let likeIcon = queryByTestId('likeIcon');
+  let unlikeIcon = queryByTestId('unLikeIcon');
   expect(likeIcon).toBeNull();
   expect(unlikeIcon).toBeTruthy();
+});
+
+test('should handle liked state', () => {
+  const { queryByTestId } = render(
+    <PlayerBar
+      track={{ ...dummyTrackInfos[0], like: true }}
+      setTrack={mockSetTrack}
+    />,
+  );
+  let likeIcon = queryByTestId('likeIcon');
+  let unlikeIcon = queryByTestId('unLikeIcon');
+  expect(likeIcon).toBeTruthy();
+  expect(unlikeIcon).toBeNull();
 });
 
 test('should interval', () => {
@@ -111,16 +117,6 @@ test('should interval', () => {
   jest.spyOn(Hooks, 'useInterval').mockImplementation((callback, delay) => {
     updateProgress = callback;
   });
-  const { queryByTestId } = render(
-    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
-  );
-  Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-    configurable: true,
-    value: 200,
-  });
-
-  let fill = queryByTestId('progressFill');
-  let box = queryByTestId('progressBox');
 
   const duration = 200;
   const currentTime = 130;
@@ -129,7 +125,22 @@ test('should interval', () => {
   (player.getDuration as jest.Mock).mockReturnValue(duration);
   (player.getCurrentTime as jest.Mock).mockReturnValue(currentTime);
 
+  const { queryByTestId } = render(
+    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
+  );
+  Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+    configurable: true,
+    value: 200,
+  });
+
+  act(() => {
+    player.onStatusChange?.('play');
+  });
+
   act(() => updateProgress());
+
+  let fill = queryByTestId('progressFill');
+  let box = queryByTestId('progressBox');
   expect(fill?.style.width).toBe((currentTime / duration) * 100 + '%');
 
   const target = {
