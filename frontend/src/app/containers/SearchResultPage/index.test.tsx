@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
@@ -32,13 +32,11 @@ function setup() {
   const path = '/search?key=A';
   const page = render(
     <Provider store={store}>
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[path]}>
         <Switch>
           <Route path={'/search'} component={SearchResultPage} />
-          <Redirect exact from="/" to={path} />
-          <Route component={() => <div>WHAT</div>} />
         </Switch>
-      </BrowserRouter>
+      </MemoryRouter>
     </Provider>,
   );
   return { page };
@@ -47,6 +45,22 @@ function setup() {
 test('should render', async () => {
   const { page } = setup();
   expect(page.getByTestId('SearchResultPage')).toBeTruthy();
+});
+
+test('should render without key', async () => {
+  const path = '/search';
+  render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[path]}>
+        <Switch>
+          <Route path={'/search'} component={SearchResultPage} />
+        </Switch>
+      </MemoryRouter>
+    </Provider>,
+  );
+  await waitFor(() => {
+    expect(api.getSongBySearch).toHaveBeenCalledWith('');
+  });
 });
 
 test('should handle empty page', async () => {
@@ -73,4 +87,16 @@ test('should handle title button correctly', async () => {
   const resultLine = page.getAllByTestId('ResultLine')[0] as HTMLDataElement;
   fireEvent.click(resultLine);
   expect(mockHistoryPush).toBeTruthy();
+});
+
+test('should handle error', async () => {
+  api.getSongBySearch = jest.fn(
+    (_key: string) =>
+      new Promise((res, rej) => {
+        rej('REJECT');
+      }),
+  );
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+  setup();
+  await waitFor(() => expect(window.alert).toBeCalledTimes(1));
 });

@@ -24,6 +24,7 @@ export default function SearchResultPage(props: Props) {
   const songsResponse = searchResultState.songsResponse;
 
   useEffect(() => {
+    console.log('key', key);
     dispatch(apiActions.loadSongsSearch.request(key));
   }, [dispatch, key]);
 

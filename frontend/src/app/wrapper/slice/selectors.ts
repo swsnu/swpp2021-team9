@@ -8,8 +8,3 @@ export const selectSlice = (state: RootState) => state.wrapper || initialState; 
 export const selectWrapper = createSelector([selectSlice], state => state);
 
 export const selectUser = createSelector([selectWrapper], state => state.user);
-
-export const selectCurrentTrack = createSelector(
-  [selectWrapper],
-  state => state.currentTrack,
-);
