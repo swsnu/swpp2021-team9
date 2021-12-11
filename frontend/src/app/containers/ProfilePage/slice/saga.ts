@@ -27,7 +27,7 @@ export function* getProfileResponse(
 export function* postProfileResponse(
   action: ActionType<typeof actions.postProfile.request>,
 ) {
-  yield put(profileActions.loadingProfileResponse('start load'));
+  yield put(profileActions.loadingPostResponse('start load'));
   try {
     const postProfileResponse = yield api.postUserInfo(action.payload);
     yield put(profileActions.successPostResponse(postProfileResponse.data));
