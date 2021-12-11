@@ -10,10 +10,9 @@ interface Props {
   labelText?: string;
   id: string;
   isMergeClicked: boolean;
-  setSelectedId: (props: string | undefined) => any;
-  setIsPlaySegmentClicked: (props: any) => any;
-  setIsDeleteClicked: (props: any) => any;
   handleMergeList: (id: string, isMerge: boolean) => any;
+  onPlaySegment: (id: string) => void;
+  onDeleteSegment: (id: string) => void;
 }
 
 export default function SegmentComponent({
@@ -22,10 +21,9 @@ export default function SegmentComponent({
   endTime,
   labelText,
   isMergeClicked,
-  setSelectedId,
-  setIsPlaySegmentClicked,
-  setIsDeleteClicked,
   handleMergeList,
+  onPlaySegment,
+  onDeleteSegment,
 }: Props) {
   const [isMerge, setIsMerge] = useState(false);
 
@@ -60,26 +58,26 @@ export default function SegmentComponent({
       <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
         {labelText}
       </td>
-      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        <button
-          data-testid="PlayButton"
-          onClick={() => {
-            setSelectedId(id);
-            setIsPlaySegmentClicked(true);
-          }}
-        >
+      <td
+        data-testid="PlayButton"
+        onClick={() => {
+          onPlaySegment(id);
+        }}
+        className="py-2 border font-md font-medium whitespace-nowrap text-center"
+      >
+        <button>
           <FontAwesomeIcon icon={faPlay} />
         </button>
       </td>
 
-      <td className="py-2 border font-md font-medium whitespace-nowrap text-center">
-        <button
-          data-testid="DeleteButton"
-          onClick={() => {
-            setSelectedId(id);
-            setIsDeleteClicked(true);
-          }}
-        >
+      <td
+        data-testid="DeleteButton"
+        onClick={() => {
+          onDeleteSegment(id);
+        }}
+        className="py-2 border font-md font-medium whitespace-nowrap text-center"
+      >
+        <button>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

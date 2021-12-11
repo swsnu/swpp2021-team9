@@ -2,6 +2,31 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { WaveformView } from '.';
+import { Segment } from 'peaks.js';
+
+const stubSegments: Segment[] = [
+  {
+    id: 'peaks.segment.0',
+    startTime: 1,
+    endTime: 6,
+    labelText: `TEST_LABEL_0`,
+    update: jest.fn(),
+  },
+  {
+    id: 'peaks.segment.1',
+    startTime: 1,
+    endTime: 6,
+    labelText: `TEST_LABEL_1`,
+    update: jest.fn(),
+  },
+  {
+    id: 'peaks.segment.2',
+    startTime: 1,
+    endTime: 6,
+    labelText: `TEST_LABEL_2`,
+    update: jest.fn(),
+  },
+];
 
 let events = {};
 let mockContent = {
@@ -11,15 +36,17 @@ let mockContent = {
   }),
   destroy: jest.fn(() => {}),
   setSource: jest.fn((options, cb) => {
-    cb(null, mockContent);
+    // return cb(null, 'Peaks');
+    return cb(null, mockContent);
   }),
-  player: { getCurrentTime: jest.fn() },
+  player: { getCurrentTime: jest.fn(), playSegment: jest.fn() },
   segments: {
     _segmentIdCounter: 2,
+    _segments: stubSegments,
     add: jest.fn((startTime, endTime, labelText, editable) => {}),
-    getSegments: jest.fn(() => {
-      'TEST_SEGMENT';
-    }),
+    getSegments: () => stubSegments,
+    getSegment: (id: string) => stubSegments[0],
+    removeById: jest.fn(),
   },
   zoom: { zoomIn: jest.fn(() => {}), zoomOut: jest.fn(() => {}) },
 };
@@ -45,7 +72,6 @@ const getWaveformView = (
 ) => {
   return (
     <WaveformView
-      selectedSegmentId={id}
       audioUrl={url}
       audioContentType={'audio/mpeg'}
       setSegments={setSeg}

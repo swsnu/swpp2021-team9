@@ -36,17 +36,12 @@ export default function CreateCoverRecord(props: Props) {
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
   const [mergeList, setMergeList] = useState<string[]>([]);
   const [isMergeClicked, setIsMergeClicked] = useState<boolean>(false);
-  const [isDeleteClicked, setIsDeleteClicked] = useState<boolean>(false);
-  const [isPlaySegmentClicked, setIsPlaySegmentClicked] =
-    useState<boolean>(false);
+
   const [uploadedUrl, setUploadedUrl] = useState<string>('');
   const [segments, setSegments] = useState<Segment[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [selectedSegmentId, setSelectedSegmentId] = useState<
-    string | undefined
-  >('');
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
@@ -57,15 +52,16 @@ export default function CreateCoverRecord(props: Props) {
   const { actions: createCoverActions } = useCreateCoverSlice();
   const makeCombiState = useSelector(selectMakeCombinationSlice);
   const createCoverState = useSelector(selectCreateCover);
+  const makeCombiStateSong = makeCombiState.song;
 
   useEffect(() => {
-    if (makeCombiState && makeCombiState.song) {
-      setRefUrl(makeCombiState.song.reference);
+    if (makeCombiStateSong) {
+      setRefUrl(makeCombiStateSong.reference);
     }
     if (createCoverState.audioURL) {
       setUploadedUrl(createCoverState.audioURL);
     }
-  }, [createCoverState.audioURL, makeCombiState.song]);
+  }, [createCoverState.audioURL, makeCombiStateSong]);
 
   useEffect(() => {
     return () => {
@@ -74,38 +70,74 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  useMemo(() => {
-    if (
-      isPlaySegmentClicked &&
-      selectedSegmentId &&
-      selectedSegmentId.length > 0
-    ) {
-      const Segs: Segment[] = segments.filter((seg: Segment) => {
-        if (seg.id === selectedSegmentId) return seg;
-      });
-      const seg: Segment = Segs[0];
-      const peaks = WaveformView.getPeaks();
-      if (!peaks) {
-        return window.alert('peaks가 없습니다.');
-      }
-      console.log(seg);
-      peaks.player.playSegment(seg);
-      setIsPlaySegmentClicked(false);
-    }
-  }, [isPlaySegmentClicked, segments, selectedSegmentId]);
+  const onPlaySegment = useCallback(
+    (id: string) => {
+      if (id && id.length > 0) {
+        // const Segs: Segment[] = segments.filter((seg: Segment) => {
+        //   console.log(seg.id);
+        //   if (seg.id === id) return seg;
+        // });
+        // const seg: Segment = Segs[0];
+        console.log(id);
 
-  useMemo(() => {
-    if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
+        console.log(segments);
+
+        const peaks = WaveformView.getPeaks();
+        if (!peaks) {
+          return window.alert('peaks가 없습니다.');
+        }
+        peaks.player.playSegment(peaks.segments.getSegment(id));
+      }
+    },
+    [segments],
+  );
+
+  // useMemo(() => {
+  //   if (
+  //     isPlaySegmentClicked &&
+  //     selectedSegmentId &&
+  //     selectedSegmentId.length > 0
+  //   ) {
+  //     const Segs: Segment[] = segments.filter((seg: Segment) => {
+  //       if (seg.id === selectedSegmentId) return seg;
+  //     });
+  //     const seg: Segment = Segs[0];
+  //     const peaks = WaveformView.getPeaks();
+  //     if (!peaks) {
+  //       return window.alert('peaks가 없습니다.');
+  //     }
+  //     console.log(seg);
+  //     peaks.player.playSegment(seg);
+  //     setIsPlaySegmentClicked(false);
+  //   }
+  // }, [isPlaySegmentClicked, segments, selectedSegmentId]);
+
+  const onDeleteSegment = useCallback(async (id: string) => {
+    if (id && id.length > 0) {
       const peaks = WaveformView.getPeaks();
       if (!peaks) {
         return window.alert('peaks가 없습니다.');
       }
-      peaks.segments.removeById(selectedSegmentId);
-      const segs = peaks.segments.getSegments();
-      setSegments(segs);
-      setIsDeleteClicked(false);
+
+      await peaks.segments.removeById(id);
+      const segs = await peaks.segments.getSegments();
+
+      setSegments([...segs]);
     }
-  }, [isDeleteClicked, selectedSegmentId]);
+  }, []);
+
+  // useMemo(() => {
+  //   if (isDeleteClicked && selectedSegmentId && selectedSegmentId?.length > 0) {
+  //     const peaks = WaveformView.getPeaks();
+  //     if (!peaks) {
+  //       return window.alert('peaks가 없습니다.');
+  //     }
+  //     peaks.segments.removeById(selectedSegmentId);
+  //     const segs = peaks.segments.getSegments();
+  //     setSegments(segs);
+  //     setIsDeleteClicked(false);
+  //   }
+  // }, [isDeleteClicked, selectedSegmentId]);
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
@@ -209,16 +241,9 @@ export default function CreateCoverRecord(props: Props) {
   };
 
   const renderSegments = () => {
-    const _segments = [...segments];
-
-    if (!_segments || _segments.length === 0) {
-      return null;
+    if (segments.length === 0) {
+      return;
     }
-
-    // if (_segments.length === 0) {
-    //   return null;
-    // }
-
     return (
       <React.Fragment>
         <table>
@@ -233,7 +258,7 @@ export default function CreateCoverRecord(props: Props) {
               <th>Delete</th>
             </tr>
           </thead>
-          <tbody>{renderSegmentRows(_segments)}</tbody>
+          <tbody>{renderSegmentRows(segments)}</tbody>
         </table>
         <button
           data-testid="MergeBtn"
@@ -256,10 +281,9 @@ export default function CreateCoverRecord(props: Props) {
         endTime={segment.endTime}
         labelText={segment.labelText}
         isMergeClicked={isMergeClicked}
-        setSelectedId={setSelectedSegmentId}
-        setIsPlaySegmentClicked={setIsPlaySegmentClicked}
-        setIsDeleteClicked={setIsDeleteClicked}
         handleMergeList={handleMergeList}
+        onPlaySegment={onPlaySegment}
+        onDeleteSegment={onDeleteSegment}
       />
     ));
   };
@@ -296,7 +320,7 @@ export default function CreateCoverRecord(props: Props) {
         {isRecordingEnabled ? (
           mediaBlobUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
@@ -320,7 +344,7 @@ export default function CreateCoverRecord(props: Props) {
         {isUploading ? (
           uploadedUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}

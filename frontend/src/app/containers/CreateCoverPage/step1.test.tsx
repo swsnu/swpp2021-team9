@@ -61,6 +61,7 @@ let mockContent = {
     _segments: stubSegments,
     add: jest.fn((startTime, endTime, labelText, editable) => {}),
     getSegments: () => stubSegments,
+    getSegment: (id: string) => stubSegments[0],
     removeById: jest.fn(),
   },
   zoom: { zoomIn: jest.fn(() => {}), zoomOut: jest.fn(() => {}) },
