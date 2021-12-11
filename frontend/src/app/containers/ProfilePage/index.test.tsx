@@ -63,7 +63,7 @@ beforeEach(() => {
 });
 
 function setup(state: RootState) {
-  spySelectWrapper.mockReturnValue(state.wrapper);
+  spySelectWrapper.mockReturnValue(state?.wrapper);
   const store = configureAppStore();
   const page = (
     <Provider store={store}>
@@ -99,72 +99,71 @@ test('When click checkbox_bass and click choose instrument button', () => {
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
-/*
 test('When click checkbox_guitar and click choose instrument button', () => {
-  const { page } = setup();
+  const { page } = setup(stubState);
   render(page);
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
   const checkguitar = screen.getByTestId('checkguitar');
   fireEvent.click(checkguitar);
- 
+
   const chooseInstrument = screen.getByTestId('chooseInstrument');
   fireEvent.click(chooseInstrument);
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
 test('When click checkbox_vocals and click choose instrument button', () => {
-  const { page } = setup();
+  const { page } = setup(stubState);
   render(page);
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
   const checkvocals = screen.getByTestId('checkvocals');
   fireEvent.click(checkvocals);
- 
+
   const chooseInstrument = screen.getByTestId('chooseInstrument');
   fireEvent.click(chooseInstrument);
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
 test('When click checkbox_drum and click choose instrument button', () => {
-  const { page } = setup();
+  const { page } = setup(stubState);
   render(page);
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
   const checkdrum = screen.getByTestId('checkdrum');
   fireEvent.click(checkdrum);
- 
+
   const chooseInstrument = screen.getByTestId('chooseInstrument');
   fireEvent.click(chooseInstrument);
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
 test('When click checkbox_keyboard and click choose instrument button', () => {
-  const { page } = setup();
+  const { page } = setup(stubState);
   render(page);
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
   const checkkeyboard = screen.getByTestId('checkkeyboard');
   fireEvent.click(checkkeyboard);
- 
+
   const chooseInstrument = screen.getByTestId('chooseInstrument');
   fireEvent.click(chooseInstrument);
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
-test('Uploading file works properly', ()=>{
-  const {page} = setup();
+test('Uploading file works properly', () => {
+  const { page } = setup(stubState);
   render(page);
-  
+
   let file;
   file = new File(['(⌐□_□)'], 'swpp2021.png', { type: 'image/png' });
 
+  const editPictureButton = screen.getByTestId('editPictureButton');
   const uploadFile = screen.getByTestId('uploadFile');
   fireEvent.change(uploadFile);
-})
-
-*/
+  fireEvent.click(editPictureButton);
+});

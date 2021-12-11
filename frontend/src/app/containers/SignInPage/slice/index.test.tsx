@@ -137,7 +137,7 @@ test('should signin Response onError', async () => {
   api.signin = jest.fn(
     (form: SignInForm) =>
       new Promise((res, rej) => {
-        res('swpp2021' as any);
+        rej('REJECT');
       }),
   );
   await runSaga(
@@ -151,5 +151,8 @@ test('should signin Response onError', async () => {
     },
   ).toPromise();
 
-  expect(dispatched).toBeTruthy();
+  expect(dispatched).toEqual([
+    signInActions.loadingSignInResponse('start load'),
+    signInActions.errorSignInResponse('REJECT' as any),
+  ]);
 });

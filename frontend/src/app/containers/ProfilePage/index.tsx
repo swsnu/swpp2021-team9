@@ -241,6 +241,7 @@ export default function ProfilePage(props: Props) {
                   <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
                     <img src={userForm.photo} />
                     <button
+                      data-testid="editPictureButton"
                       id="editpicture_button"
                       className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
                       onClick={onEditPicture}
