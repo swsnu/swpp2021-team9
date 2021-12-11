@@ -32,7 +32,6 @@ export default function MainPage(props: Props) {
   useEffect(() => {
     if (!combinationsResponse.loading) {
       if (combinationsResponse.error) {
-        console.log('error');
         window.alert('Error: could not fetch bands.');
       } else if (combinationsResponse.data && player) {
         // setting tracks

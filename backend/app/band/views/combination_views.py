@@ -3,7 +3,6 @@ combination views for band
 TODO ("implement")
 """
 from django.http.request import HttpRequest
-from django.db.models import Count
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
@@ -95,7 +94,8 @@ class CombinationLike(generics.GenericAPIView):
 
     def put(self, request: Request, *args, **kwargs):
         instance = self.get_object()
-        serializer_old: CombinationLikeSerializer = self.get_serializer(instance)
+        serializer_old: CombinationLikeSerializer = self.get_serializer(
+            instance)
         likes: list = serializer_old.data.get("likes")
 
         is_like = request.data.get("isLiked")

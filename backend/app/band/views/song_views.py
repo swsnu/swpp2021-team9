@@ -3,7 +3,6 @@ song views for band
 TODO ("implement")
 """
 from django.http.request import HttpRequest
-from django.db.models import Count
 from rest_framework import mixins, generics, filters
 
 from band.models import Song
