@@ -44,7 +44,7 @@ SECRET_KEY = get_secret("SECRET_KEY", "ASDFG")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_secret("DEBUG", False)
 
-ALLOWED_HOSTS = get_secret("ALLOWED_HOSTS", [])
+ALLOWED_HOSTS = get_secret("ALLOWED_HOSTS", ["localhost"])
 
 
 # Application definition
@@ -175,4 +175,4 @@ REST_FRAMEWORK = {
 # For https header
 
 USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
