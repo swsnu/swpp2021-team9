@@ -14,21 +14,28 @@ import { faHeart as faEmptyHeart } from '@fortawesome/free-regular-svg-icons';
 import Player from 'app/helper/Player';
 import { useInterval } from 'app/helper/Hooks';
 
-interface Props {}
+interface Props {
+  track?: TrackInfo;
+  setTrack: (track: TrackInfo) => void;
+}
 
 export default function PlayerBar(props: Props) {
   const player = useMemo(() => Player.getInstance(), []);
   const [currLength, setCurrLength] = useState(0);
   const [length, setLength] = useState(0);
   const [status, setStatus] = useState('');
-  const [track, setTrack] = useState<TrackInfo>();
   const progress = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    player.onStatusChange = newStatus => setStatus(newStatus);
-    player.onTrackChanged = newTrack => setTrack(newTrack);
-  }, [player]);
+    player.onStatusChange = newStatus => {
+      setStatus(newStatus);
+      setLength(player.getDuration());
+    };
+    player.onTrackChanged = newTrack => {
+      props.setTrack(newTrack);
+    };
+  }, [player, props]);
 
   const onPlayClicked = useCallback(() => {
     if (player.isPaused()) {
@@ -47,23 +54,21 @@ export default function PlayerBar(props: Props) {
   }, [player]);
 
   const onLikeClicked = useCallback(() => {
-    if (track) {
-      const newTrack = { ...track, like: !track?.like };
-      setTrack(newTrack);
+    if (props.track) {
+      const newTrack: TrackInfo = { ...props.track, like: !props.track.like };
+      props.setTrack(newTrack);
     }
-  }, [track]);
+  }, [props]);
 
   const updateProgress = useCallback(() => {
-    const duration = player.getDuration();
     const currentTime = player.getCurrentTime();
-    setLength(Math.ceil(duration));
-    setCurrLength(Math.ceil(currentTime));
-    const currnetPercent = (currentTime / duration) * 100;
+    setCurrLength(currentTime);
+    const currnetPercent = length ? (currentTime / length) * 100 : 0;
     bar.current!.style.width = currnetPercent + '%';
-    if (currentTime === duration) {
+    if (length && currentTime >= length - 0.01) {
       player.playNext();
     }
-  }, [player]);
+  }, [player, length]);
 
   const onProgressClick = useCallback(
     (e: any) => {
@@ -78,22 +83,24 @@ export default function PlayerBar(props: Props) {
   );
 
   const formatMinute = useCallback((time: number) => {
-    const min = Math.floor(time / 60);
-    const sec = time % 60;
+    if (isNaN(time)) return '0:00';
+    const timeInt = Math.ceil(time);
+    const min = Math.floor(timeInt / 60);
+    const sec = timeInt - min * 60;
     return `${min}:${`0${sec}`.slice(-2)}`;
   }, []);
 
-  useInterval(updateProgress, 1000);
+  useInterval(updateProgress, 200);
 
   return (
     <div
       data-testid="PlayerBar"
-      className="fixed bottom-0 left-0 h-16 pt-1 px-4 sm:px-8 w-full self-stretch flex items-center justify-between bg-gray-100"
+      className="fixed bottom-0 left-0 z-50 h-16 pt-1 px-4 sm:px-8 w-full flex items-center justify-between bg-gray-100"
     >
       <div id="info" className="h-full py-2 flex w-6/12 items-center">
         <div className="px-2 py-1 font-semibold border-2 border-black rounded-lg">
-          {track
-            ? `${track.song.title} - ${track.song.singer}`
+          {props.track
+            ? `${props.track.song.title} - ${props.track.song.singer}`
             : 'Select Music'}
         </div>
         <button
@@ -101,7 +108,7 @@ export default function PlayerBar(props: Props) {
           id="like-button"
           onClick={onLikeClicked}
         >
-          {track?.like ? (
+          {props.track?.like ? (
             <FontAwesomeIcon
               data-testid="likeIcon"
               icon={faHeart}

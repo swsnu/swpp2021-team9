@@ -15,7 +15,11 @@ export const CREATE_COVER = asyncActionCreator('CREATE_COVER');
 
 // combination actionTypes
 export const LOAD_COMBINATIONS = asyncActionCreator('LOAD_COMBINATIONS');
+export const LOAD_COMBINATIONS_MAIN = asyncActionCreator(
+  'LOAD_COMBINATIONS_MAIN',
+);
 
 // song actionTypes
 export const CREATE_SONG = asyncActionCreator('CREATE_SONG');
 export const LOAD_SONG = asyncActionCreator('LOAD_SONG');
+export const LOAD_SONGS_SEARCH = asyncActionCreator('LOAD_SONGS_SEARCH');

@@ -69,6 +69,22 @@ class CombinationTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(response.content), "No covers provided.")
 
+    def test_combination_main(self):
+        client = Client(enforce_csrf_checks=False)
+
+        response = client.get("/api/combination/main/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        combinations = json.loads(response.content)
+        self.assertGreater(len(combinations), 0)
+
+        client = get_logined_client()
+        # Machine learning check
+
+        response = client.get("/api/combination/main/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        combinations = json.loads(response.content)
+        self.assertGreater(len(combinations), 0)
+
     def test_combination_info(self):
         client = Client(enforce_csrf_checks=False)
 

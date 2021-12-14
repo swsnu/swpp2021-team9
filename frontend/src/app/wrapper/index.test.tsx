@@ -41,7 +41,6 @@ describe('index', () => {
   test('should render signout and profile buttons when logged in', () => {
     jest.spyOn(console, 'log').mockImplementation();
     const mockState: WrapperState = {
-      name: 'wrapper',
       user: {
         id: 0,
         username: 'USERNAME',
@@ -69,9 +68,7 @@ describe('index', () => {
 
   test('should render signin and signup buttons when not logged in and logo', () => {
     jest.spyOn(console, 'log').mockImplementation();
-    const mockState: WrapperState = {
-      name: 'wrapper',
-    };
+    const mockState: WrapperState = {};
     const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
     useSelectorMock.mockReturnValue(mockState);
     const { page } = setup();
@@ -97,9 +94,7 @@ describe('index', () => {
 
   test('should get search key when click search button', () => {
     jest.spyOn(console, 'log').mockImplementation();
-    const mockState: WrapperState = {
-      name: 'wrapper',
-    };
+    const mockState: WrapperState = {};
     const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
     useSelectorMock.mockReturnValue(mockState);
     const { page } = setup();
