@@ -9,7 +9,7 @@ import ProfilePage from '.';
 import { dummyUser } from 'api/dummy';
 import * as urls from 'utils/urls';
 import { api } from 'api/band';
-import { RootState } from 'types';
+import { RootState } from '../../../utils/types';
 
 const store = configureAppStore();
 
@@ -166,4 +166,14 @@ test('Uploading file works properly', () => {
   const uploadFile = screen.getByTestId('uploadFile');
   fireEvent.change(uploadFile);
   fireEvent.click(editPictureButton);
+});
+
+it('error on load cover', async () => {
+  const { page } = setup(stubState);
+  (api.getUserInfo as jest.Mock).mockRejectedValueOnce('ERROR');
+  render(page);
+
+  await waitFor(() => expect(mockHistoryReplace).toBeCalledTimes(1));
+  expect(window.alert).toHaveBeenCalled();
+  expect(mockHistoryReplace).toHaveBeenLastCalledWith(urls.Main());
 });
