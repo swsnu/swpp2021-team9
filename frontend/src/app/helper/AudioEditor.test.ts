@@ -167,7 +167,6 @@ describe('AudioEditor.ts test', () => {
     fileWav = new File([new ArrayBuffer(23123)], 'file.wav', {
       type: 'audio/wav',
     });
-    // window.console.log = jest.fn();
     window.alert = jest.fn();
     getMockAudioContext();
     ae = AudioEditor.getInstance();

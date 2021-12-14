@@ -131,3 +131,5 @@ server/keyfile.json
 
 # vscode
 .vscode
+
+model.pth

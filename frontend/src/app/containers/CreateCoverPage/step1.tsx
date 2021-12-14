@@ -22,7 +22,6 @@ import { useCreateCoverSlice } from './slice';
 import { SegmentComponent, WaveformView } from 'app/components/Peaks';
 import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
-import MergedAudio from 'app/components/CreateCover/MergedAudio';
 import { selectCreateCover } from './slice/selectors';
 import { selectMakeCombinationSlice } from '../SongPage/slice/selectors';
 interface MatchParams {
@@ -41,7 +40,6 @@ export default function CreateCoverRecord(props: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [selectedSegmentId, setSelectedSegmentId] = useState<string>('');
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
@@ -70,42 +68,32 @@ export default function CreateCoverRecord(props: Props) {
     };
   }, [isUploading, isRecordingEnabled]);
 
-  const onClickDelete = useCallback((id: string) => {
-    setSelectedSegmentId(id);
-    if (id.length > 0) {
+  const onPlaySegment = useCallback((id: string) => {
+    if (id && id.length > 0) {
       const peaks = WaveformView.getPeaks();
       if (!peaks) {
         return window.alert('peaks가 없습니다.');
       }
-      peaks.segments.removeById(id);
-      const segs = peaks.segments.getSegments();
-      setSegments(segs);
+      peaks.player.playSegment(peaks.segments.getSegment(id)!);
     }
   }, []);
 
-  const onClickPlaySegment = useCallback(
-    (id: string) => {
-      setSelectedSegmentId(id);
-      if (id.length > 0) {
-        const Segs: Segment[] = segments.filter(
-          (seg: Segment) => seg.id === id,
-        );
-        const seg: Segment = Segs[0];
-        const peaks = WaveformView.getPeaks();
-        if (!peaks) {
-          return window.alert('peaks가 없습니다.');
-        }
-        console.log(seg);
-        peaks.player.playSegment(seg);
+  const onDeleteSegment = useCallback(async (id: string) => {
+    if (id && id.length > 0) {
+      const peaks = WaveformView.getPeaks();
+      if (!peaks) {
+        return window.alert('peaks가 없습니다.');
       }
-    },
-    [segments],
-  );
+
+      await peaks.segments.removeById(id);
+      const segs = await peaks.segments.getSegments();
+
+      setSegments([...segs]);
+    }
+  }, []);
 
   const getBlobFromRecorder = useCallback(
     async (blobUrl, blob) => {
-      console.log('url: ', blobUrl);
-      console.log('bolb: ', blob);
       let fileFromBlob = new File(
         [blob],
         new Date().toISOString() + '_recording.wav',
@@ -114,7 +102,6 @@ export default function CreateCoverRecord(props: Props) {
         },
       );
       const bUrl: any = await editor.readAndDecode(fileFromBlob, true);
-      console.log(bUrl);
       setRecordedUrl(bUrl);
     },
     [editor],
@@ -200,16 +187,9 @@ export default function CreateCoverRecord(props: Props) {
   };
 
   const renderSegments = () => {
-    const _segments = [...segments];
-
-    if (!_segments || _segments.length === 0) {
-      return null;
+    if (segments.length === 0) {
+      return;
     }
-
-    // if (_segments.length === 0) {
-    //   return null;
-    // }
-
     return (
       <React.Fragment>
         <table>
@@ -224,7 +204,7 @@ export default function CreateCoverRecord(props: Props) {
               <th>Delete</th>
             </tr>
           </thead>
-          <tbody>{renderSegmentRows(_segments)}</tbody>
+          <tbody>{renderSegmentRows(segments)}</tbody>
         </table>
         <button
           data-testid="MergeBtn"
@@ -247,9 +227,9 @@ export default function CreateCoverRecord(props: Props) {
         endTime={segment.endTime}
         labelText={segment.labelText}
         isMergeClicked={isMergeClicked}
-        onClickPlaySegment={onClickPlaySegment}
-        onClickDelete={onClickDelete}
         handleMergeList={handleMergeList}
+        onPlaySegment={onPlaySegment}
+        onDeleteSegment={onDeleteSegment}
       />
     ));
   };
@@ -286,7 +266,7 @@ export default function CreateCoverRecord(props: Props) {
         {isRecordingEnabled ? (
           mediaBlobUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={mediaBlobUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
@@ -311,7 +291,7 @@ export default function CreateCoverRecord(props: Props) {
         {isUploading ? (
           uploadedUrl ? (
             <WaveformView
-              selectedSegmentId={selectedSegmentId}
+              // selectedSegmentId={selectedSegmentId}
               audioUrl={uploadedUrl}
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
@@ -322,20 +302,27 @@ export default function CreateCoverRecord(props: Props) {
       </div>
       {renderSegments()}
       {mergedUrl && (isUploading || isRecordingEnabled) ? (
-        <div className="justify-center items-center">
-          <MergedAudio audioUrl={mergedUrl} />
-          <button
-            data-testid="UseMerged"
-            onClick={() => {
-              setUseMergedAudio(prev => !prev);
-            }}
-            className="my-3 mx-3 px-4 py-3 justify-center items-center rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
-          >
-            Use MergedAudio
-          </button>
-          {useMergedAudio ? (
-            <FontAwesomeIcon icon={faCheck} color="green" />
-          ) : null}
+        <div className="flex flex-col justify-center items-center">
+          <audio
+            data-testid="MergedAudio"
+            className="items-center justify-center"
+            src={mergedUrl}
+            controls
+          />
+          <div className="flex-row">
+            {useMergedAudio ? (
+              <FontAwesomeIcon icon={faCheck} color="green" />
+            ) : null}
+            <button
+              data-testid="UseMerged"
+              onClick={() => {
+                setUseMergedAudio(prev => !prev);
+              }}
+              className="items-center my-3 mx-3 px-4 py-3 rounded-md bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 hover:bg-blue-300"
+            >
+              Use Merged Audio
+            </button>
+          </div>
         </div>
       ) : null}
       <div

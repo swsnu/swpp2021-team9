@@ -8,7 +8,7 @@ import CoverEditPage from '.';
 import { dummyCovers } from 'api/dummy';
 import * as urls from 'utils/urls';
 import { api } from 'api/band';
-import { RootState } from 'types';
+import { RootState } from 'utils/types';
 
 window.alert = jest.fn();
 

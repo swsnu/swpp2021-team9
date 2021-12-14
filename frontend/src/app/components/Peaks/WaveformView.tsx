@@ -11,7 +11,6 @@ interface Props {
   audioContentType: string;
   segments: Segment[];
   setSegments: (props: any) => void;
-  selectedSegmentId: string | undefined;
 }
 
 interface State {}
@@ -94,19 +93,12 @@ class WaveformView extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log('WaveformComponent.componentDidMount');
-
     this.initPeaks();
   }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('WaveformComponent.componentDidUpdate');
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;
     }
-    // console.log('props', this.props);
-    // console.log('prevProps', prevProps);
-    // console.log(this.peaks);
     if (!this.peaks) {
       this.initPeaks();
       return;
@@ -147,21 +139,19 @@ class WaveformView extends Component<Props, State> {
       },
       showPlayheadTime: true,
       emitCueEvents: true,
+      zoomLevels: [8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096],
     };
 
     this.audioElementRef.current.src = this.props.audioUrl;
 
     Peaks.init(options, (err, peaks) => {
       this.peaks = peaks ?? null;
-      // console.log(peaks);
       WaveformView.PeaksInstance = peaks ?? null;
       this.onPeaksReady();
     });
   }
 
   componentWillUnmount() {
-    console.log('WaveformView.componentWillUnmount');
-
     if (this.peaks) {
       this.peaks.destroy();
       this.peaks = null;
@@ -191,21 +181,21 @@ class WaveformView extends Component<Props, State> {
         labelText: `편집할 부분 ${id}`,
         editable: true,
       });
-      this.logMarkers();
+      // this.logMarkers();
+      this.props.setSegments([...this.peaks.segments.getSegments()]);
     }
   };
 
-  logMarkers = () => {
-    if (this.peaks) {
-      this.props.setSegments(prevState => [
-        ...this.peaks!.segments.getSegments(),
-      ]);
-    }
-  };
+  // logMarkers = () => {
+  //   if (this.peaks) {
+  //     this.props.setSegments(prevState => [
+  //       ...this.peaks.segments.getSegments(),
+  //     ]);
+  //   }
+  // };
 
   onPeaksReady = () => {
     // Do something when the Peaks instance is ready for use
-    console.log('Peaks.js is ready');
     this.peaks &&
       this.peaks.on('segments.dragend', segment => {
         const segments = this.peaks!.segments.getSegments();

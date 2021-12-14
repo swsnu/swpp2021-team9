@@ -12,7 +12,7 @@ interface MatchParams {
 export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function CreateCoverInfoPage(props: Props) {
-  const { actions } = useCreateCoverSlice();
+  useCreateCoverSlice();
   const history = useHistory();
   const dispatch = useDispatch();
   const createCoverState = useSelector(selectCreateCover);
@@ -61,9 +61,7 @@ export default function CreateCoverInfoPage(props: Props) {
   ) => {
     e.preventDefault();
     const isFinish = window.confirm('커버 정보를 업로드 하시겠습니까?');
-    console.log(isFinish);
     if (!isFinish || !audioUrl) {
-      console.log('early return');
       return;
     }
     const coverUploadForm = {
