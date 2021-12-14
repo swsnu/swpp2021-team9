@@ -52,8 +52,8 @@ describe('band api', () => {
     const mockCoverForm: CoverForm = {
       audio: 'MOCK_AUDIO',
       songId: 1,
-      title: 'MOCK_TITLE',
       category: 'MOCK_CATEGORY',
+      title: 'MOCK_TITLE',
       description: 'MOCK_DESCRIPTION',
       tags: ['MOCK_TAG1', 'MOCK_TAG2'],
       combinationId: 2,
@@ -135,6 +135,11 @@ describe('band api', () => {
     );
   });
 
+  test(`/api/combination/main/`, async () => {
+    expect(await api.getCombinationsMain()).toEqual(MOCK_GET_DATA);
+    expect(apiClient.get).lastCalledWith(`/api/combination/main/`);
+  });
+
   test(`/api/song/`, async () => {
     const mockForm: SongForm = {} as any;
 
@@ -145,16 +150,11 @@ describe('band api', () => {
     expect(apiClient.post).lastCalledWith(`/api/song/`, mockForm);
   });
 
-  test(`/api/song/main/`, async () => {
-    expect(await api.getSongMain()).toEqual(MOCK_GET_DATA);
-    expect(apiClient.get).lastCalledWith(`/api/song/main/`);
-  });
-
   test(`/api/song/search/?search=key:str/`, async () => {
     const mockKey = 'MOCK_KEY';
 
     expect(await api.getSongBySearch(mockKey)).toEqual(MOCK_GET_DATA);
-    expect(apiClient.get).lastCalledWith(`/api/search/`, {
+    expect(apiClient.get).lastCalledWith(`/api/song/search/`, {
       params: { search: mockKey },
     });
   });

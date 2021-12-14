@@ -156,36 +156,23 @@ export const dummyCombinations: Combination[] = [
   {
     id: 0,
     views: 141,
-    song: 0,
+    song: dummySongs[0],
     covers: [dummyCovers[0], dummyCovers[1], dummyCovers[2]],
     likes: 25,
   },
   {
     id: 1,
     views: 93,
-    song: 0,
+    song: dummySongs[0],
     covers: [dummyCovers[1], dummyCovers[2], dummyCovers[3]],
     likes: 14,
   },
 ];
 
-export const dummyResultLines = [
+export const dummyTrackInfos: TrackInfo[] = [
   {
-    title: 'strawberry moon',
-    singer: 'jenny',
-    view: 1034,
-    likes: 426,
-  },
-  {
-    title: 'strawberry muun',
-    singer: 'henry',
-    view: 1020,
-    likes: 324,
-  },
-  {
-    title: 'strawberry boom',
-    singer: 'betty',
-    view: 1023,
-    likes: 302,
+    song: dummySongs[0],
+    sources: ['dummysource'],
+    like: false,
   },
 ];

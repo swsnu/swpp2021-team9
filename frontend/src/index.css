@@ -7,6 +7,16 @@ html {
   width: 100%;
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   height: 100%;
   width: 100%;
@@ -64,5 +74,5 @@ select {
 }
 
 .small-button {
-  @apply py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900
+  @apply py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900;
 }

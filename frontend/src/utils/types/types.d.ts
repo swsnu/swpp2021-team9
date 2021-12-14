@@ -8,7 +8,7 @@ type SignInForm = SignUpForm;
 interface Combination {
   id: number;
   views: number;
-  song: number;
+  song: Song;
   covers: Cover[];
   likes: number;
 }
@@ -89,11 +89,6 @@ type UserInfo = {
   photo?: string;
 };
 
-type PlayInfo = {
-  covers: string[];
-  song: SongInfo;
-};
-
 type SongInfo = {
   title: string;
   singer: string;
@@ -113,4 +108,17 @@ type ResultLine = {
   author: string;
   view: number;
   likes: number;
+};
+
+type SegmentDetail = {
+  segmentDuration: number;
+  startTime: number;
+  endTime: number;
+  segmentLength: number;
+};
+
+type AudioData = {
+  channels: Float32Array[];
+  sampleRate: number;
+  length: number;
 };

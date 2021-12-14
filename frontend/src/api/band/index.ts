@@ -39,11 +39,13 @@ export const api = {
     coverFormData.append('category', coverForm.category);
     coverFormData.append('description', coverForm.description);
     coverFormData.append('tags', JSON.stringify(coverForm.tags));
-    coverFormData.append('combination', String(coverForm.combinationId));
+    // coverFormData.append('combination', String(coverForm.combinationId));
     coverFormData.append('instrument', String(coverForm.instrumentId));
+
     return await apiClient.post<Cover>(
       `/api/cover/${coverForm.songId}/`,
       coverFormData,
+      // { headers: { 'Content-Type': 'multipart/form-data' } },
     );
   },
   getCoverBySongAndInstrument: async (songId: number, instrumentId: number) => {
@@ -99,6 +101,14 @@ export const api = {
     );
   },
 
+  // `/api/combination/main/`
+  getCombinationsMain: async () => {
+    const response = await apiClient.get<Combination[]>(
+      `/api/combination/main/`,
+    );
+    return response.data;
+  },
+
   // `/api/song/`
   getSongList: async () => {
     const response = await apiClient.get<Song[]>(`/api/song/`);
@@ -108,15 +118,9 @@ export const api = {
     return await apiClient.post<Song>(`/api/song/`, songForm);
   },
 
-  // `/api/song/main/`
-  getSongMain: async () => {
-    const response = await apiClient.get<Song[]>(`/api/song/main/`);
-    return response.data;
-  },
-
   // `/api/song/search/?search=key:str/`
   getSongBySearch: async (key: string) => {
-    const response = await apiClient.get<Song[]>(`/api/search/`, {
+    const response = await apiClient.get<Song[]>(`/api/song/search/`, {
       params: { search: key },
     });
     return response.data;

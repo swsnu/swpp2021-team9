@@ -23,14 +23,25 @@ export const editCover = asyncAction<CoverFormPut, Cover, AxiosError>(
 export const deleteCover = asyncAction<number, number, AxiosError>(
   AT.DELETE_COVER,
 );
+export const createCover = asyncAction<CoverForm, Cover, AxiosError>(
+  AT.CREATE_COVER,
+);
 
 // combination actions
 export const loadCombinations = asyncAction<number, Combination[], AxiosError>(
   AT.LOAD_COMBINATIONS,
 );
+export const loadCombinationsMain = asyncAction<
+  undefined,
+  Combination[],
+  AxiosError
+>(AT.LOAD_COMBINATIONS_MAIN);
 
 // song actions
 export const createSong = asyncAction<SongForm, Song, AxiosError>(
   AT.CREATE_SONG,
 );
 export const loadSong = asyncAction<number, Song, AxiosError>(AT.LOAD_SONG);
+export const loadSongsSearch = asyncAction<string, Song[], AxiosError>(
+  AT.LOAD_SONGS_SEARCH,
+);

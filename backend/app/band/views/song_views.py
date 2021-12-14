@@ -3,7 +3,6 @@ song views for band
 TODO ("implement")
 """
 from django.http.request import HttpRequest
-from django.db.models import Count
 from rest_framework import mixins, generics, filters
 
 from band.models import Song
@@ -24,27 +23,6 @@ class SongView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
 
     def post(self, request: HttpRequest):
         return self.create(request)
-
-
-class SongMain(mixins.ListModelMixin, generics.GenericAPIView):
-    """song/main/"""
-
-    serializer_class = SongSerializer
-
-    def get_queryset(self):
-        queryset = Song.objects.all()
-        if self.request.user.is_authenticated:
-            # if user is logged in, should recommend based on the user
-            return queryset
-
-        # default recommendation model: order by number of covers
-        queryset = queryset.annotate(cover_count=Count("covers")).order_by(
-            "-cover_count"
-        )
-        return queryset
-
-    def get(self, request: HttpRequest):
-        return self.list(request)
 
 
 class SongSearch(mixins.ListModelMixin, generics.GenericAPIView):

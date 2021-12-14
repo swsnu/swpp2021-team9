@@ -55,21 +55,6 @@ class SongTestCase(TestCase):
         self.assertEqual(res_content["reference"], "TEST_REFERENCE")
         self.assertEqual(res_content["description"], "TEST_DESCRIPTION")
 
-    def test_song_main(self):
-        client = Client(enforce_csrf_checks=False)
-
-        response = client.get("/api/song/main/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        songs = json.loads(response.content)
-        self.assertGreater(len(songs), 0)
-
-        client = get_logined_client()
-
-        response = client.get("/api/song/main/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        songs = json.loads(response.content)
-        self.assertGreater(len(songs), 0)
-
     def test_song_search(self):
         client = Client(enforce_csrf_checks=False)
         song: Song = Song.objects.get(pk=1)

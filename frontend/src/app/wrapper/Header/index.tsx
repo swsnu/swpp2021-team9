@@ -26,15 +26,15 @@ export default function Header(props: Props) {
   return (
     <div
       data-testid="Header"
-      className="flex self-stretch items-center justify-between h-12 px-4 bg-gray-100"
+      className="absolute top-0 left-0 w-full z-50 flex items-center justify-between h-12 px-4 bg-gray-100"
     >
-      <div
+      <button
         id="logo_button"
         onClick={props.onLogoClicked}
         className="sr-only sm:not-sr-only flex-none sm:mx-4 justify-start"
       >
         <Logo />
-      </div>
+      </button>
       <div className="flex-auto mx-4 max-w-lg">
         <Search onSearchClicked={props.onSearchClicked} />
       </div>

@@ -23,12 +23,16 @@ export default class Player extends TrackPlayer {
     this.setTracks(tracks ?? []);
   }
 
+  public get getIndex(): number {
+    return this.index;
+  }
+
   setIndex(idx: number) {
     if (idx < this.tracks.length) {
       this.index = idx;
       this.setTrack(this.tracks[idx]);
-      this.onTrackChanged?.(this.tracks[idx]);
       this.play();
+      this.onTrackChanged?.(this.tracks[idx]);
     } else {
       throw Error(
         `Out of index of tracks idx: ${idx}, length: ${this.tracks.length}`,
@@ -38,7 +42,7 @@ export default class Player extends TrackPlayer {
 
   setTracks(tracks: TrackInfo[]) {
     if (tracks && tracks.length > 0) {
-      this.tracks = tracks;
+      this.tracks = [...tracks];
       this.setIndex(0);
     } else {
       this.tracks = [];
@@ -46,8 +50,8 @@ export default class Player extends TrackPlayer {
   }
 
   addTrack(track: TrackInfo) {
-    this.tracks.splice(this.index, 0, track);
-    this.setIndex(this.index + 1);
+    this.tracks.splice(this.index, 0, { ...track });
+    this.setIndex(this.index);
   }
 
   playNext() {

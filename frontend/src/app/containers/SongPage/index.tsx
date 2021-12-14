@@ -8,12 +8,13 @@ import {
   selectCurrent,
 } from './slice/selectors';
 import { useSongSlice } from './slice';
+import { useMakeCombinationSlice } from './slice/makeCombination';
 import * as apiActions from 'api/actions';
 import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
 
 import Player from 'app/helper/Player';
-import SongInfo from './SongInfo';
+import SongInfoArea from './SongInfoArea';
 import TopCombination from './TopCombination';
 import CombinationArea from './CombinationArea';
 import TopCover from './TopCover';
@@ -25,6 +26,7 @@ export interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function SongPage(props: Props) {
   useSongSlice();
+  const makeCombination = useMakeCombinationSlice();
   const history = useHistory();
   const dispatch = useDispatch();
   const songState = useSelector(selectSong);
@@ -51,15 +53,17 @@ export default function SongPage(props: Props) {
       if (songResponse.error) {
         window.alert('Song page does not exist.');
         history.push(urls.Main());
+      } else if (songResponse.data) {
+        dispatch(makeCombination.actions.setSong(songResponse.data));
       }
     }
-  }, [songResponse, history]);
+  }, [songResponse, history, dispatch, makeCombination.actions]);
 
   // playing
   const player = useMemo(() => Player.getInstance(), []);
 
   const onClickPlay = useCallback(() => {
-    const currentSongInfo: SongInfo = songResponse.data!;
+    const currentSongInfo = songResponse.data!;
 
     let sources: string[] = combination
       .filter(item => item.cover)
@@ -72,7 +76,7 @@ export default function SongPage(props: Props) {
       sources,
       like: false,
     };
-    player.setTracks([currentTrackInfo]);
+    player.addTrack(currentTrackInfo);
   }, [combination, player, songResponse.data]);
 
   const renderTopCover = useCallback(() => {
@@ -95,10 +99,10 @@ export default function SongPage(props: Props) {
   }, [current, combination, coversResponse.data]);
 
   return (
-    <div data-testid="SongPage" className="flex justify-center">
+    <div data-testid="SongPage" className="flex justify-center h-full">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         {songResponse.data && (
-          <SongInfo
+          <SongInfoArea
             song={songResponse.data}
             image={getThumbnail(songResponse.data.reference)}
           />
@@ -110,6 +114,7 @@ export default function SongPage(props: Props) {
 
         {instrumentsResponse.data && coversResponse.data && (
           <CombinationArea
+            songId={props.match.params.id}
             instruments={instrumentsResponse.data}
             covers={coversResponse.data}
             onClickPlay={onClickPlay}
