@@ -13,7 +13,6 @@ from band.serializers import CombinationSerializer, CombinationLikeSerializer
 # pylint: disable=W0613
 # disable unused-argument warning, duplicate code
 
-
 class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):
     """combination/<int:song_id>/"""
 

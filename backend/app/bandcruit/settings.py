@@ -56,12 +56,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_apscheduler",
     "corsheaders",
     "rest_framework",
     "band",
     "user",
 ]
 
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+
+SCHEDULER_DEFAULT = True
 
 # Use Custom User as default user
 AUTH_USER_MODEL = "user.CustomUser"
@@ -83,8 +87,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "bandcruit.urls"
-
-CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "https://metaband.space", "http://localhost"]
 
 TEMPLATES = [
     {

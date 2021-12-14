@@ -80,7 +80,7 @@ class Cover(models.Model):
     likes = ManyToManyField(
         User, db_table="Cover_Likes", related_name="like_covers", blank=True
     )
-    views: int = IntegerField(db_column="view", default=0)
+    # views: int = IntegerField(db_column="view", default=0)
     combination: "Combination" = ForeignKey(
         "Combination",
         related_name="+",
@@ -88,6 +88,10 @@ class Cover(models.Model):
         null=True,
         blank=True,
     )
+
+    @property
+    def views(self) -> int:
+        return CoverLog.objects.filter(cover=self).count()
 
     @property
     def like_count(self) -> int:
@@ -103,7 +107,7 @@ class Cover(models.Model):
 class Combination(models.Model):
     """Combination model"""
 
-    view: int = IntegerField(db_column="view", default=0)
+    # view: int = IntegerField(db_column="view", default=0)
     song: Song = ForeignKey(Song, related_name="combinations", on_delete=models.CASCADE)
     covers = ManyToManyField(Cover, db_table="Cover_Combination", related_name="+")
     likes = ManyToManyField(
@@ -113,6 +117,10 @@ class Combination(models.Model):
     @property
     def like_count(self) -> int:
         return self.likes.count()
+
+    @property
+    def views(self) -> int:
+        return CombinationLog.objects.filter(cover=self).count()
 
     def __str__(self):
         return f"([{self.pk}] {self.song} combination)"
@@ -133,6 +141,7 @@ class CoverTag(models.Model):
 class CoverLog(models.Model):
     """CoverLog model"""
 
+    addr = models.CharField(max_length=50, db_column="addr")
     user: User = ForeignKey(
         User, related_name="+", on_delete=models.SET_NULL, null=True
     )
@@ -154,3 +163,11 @@ class CombinationLog(models.Model):
 
     class Meta:
         db_table = "CombinationLog"
+
+
+class RecoSong(models.Model):
+    song: Song = ForeignKey(Song, on_delete=models.CASCADE)
+    recos = models.CharField(max_length=50, db_column="recos")
+
+    class Meta:
+        db_table = "RecoSong"
