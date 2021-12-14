@@ -42,7 +42,7 @@ export default class Player extends TrackPlayer {
 
   setTracks(tracks: TrackInfo[]) {
     if (tracks && tracks.length > 0) {
-      this.tracks = tracks;
+      this.tracks = [...tracks];
       this.setIndex(0);
     } else {
       this.tracks = [];
@@ -50,8 +50,8 @@ export default class Player extends TrackPlayer {
   }
 
   addTrack(track: TrackInfo) {
-    this.tracks.splice(this.index, 0, track);
-    this.setIndex(this.index + 1);
+    this.tracks.splice(this.index, 0, { ...track });
+    this.setIndex(this.index);
   }
 
   playNext() {

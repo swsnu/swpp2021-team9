@@ -29,9 +29,24 @@ export default function Album(props: Props) {
         <div className="text-md font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
           {props.combination.song.singer}
         </div>
+        <div className="font-light text-xs text-opacity-50 whitespace-nowrap overflow-hidden overflow-ellipsis">
+          {`By `}
+          {props.combination.covers.map(cover => (
+            <span key={cover.id} className="font-normal">
+              {cover.user.username}
+              <span className="font-light">
+                {`(${cover.instrument.name}) `}
+              </span>
+            </span>
+          ))}
+        </div>
       </button>
 
-      <button data-testid="Play" onClick={props.onClickPlay}>
+      <button
+        data-testid="Play"
+        onClick={props.onClickPlay}
+        className="w-full flex flex-col items-center"
+      >
         <div className="relative block h-36 w-36 bg-gray-400 rounded-full shadow-md overflow-hidden">
           <div
             className="absolute top-1/2 left-1/2 h-48 w-48"

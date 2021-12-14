@@ -9,7 +9,6 @@ import { selectWrapper } from './slice/selectors';
 import { useWrapperSlice, wrapperActions } from './slice';
 
 import * as url from 'utils/urls';
-import mockPlaylist from 'app/helper/mockPlayList';
 import Player from 'app/helper/Player';
 
 interface Props {
@@ -29,21 +28,6 @@ export default function Wrapper(props: Props) {
   const player = React.useMemo(() => Player.getInstance(), []);
 
   useEffect(() => {
-    const trackList: TrackInfo[] = [];
-    mockPlaylist.forEach(v => {
-      trackList.push({
-        song: {
-          title: v.name,
-          singer: v.artist,
-          category: 'category',
-          reference: 'ref',
-          description: 'des',
-        },
-        sources: [v.source],
-        like: false,
-      });
-    });
-    player.setTracks(trackList);
     player.pause();
   }, [player]);
 

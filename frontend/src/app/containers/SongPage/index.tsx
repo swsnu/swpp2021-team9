@@ -76,7 +76,7 @@ export default function SongPage(props: Props) {
       sources,
       like: false,
     };
-    player.setTracks([currentTrackInfo]);
+    player.addTrack(currentTrackInfo);
   }, [combination, player, songResponse.data]);
 
   const renderTopCover = useCallback(() => {
@@ -99,7 +99,7 @@ export default function SongPage(props: Props) {
   }, [current, combination, coversResponse.data]);
 
   return (
-    <div data-testid="SongPage" className="flex justify-center">
+    <div data-testid="SongPage" className="flex justify-center h-full">
       <div className="flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg">
         {songResponse.data && (
           <SongInfoArea

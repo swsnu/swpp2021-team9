@@ -35,7 +35,7 @@ export default function MainPage(props: Props) {
         window.alert('Error: could not fetch bands.');
       } else if (combinationsResponse.data && player) {
         // setting tracks
-        const tracks = combinationsResponse.data.map(combination => {
+        const trackInfos = combinationsResponse.data.map(combination => {
           const sources = combination.covers.map(cover => cover.audio);
           const trackInfo: TrackInfo = {
             song: combination.song,
@@ -44,7 +44,7 @@ export default function MainPage(props: Props) {
           };
           return trackInfo;
         });
-        player.setTracks(tracks);
+        player.setTracks(trackInfos);
       }
     }
   }, [combinationsResponse, player]);
