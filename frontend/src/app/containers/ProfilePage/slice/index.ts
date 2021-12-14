@@ -5,13 +5,11 @@ import profilePageSaga from './saga';
 
 /* --- STATE --- */
 export interface ProfileState {
-  name: string;
   profileResponse: AsyncStateType<User>;
   postProfileResponse: AsyncStateType<UserPostForm>;
 } // state 형식 정의
 
 export const initialState: ProfileState = {
-  name: 'profile',
   profileResponse: { loading: false },
   postProfileResponse: { loading: false },
 };
