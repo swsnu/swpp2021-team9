@@ -1,15 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { useProfileSlice } from './slice';
-import { useHistory, RouteComponentProps } from 'react-router-dom';
-import * as apiActions from 'api/actions';
-import { selectProfile } from './slice/selectors';
-import { selectWrapper } from 'app/wrapper/slice/selectors';
-import * as urls from 'utils/urls';
+import { RouteComponentProps } from 'react-router-dom';
 import { useProfile } from './hook';
-import { format } from 'path';
 
 interface MatchParams {
   id: string;
