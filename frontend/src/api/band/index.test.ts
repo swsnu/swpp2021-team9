@@ -52,8 +52,8 @@ describe('band api', () => {
     const mockCoverForm: CoverForm = {
       audio: 'MOCK_AUDIO',
       songId: 1,
-      title: 'MOCK_TITLE',
       category: 'MOCK_CATEGORY',
+      title: 'MOCK_TITLE',
       description: 'MOCK_DESCRIPTION',
       tags: ['MOCK_TAG1', 'MOCK_TAG2'],
       combinationId: 2,

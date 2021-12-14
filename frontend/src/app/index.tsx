@@ -49,7 +49,7 @@ export function App() {
             <Route exact path={url.Cover(':id')} component={CoverPage} />
             <Route
               exact
-              path={url.CreateCover('record')}
+              path={url.CreateCover(':id', 'record')}
               component={CreateCoverRecord}
             />
             <Route
@@ -59,7 +59,7 @@ export function App() {
             />
             <Route
               exact
-              path={url.CreateCover('info')}
+              path={url.CreateCover(':id', 'info')}
               component={CreateCoverInfo}
             />
             <Route exact path={url.Song(':id')} component={CoverPage} />

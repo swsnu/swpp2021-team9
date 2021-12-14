@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
+interface Props {
+  stream: MediaStream | null;
+  className: string;
+}
+
+const VideoPreview = ({ stream, className }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -12,14 +17,16 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
     return null;
   }
   return (
-    <video
-      data-testid="video-preview"
-      ref={videoRef}
-      width={500}
-      height={500}
-      autoPlay
-      controls
-    />
+    <div className={className}>
+      <video
+        data-testid="video-preview"
+        ref={videoRef}
+        width={500}
+        height={500}
+        autoPlay
+        controls
+      />
+    </div>
   );
 };
 

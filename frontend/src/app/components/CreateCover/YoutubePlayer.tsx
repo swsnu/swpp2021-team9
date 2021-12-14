@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import ReactPlayer from 'react-player';
-interface Props {}
+interface Props {
+  url: string;
+}
 
 export default function YoutubePlayer(props: Props) {
   const player = useRef<ReactPlayer>(null);
@@ -10,11 +12,7 @@ export default function YoutubePlayer(props: Props) {
       <ReactPlayer
         ref={player}
         className={'shadow border'}
-        url={[
-          'https://www.youtube.com/watch?v=SK6Sm2Ki9tI',
-          'https://www.youtube.com/watch?v=FtaW6YMAafk',
-          'https://www.youtube.com/watch?v=ww9hZfgC2d8',
-        ]}
+        url={props.url}
         controls={true}
       />
     </div>
