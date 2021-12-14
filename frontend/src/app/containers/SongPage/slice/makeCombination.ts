@@ -10,11 +10,13 @@ export interface CombinationItem {
 
 /* --- STATE --- */
 export interface MakeCombinationState {
+  song: Song | null;
   combination: CombinationItem[];
   current: number | null;
-} // state 형식 정의
+}
 
 export const initialState: MakeCombinationState = {
+  song: null,
   combination: [],
   current: null,
 };
@@ -25,6 +27,13 @@ const slice = createSlice({
   name: 'makeCombination', // 이 이름을 types/RootState.ts에 써놓아야 함
   initialState,
   reducers: {
+    setSong(state, action: PayloadAction<Song>) {
+      if (state.song && state.song.id !== action.payload.id) {
+        state.combination = [];
+        state.current = null;
+      }
+      state.song = action.payload;
+    },
     addItem(state, action: PayloadAction<Instrument>) {
       const newItem: CombinationItem = {
         id: nextItemID,
@@ -88,15 +97,3 @@ export const useMakeCombinationSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions, reducer: slice.reducer };
 };
-
-/**
- * Example Usage:
- *
- * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useExampleSlice();
- *
- *  const onButtonClick = (evt) => {
- *    dispatch(actions.someAction());
- *   };
- * }
- */

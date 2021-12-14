@@ -15,6 +15,7 @@ export const LOAD_PROFILE = asyncActionCreator('LOAD_PROFILE');
 export const POST_PROFILE = asyncActionCreator('POST_PROFILE');
 export const EDIT_COVER = asyncActionCreator('EDIT_COVER');
 export const DELETE_COVER = asyncActionCreator('DELETE_COVER');
+export const CREATE_COVER = asyncActionCreator('CREATE_COVER');
 
 // combination actionTypes
 export const LOAD_COMBINATIONS = asyncActionCreator('LOAD_COMBINATIONS');

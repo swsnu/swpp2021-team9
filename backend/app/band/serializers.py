@@ -4,6 +4,7 @@ DRF serializers for band
 from rest_framework import serializers
 
 from user.serializers import UserSerializer
+from common.proxy_file_field import ProxyFileField
 from .models import (
     CoverTag,
     Instrument,
@@ -32,7 +33,7 @@ class SongSerializer(serializers.ModelSerializer):
 class CoverSerializer(serializers.ModelSerializer):
     """Serializer for cover"""
 
-    audio = serializers.FileField(allow_empty_file=True)
+    audio = ProxyFileField(allow_empty_file=True)
     user = UserSerializer(many=False, read_only=True)
     user_id = serializers.IntegerField(write_only=True)
     song = SongSerializer(many=False, read_only=True)
@@ -41,7 +42,6 @@ class CoverSerializer(serializers.ModelSerializer):
     instrument_id = serializers.IntegerField(write_only=True)
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     tags_list = serializers.ListField(write_only=True, required=False)
-
     # override
     def create(self, validated_data: dict):
         if validated_data.get("tags_list") is not None:
@@ -73,7 +73,7 @@ class CoverSerializer(serializers.ModelSerializer):
             "tags",
             "like_count",
             "views",
-            "combination",
+            # "combination",
             "user_id",
             "song_id",
             "instrument_id",

@@ -1,10 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { RootState } from 'types';
+import { RootState } from 'utils/types';
 import { initialState as initialMakeCombination } from './makeCombination';
 import { initialState as initialSong } from '.';
 
-const selectMakeCombinationSlice = (state: RootState) =>
+export const selectMakeCombinationSlice = (state: RootState) =>
   (state && state.makeCombination) || initialMakeCombination;
 
 export const selectCombination = createSelector(

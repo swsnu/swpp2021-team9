@@ -27,14 +27,14 @@ describe('<VideoPreview />', () => {
   });
 
   it('should render properly when stream is null', () => {
-    render(<VideoPreview stream={null} />);
+    render(<VideoPreview className="" stream={null} />);
     // when you find non-existing element, use queryByTestId
     const videoPreview = screen.queryByTestId('video-preview');
     expect(videoPreview).toBeFalsy();
   });
 
   it('should render properly when stream is not null', () => {
-    render(<VideoPreview stream={mockMediaStream} />);
+    render(<VideoPreview className="" stream={mockMediaStream} />);
     const videoPreview = screen.getByTestId('video-preview');
     expect(videoPreview).toBeTruthy();
   });
