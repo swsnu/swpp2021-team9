@@ -63,7 +63,7 @@ export default function CoverPage(props: Props) {
   const author = cover?.user;
   const editable =
     author && wrapperState.user ? author.id === wrapperState.user.id : false;
-
+  console.log(cover);
   return (
     <div data-testid="CoverPage" className="flex justify-center">
       {cover ? (
