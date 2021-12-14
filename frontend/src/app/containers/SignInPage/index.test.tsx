@@ -239,7 +239,6 @@ test('should alert [No User Info Received] when signinstate has error', () => {
 
   const inputemail = screen.getByTestId('input-email');
   const inputpassword = screen.getByTestId('input-password');
-  const mockHistoryPush = jest.fn();
 
   userEvent.type(inputemail, 'swpp2021@naver.com');
   userEvent.type(inputpassword, 'swpp2021');

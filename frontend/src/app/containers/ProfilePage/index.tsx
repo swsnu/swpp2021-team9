@@ -28,7 +28,7 @@ export default function ProfilePage(props: Props) {
   const [crop, setCrop] = useState({
     unit: '%',
     width: 30,
-    aspect: 1 / 1,
+    aspect: 1,
   } as any);
 
   const [completedCrop, setCompletedCrop] = useState(null as any);

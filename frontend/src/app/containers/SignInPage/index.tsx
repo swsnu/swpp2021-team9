@@ -30,10 +30,11 @@ export default function SignInPage(props: Props) {
 
   useEffect(() => {
     if (!signInState.signInResponse.loading) {
+      if (signInState.signInResponse.data) {
+        history.push(Main()); // TODO : testing
+      }
       if (signInState.signInResponse.error) {
         alert('No User Info Received!');
-      } else {
-        history.push(Main());
       }
     }
   });
