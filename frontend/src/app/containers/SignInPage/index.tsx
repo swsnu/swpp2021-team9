@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Main } from 'utils/urls';
-import { useSignInSlice } from './slice';
+import { signInActions, useSignInSlice } from './slice';
 import * as apiActions from 'api/actions';
 import { selectSignIn } from './slice/selectors';
 export type Props = {};
@@ -31,10 +31,12 @@ export default function SignInPage(props: Props) {
   useEffect(() => {
     if (!signInState.signInResponse.loading) {
       if (signInState.signInResponse.data) {
+        dispatch(signInActions.clearSignInResponse());
         history.push(Main()); // TODO : testing
       }
       if (signInState.signInResponse.error) {
         alert('No User Info Received!');
+        dispatch(signInActions.clearSignInResponse());
       }
     }
   });

@@ -11,6 +11,7 @@ import 'jest-styled-components';
 
 import Enzyme from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-17-updated';
+import axios from 'axios';
 
 Enzyme.configure({
   adapter: new EnzymeAdapter(),

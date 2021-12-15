@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from band.models import Instrument
+from user.serializers.info_serializers import UserSerializer
 from .serializers.profile_serializers import UserProfileSerializer
 
 User = get_user_model()
@@ -54,7 +55,7 @@ class UserSignin(APIView):
             )
 
         login(request, user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
 
 class UserSignout(APIView):
@@ -88,6 +89,7 @@ class UserInfo(
 
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
+        print("Before serializer is valid : ", request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.save()
 
@@ -97,6 +99,7 @@ class UserInfo(
                 instrument_list = json.loads(instrument_list)
                 instruments = Instrument.objects.filter(id__in=instrument_list)
                 new_user.instruments.set(instruments)
+                
             except JSONDecodeError:
                 return Response("instrument format not json", 400)
 

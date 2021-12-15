@@ -10,20 +10,10 @@ import { Props } from '.';
 
 const initForm: UserPostForm = {
   id: -1,
-  username: '',
-  description: '',
+  username: 'Your ID',
+  description: 'Your Description',
   photo: new Blob([]),
   instruments: [],
-};
-
-const initUserForm: User = {
-  id: -1,
-  username: '',
-  description: '',
-  photo: '',
-  instruments: [],
-  email: '',
-  followings: [],
 };
 
 export const useProfile = (props: Props) => {
@@ -37,7 +27,10 @@ export const useProfile = (props: Props) => {
   const profileResponse = pageState.profileResponse;
   const postProfileResponse = pageState.postProfileResponse;
 
-  const [form, setForm] = useState<UserPostForm>(initForm);
+  const [form, setForm] = useState<UserPostForm>({
+    ...initForm,
+    id: Number(props.match.params.id),
+  });
   const [photo, setPhoto] = useState<string>('');
   const [followings, setFollowings] = useState<UserInfo[]>([]);
 
@@ -49,7 +42,7 @@ export const useProfile = (props: Props) => {
   useEffect(() => {
     if (!wrapperState.user) {
       alert('You have to login to see profile page');
-      //history.replace(urls.Main());
+      history.replace(urls.Main());
     } else if (!profileResponse.loading) {
       if (profileResponse.error) {
         alert('Failed to load original data');
@@ -117,13 +110,14 @@ export const useProfile = (props: Props) => {
   const onChangePicture = useCallback(
     (Photo: Blob) => {
       setForm({ ...form, photo: Photo });
-      console.log(Photo);
+      //console.log(Photo);
     },
     [form],
   );
 
   const onSave = useCallback(() => {
     dispatch(apiActions.postProfile.request(form));
+    console.log('Form updated!');
   }, []);
 
   return {
