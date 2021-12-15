@@ -3,8 +3,9 @@ import Player from './Player';
 
 jest.mock('./TrackPlayer');
 
-const mockTrack: TrackInfo[] = mockPlaylist.map(v => {
+const mockTrack: TrackInfo[] = mockPlaylist.map((v, index) => {
   return {
+    combinationId: index,
     song: {
       title: v.name,
       singer: v.artist,
