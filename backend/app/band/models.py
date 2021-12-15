@@ -80,7 +80,7 @@ class Cover(models.Model):
     likes = ManyToManyField(
         User, db_table="Cover_Likes", related_name="like_covers", blank=True
     )
-    # views: int = IntegerField(db_column="view", default=0)
+    view: int = IntegerField(db_column="view", default=0)
     combination: "Combination" = ForeignKey(
         "Combination",
         related_name="+",
@@ -89,8 +89,7 @@ class Cover(models.Model):
         blank=True,
     )
 
-    @property
-    def views(self) -> int:
+    def count_views(self) -> int:
         return CoverLog.objects.filter(cover=self).count()
 
     @property
@@ -107,7 +106,7 @@ class Cover(models.Model):
 class Combination(models.Model):
     """Combination model"""
 
-    # view: int = IntegerField(db_column="view", default=0)
+    view: int = IntegerField(db_column="view", default=0)
     song: Song = ForeignKey(Song, related_name="combinations", on_delete=models.CASCADE)
     covers = ManyToManyField(Cover, db_table="Cover_Combination", related_name="+")
     likes = ManyToManyField(
@@ -118,8 +117,7 @@ class Combination(models.Model):
     def like_count(self) -> int:
         return self.likes.count()
 
-    @property
-    def views(self) -> int:
+    def count_views(self) -> int:
         return CombinationLog.objects.filter(cover=self).count()
 
     def __str__(self):

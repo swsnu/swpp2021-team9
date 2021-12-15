@@ -131,4 +131,20 @@ export const api = {
     const response = await apiClient.get<Song>(`/api/song/info/${songId}/`);
     return response.data;
   },
+
+  // `/api/log/cover/`
+  logCover: async (coverId: number) => {
+    const response = await apiClient.post(`/api/log/cover/`, {
+      cover_id: coverId,
+    });
+    return response;
+  },
+
+  // `/api/log/combination/`
+  logCombination: async (combinationId: number) => {
+    const response = await apiClient.post(`/api/log/combination/`, {
+      combination_id: combinationId,
+    });
+    return response;
+  },
 };

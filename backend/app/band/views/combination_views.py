@@ -2,16 +2,20 @@
 combination views for band
 TODO ("implement")
 """
+from collections import defaultdict
+import json
+from django.http import request
 from django.http.request import HttpRequest
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
 
-from band.models import Combination, Song
+from band.models import Combination, Song, CombinationLog, RecoSong
 from band.serializers import CombinationSerializer, CombinationLikeSerializer
 
 # pylint: disable=W0613
 # disable unused-argument warning, duplicate code
+
 
 class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):
     """combination/<int:song_id>/"""
@@ -54,8 +58,34 @@ class CombinationMain(mixins.ListModelMixin, generics.GenericAPIView):
     def get_queryset(self):
         queryset = Combination.objects.all()
         if self.request.user.is_authenticated:
-            # if user is logged in, should recommend based on the user
-            pass
+            user_log = CombinationLog.objects.filter(
+                user=request.user
+            ).prefetch_related("combination")
+            last_combi_logs = user_log.order_by("-timestamp")[:5]
+            last_song_logs = map(lambda x: x.combination.song_id, last_combi_logs)
+            last_songs = RecoSong.objects.filter(song_id__in=last_song_logs)
+            song_recos = {r.song_id: json.loads(r.recos) for r in last_songs}
+
+            reco_result = defaultdict(int)
+            for i, song_id in enumerate(last_song_logs):
+                if song_id not in song_recos:
+                    continue
+                recos = song_recos[song_id]
+                for reco in recos:
+                    reco_result[reco] += 1 / (i + 1)
+            sorted_recos, _ = zip(
+                *sorted(reco_result.items(), key=lambda item: -item[1])
+            )
+            if len(sorted_recos) < 10:
+                left = 10 - len(sorted_recos)
+                qc = (
+                    queryset.order_by("-view")[:left]
+                    .values_list("id", flat=True)
+                    .exclude(id__in=sorted_recos)
+                )
+                sorted_recos.extend(qc)
+
+            return Combination.objects.in_bulk(sorted_recos)
 
         # default recommendation model: order by number of views
         queryset = queryset.order_by("-view")
@@ -93,8 +123,7 @@ class CombinationLike(generics.GenericAPIView):
 
     def put(self, request: Request, *args, **kwargs):
         instance = self.get_object()
-        serializer_old: CombinationLikeSerializer = self.get_serializer(
-            instance)
+        serializer_old: CombinationLikeSerializer = self.get_serializer(instance)
         likes: list = serializer_old.data.get("likes")
 
         is_like = request.data.get("isLiked")

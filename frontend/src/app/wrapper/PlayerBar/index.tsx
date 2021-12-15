@@ -13,6 +13,7 @@ import { faHeart as faEmptyHeart } from '@fortawesome/free-regular-svg-icons';
 
 import Player from 'app/helper/Player';
 import { useInterval } from 'app/helper/Hooks';
+import { api } from 'api/band';
 
 interface Props {
   track?: TrackInfo;
@@ -34,6 +35,7 @@ export default function PlayerBar(props: Props) {
     };
     player.onTrackChanged = newTrack => {
       props.setTrack(newTrack);
+      // api.logCombination(newTrack.combinationId);
     };
   }, [player, props]);
 
