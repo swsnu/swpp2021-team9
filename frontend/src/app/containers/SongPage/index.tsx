@@ -72,6 +72,7 @@ export default function SongPage(props: Props) {
     if (sources.length === 0) return;
 
     const currentTrackInfo: TrackInfo = {
+      combinationId: 1, //TODO
       song: currentSongInfo,
       sources,
       like: false,

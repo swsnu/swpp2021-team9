@@ -102,7 +102,7 @@ type SongInfo = {
 };
 
 type TrackInfo = {
-  id?: number;
+  combinationId: number;
   song: SongInfo;
   sources: string[];
   like: boolean;

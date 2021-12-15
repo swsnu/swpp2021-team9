@@ -71,11 +71,11 @@ export default function Wrapper(props: Props) {
 
   const onLikeClicked = useCallback(
     (track: TrackInfo) => {
-      if (track.id) {
-        console.log('track', track.id);
+      if (track.combinationId) {
+        console.log('track', track.combinationId);
         dispatch(
           apiActions.editCombinationLike.request({
-            combinationId: track.id,
+            combinationId: track.combinationId,
             isLiked: !track.like,
           }),
         );
