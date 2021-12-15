@@ -88,6 +88,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "bandcruit.urls"
 
+CSRF_TRUSTED_ORIGINS = ["https://www.metaband.space/*", "metaband.space/*", "http://localhost", "metaband.space"]
+CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "https://metaband.space", "http://localhost"]
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

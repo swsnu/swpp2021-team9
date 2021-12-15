@@ -25,7 +25,7 @@ describe('WavToMp3', () => {
     jest.clearAllMocks();
     URL.createObjectURL = jest.fn().mockReturnValue('URL');
   });
-  test('wav2Mp3', () => {
+  test('wav2Mp3', async () => {
     WavToMp3.wavToMp3(
       1,
       44100,
@@ -33,7 +33,7 @@ describe('WavToMp3', () => {
     );
   });
 
-  test('audioBufferToWav', () => {
+  test('audioBufferToWav', async () => {
     WavToMp3.audioBufferToWav(stubAudioBuf);
   });
 });

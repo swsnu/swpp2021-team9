@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Main } from 'utils/urls';
-import { useSignUpSlice } from './slice';
+import { signUpActions, useSignUpSlice } from './slice';
 import * as apiActions from 'api/actions';
 import { selectSignUp } from './slice/selectors';
 
@@ -10,7 +10,7 @@ export type Props = {};
 
 export default function SignUpPage(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useSignUpSlice();
+  useSignUpSlice();
   const signUpState = useSelector(selectSignUp);
 
   const history = useHistory();
@@ -32,10 +32,12 @@ export default function SignUpPage(props: Props) {
   useEffect(() => {
     if (!signUpState.signUpResponse.loading) {
       if (signUpState.signUpResponse.data) {
+        dispatch(signUpActions.clearSignUpResponse());
         history.push(Main());
       }
       if (signUpState.signUpResponse.error) {
         alert('SignUp Failed!');
+        dispatch(signUpActions.clearSignUpResponse());
       }
     }
   });

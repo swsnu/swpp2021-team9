@@ -32,6 +32,10 @@ const slice = createSlice({
       state.signInResponse.error = action.payload;
       return state;
     },
+    clearSignInResponse(state, action: PayloadAction<undefined>) {
+      state.signInResponse = { loading: false };
+      return state;
+    },
   },
 });
 

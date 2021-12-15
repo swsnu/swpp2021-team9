@@ -146,7 +146,7 @@ class UserTestCase(TestCase):
             json.dumps(test_user_info),
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # signout
         response = client.get("/api/user/signout/")

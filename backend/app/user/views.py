@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from band.models import Instrument
+from user.serializers.info_serializers import UserSerializer
 from .serializers.profile_serializers import UserProfileSerializer
 
 User = get_user_model()
@@ -54,7 +55,7 @@ class UserSignin(APIView):
             )
 
         login(request, user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
 
 class UserSignout(APIView):

@@ -1,14 +1,6 @@
-import * as React from 'react';
 import { Provider } from 'react-redux';
 import * as reactRedux from 'react-redux';
-import {
-  Router,
-  Switch,
-  Route,
-  Redirect,
-  BrowserRouter,
-} from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { fireEvent, screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -35,6 +27,7 @@ const mockErrorState: SignUpState = {
 
 function setup(state: SignUpState) {
   const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+  jest.spyOn(reactRedux, 'useDispatch').mockImplementation(() => jest.fn());
   useSelectorMock.mockReturnValue(state);
 
   const path = '/searchresult';
@@ -58,33 +51,15 @@ test('should render', () => {
 });
 
 test('should alert when there is no email', () => {
-  function setup(state: SignUpState) {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-    useSelectorMock.mockReturnValue(state);
-
-    const path = '/searchresult';
-    const page = (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route path={path} render={() => <SignUpPage />} />
-            <Redirect to={path} />
-          </Switch>
-        </BrowserRouter>
-      </Provider>
-    );
-    return { page };
-  }
-
   const { page } = setup(mockSuccessState);
   render(page);
 
   const button = screen.getByText('Sign Up');
-  const inputemail = screen.getByTestId('input-email');
+  // const inputemail = screen.getByTestId('input-email');
   const inputpassword = screen.getByTestId('input-password');
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  userEvent.type(inputemail, '');
+  // userEvent.type(inputemail, '');
   userEvent.type(inputpassword, 'swpp2021');
 
   fireEvent.click(button);
@@ -92,33 +67,15 @@ test('should alert when there is no email', () => {
 });
 
 test('should alert when there is no password', () => {
-  function setup(state: SignUpState) {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-    useSelectorMock.mockReturnValue(state);
-
-    const path = '/searchresult';
-    const page = (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route path={path} render={() => <SignUpPage />} />
-            <Redirect to={path} />
-          </Switch>
-        </BrowserRouter>
-      </Provider>
-    );
-    return { page };
-  }
-
   const { page } = setup(mockSuccessState);
   render(page);
 
   const button = screen.getByTestId('SignupButton');
   const inputemail = screen.getByTestId('input-email');
-  const inputpassword = screen.getByTestId('input-password');
+  // const inputpassword = screen.getByTestId('input-password');
 
   userEvent.type(inputemail, 'swpp2021@naver.com');
-  userEvent.type(inputpassword, '');
+  // userEvent.type(inputpassword, '');
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
   fireEvent.click(button);
@@ -126,28 +83,6 @@ test('should alert when there is no password', () => {
 });
 
 test('should move to Main Page properly', () => {
-  const history = createMemoryHistory();
-
-  function setup(state: SignUpState) {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-    useSelectorMock.mockReturnValue(state);
-
-    const path = '/searchresult';
-    const page = (
-      <Router history={history}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Switch>
-              <Route path={path} render={() => <SignUpPage />} />
-              <Redirect to={path} />
-            </Switch>
-          </BrowserRouter>
-        </Provider>
-      </Router>
-    );
-    return { page };
-  }
-
   const { page } = setup(mockSuccessState);
   render(page);
   const button = screen.getByTestId('SignupButton');
@@ -164,35 +99,12 @@ test('should move to Main Page properly', () => {
 });
 
 test('should alert [still loading] when signupstate is still loading', () => {
-  const history = createMemoryHistory();
-
-  function setup(state: SignUpState) {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-    useSelectorMock.mockReturnValue(state);
-
-    const path = '/searchresult';
-    const page = (
-      <Router history={history}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Switch>
-              <Route path={path} render={() => <SignUpPage />} />
-              <Redirect to={path} />
-            </Switch>
-          </BrowserRouter>
-        </Provider>
-      </Router>
-    );
-    return { page };
-  }
-
   const { page } = setup(mockLoadingState);
   render(page);
   const button = screen.getByTestId('SignupButton');
 
   const inputemail = screen.getByTestId('input-email');
   const inputpassword = screen.getByTestId('input-password');
-  const mockHistoryPush = jest.fn();
 
   userEvent.type(inputemail, 'swpp2021@naver.com');
   userEvent.type(inputpassword, 'swpp2021');
@@ -203,35 +115,12 @@ test('should alert [still loading] when signupstate is still loading', () => {
 });
 
 test('should alert [SignUp Failed] when signupstate has error', () => {
-  const history = createMemoryHistory();
-
-  function setup(state: SignUpState) {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-    useSelectorMock.mockReturnValue(state);
-
-    const path = '/searchresult';
-    const page = (
-      <Router history={history}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Switch>
-              <Route path={path} render={() => <SignUpPage />} />
-              <Redirect to={path} />
-            </Switch>
-          </BrowserRouter>
-        </Provider>
-      </Router>
-    );
-    return { page };
-  }
-
   const { page } = setup(mockErrorState);
   render(page);
   const button = screen.getByTestId('SignupButton');
 
   const inputemail = screen.getByTestId('input-email');
   const inputpassword = screen.getByTestId('input-password');
-  const mockHistoryPush = jest.fn();
 
   userEvent.type(inputemail, 'swpp2021@naver.com');
   userEvent.type(inputpassword, 'swpp2021');

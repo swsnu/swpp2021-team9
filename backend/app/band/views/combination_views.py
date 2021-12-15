@@ -45,8 +45,6 @@ class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):
             filtered_covers = filtered_covers.filter(covers=cover_id)
 
         filtered_covers = filtered_covers.filter(covers__count=len(covers))
-        print(filtered_covers)
-        print(len(filtered_covers))
         if len(filtered_covers) > 0:
             instance: Combination = filtered_covers[0]
             serializer: CombinationSerializer = self.get_serializer(instance)
