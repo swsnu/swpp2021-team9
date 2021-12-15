@@ -23,6 +23,9 @@ const slice = createSlice({
     setCurrentPlaying(state, action: PayloadAction<TrackInfo>) {
       state.currentTrack = action.payload;
     },
+    signOut(state, action: PayloadAction<undefined>) {
+      state.user = undefined;
+    },
   },
 });
 

@@ -55,8 +55,8 @@ export default function Wrapper(props: Props) {
   }, [history]);
 
   const onSignOutClicked = useCallback(() => {
-    console.log('onSignOutClicked');
-  }, []);
+    dispatch(wrapperActions.signOut());
+  }, [dispatch]);
 
   const onProfileClicked = useCallback(() => {
     history.push(url.Profile(`${user!.id}`));
