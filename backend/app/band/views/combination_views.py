@@ -3,6 +3,7 @@ combination views for band
 TODO ("implement")
 """
 from django.http.request import HttpRequest
+from django.db.models import Count
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import mixins, generics, status
@@ -31,13 +32,25 @@ class CombinationSong(mixins.ListModelMixin, generics.GenericAPIView):
             return Response("Song does not exist.", status=status.HTTP_400_BAD_REQUEST)
 
         data = request.data.copy()
-        data["user_id"] = request.user.id
-        data["song_id"] = song_id
 
         covers = data.pop("covers")
         if covers is None or len(covers) == 0:
             return Response("No covers provided.", status=status.HTTP_400_BAD_REQUEST)
 
+        filtered_covers = Combination.objects.all().annotate(Count("covers"))
+        for cover_id in covers:
+            filtered_covers = filtered_covers.filter(covers=cover_id)
+
+        filtered_covers = filtered_covers.filter(covers__count=len(covers))
+        print(filtered_covers)
+        print(len(filtered_covers))
+        if len(filtered_covers) > 0:
+            instance: Combination = filtered_covers[0]
+            serializer: CombinationSerializer = self.get_serializer(instance)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        data["user_id"] = request.user.id
+        data["song_id"] = song_id
         data["covers_list"] = covers
 
         serializer: CombinationSerializer = self.get_serializer(data=data)
@@ -94,8 +107,7 @@ class CombinationLike(generics.GenericAPIView):
 
     def put(self, request: Request, *args, **kwargs):
         instance = self.get_object()
-        serializer_old: CombinationLikeSerializer = self.get_serializer(
-            instance)
+        serializer_old: CombinationLikeSerializer = self.get_serializer(instance)
         likes: list = serializer_old.data.get("likes")
 
         is_like = request.data.get("isLiked")

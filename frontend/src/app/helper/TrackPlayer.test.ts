@@ -1,8 +1,9 @@
 import mockPlaylist from './mockPlayList';
 import TrackPlayer from './TrackPlayer';
 
-const mockTrack: TrackInfo[] = mockPlaylist.map(v => {
+const mockTrack: TrackInfo[] = mockPlaylist.map((v, index) => {
   return {
+    combinationId: index,
     song: {
       title: v.name,
       singer: v.artist,

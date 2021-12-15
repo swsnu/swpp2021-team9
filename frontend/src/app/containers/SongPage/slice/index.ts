@@ -9,6 +9,7 @@ import songPageSaga from './saga';
 /* --- STATE --- */
 export interface SongState {
   songResponse: AsyncStateType<Song>;
+  combinationResponse: AsyncStateType<Combination>;
   combinationsResponse: AsyncStateType<Combination[]>;
   coversResponse: AsyncStateType<Cover[]>;
   instrumentsResponse: AsyncStateType<Instrument[]>;
@@ -16,6 +17,7 @@ export interface SongState {
 
 export const initialState: SongState = {
   songResponse: { loading: false },
+  combinationResponse: { loading: false },
   combinationsResponse: { loading: false },
   coversResponse: { loading: false },
   instrumentsResponse: { loading: false },
@@ -38,6 +40,18 @@ const slice = createSlice({
     errorSongResponse(state, action: PayloadAction<string>) {
       state.songResponse = { loading: false };
       state.songResponse.error = action.payload;
+    },
+
+    loadingCombinationResponse(state, _action: PayloadAction<any>) {
+      state.combinationResponse = { loading: true };
+    },
+    successCombinationResponse(state, action: PayloadAction<Combination>) {
+      state.combinationResponse = { loading: false };
+      state.combinationResponse.data = action.payload;
+    },
+    errorCombinationResponse(state, action: PayloadAction<string>) {
+      state.combinationResponse = { loading: false };
+      state.combinationResponse.error = action.payload;
     },
 
     loadingCombinationsResponse(state, _action: PayloadAction<any>) {

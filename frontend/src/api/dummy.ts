@@ -171,6 +171,7 @@ export const dummyCombinations: Combination[] = [
 
 export const dummyTrackInfos: TrackInfo[] = [
   {
+    combinationId: 1,
     song: dummySongs[0],
     sources: ['dummysource'],
     like: false,

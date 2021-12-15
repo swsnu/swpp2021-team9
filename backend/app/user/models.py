@@ -10,7 +10,7 @@ from .managers import UserManager
 
 def user_profile_path(instance, filename):
     extension = os.path.splitext(filename)[1]
-    return 'profile_pic/{}_profile{}'.format(instance.pk, extension)
+    return f'profile_pic/{instance.pk}_profile{extension}'
 
 class CustomUser(AbstractUser):
     """Custom user model class for bandcruit
