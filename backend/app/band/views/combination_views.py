@@ -2,7 +2,6 @@
 combination views for band
 TODO ("implement")
 """
-import json
 from django.http.request import HttpRequest
 from django.db.models import Count
 from rest_framework.response import Response
