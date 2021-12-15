@@ -144,7 +144,7 @@
       "!src/**/*/types.ts",
       "!src/index.tsx",
       "!src/reportWebVitals.ts",
-      "!src/setupTests.js",
+      "!src/setupTests.ts",
       "!src/utils/**/*",
       "!src/types/**/*",
       "!src/locales/*",

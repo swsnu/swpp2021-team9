@@ -35,14 +35,20 @@ function setup() {
   return { page };
 }
 
-beforeEach(() => {
-  jest.clearAllMocks();
+beforeAll(() => {
   player.play = jest.fn();
   player.pause = jest.fn();
   player.playPrev = jest.fn();
   player.playNext = jest.fn();
   player.setCurrentTime = jest.fn();
   player.isPaused = jest.fn().mockReturnValue(true);
+  player.setIndex = jest.fn();
+  player.addTrack = jest.fn();
+  player.getTrack = jest.fn();
+});
+
+beforeEach(() => {
+  jest.resetAllMocks();
   api.getCombinationsMain = jest.fn(
     () =>
       new Promise((res, rej) => {
@@ -57,17 +63,21 @@ test('should render', () => {
 });
 
 test('should handle clicking play button correctly', async () => {
-  const spySetIndex = jest.spyOn(player, 'setIndex');
+  let track = 1;
+  (player.addTrack as jest.Mock).mockImplementation(t => {
+    track = t;
+  });
+
   const { page } = setup();
   await waitFor(() => {});
   const clickplay = page.getAllByTestId('Play')[1] as HTMLElement;
 
   fireEvent.click(clickplay);
-  expect(spySetIndex).toHaveBeenCalledWith(1);
-  const calledTimes = spySetIndex.mock.calls.length;
+  expect(player.addTrack).toBeCalledTimes(1);
 
+  (player.getTrack as jest.Mock).mockReturnValueOnce(track);
   fireEvent.click(clickplay);
-  expect(spySetIndex).toHaveBeenCalledTimes(calledTimes);
+  expect(player.addTrack).toBeCalledTimes(1);
 });
 
 test('should handle clicking title button correctly', async () => {

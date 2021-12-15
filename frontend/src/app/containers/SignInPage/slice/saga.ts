@@ -17,7 +17,7 @@ export function* getSignInResponse(
   yield put(signInActions.loadingSignInResponse('start load'));
   try {
     const signInResponse = yield api.signin(action.payload);
-    console.log(signInResponse);
+    // console.log(signInResponse);
     yield put(signInActions.successSignInResponse(signInResponse.data));
     yield put(wrapperActions.setUser(signInResponse.data));
   } catch (e: any) {

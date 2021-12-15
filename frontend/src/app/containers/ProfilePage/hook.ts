@@ -118,7 +118,7 @@ export const useProfile = (props: Props) => {
   const onChangeInstruments = useCallback(
     (Instruments: number[]) => {
       setForm({ ...form, instruments: Instruments });
-      console.log(Instruments);
+      // console.log(Instruments);
     },
     [form],
   );
@@ -126,7 +126,7 @@ export const useProfile = (props: Props) => {
   const onChangePicture = useCallback(
     (Photo: Blob) => {
       setForm({ ...form, photo: Photo });
-      console.log(Photo);
+      // console.log(Photo);
     },
     [form],
   );
