@@ -38,6 +38,7 @@ export default function MainPage(props: Props) {
         const trackInfos = combinationsResponse.data.map(combination => {
           const sources = combination.covers.map(cover => cover.audio);
           const trackInfo: TrackInfo = {
+            id: combination.id,
             song: combination.song,
             sources,
             like: false,

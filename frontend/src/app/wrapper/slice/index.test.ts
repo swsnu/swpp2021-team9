@@ -4,9 +4,10 @@ import {
   wrapperActions,
   WrapperState,
 } from './index';
-
+import * as ReactRedux from 'react-redux';
 import {
   InjectReducerParams,
+  InjectSagaParams,
   RootStateKeyType,
 } from 'utils/types/injector-typings';
 import { selectSlice } from './selectors';
@@ -18,11 +19,14 @@ jest.mock('utils/redux-injectors', () => {
   return {
     __esModule: true,
     ...originalModule,
+    useInjectSaga: jest.fn((params: InjectSagaParams) => {}),
     useInjectReducer: jest.fn(
       (params: InjectReducerParams<RootStateKeyType>) => {},
     ),
   };
 });
+
+jest.spyOn(ReactRedux, 'useDispatch').mockImplementation(() => jest.fn());
 
 test('should return initial state', () => {
   expect(useWrapperSlice().reducer(undefined, { type: '' })).toEqual(

@@ -7,7 +7,7 @@ import Header from './Header';
 import PlayerBar from './PlayerBar';
 import { selectWrapper } from './slice/selectors';
 import { useWrapperSlice, wrapperActions } from './slice';
-
+import * as apiActions from 'api/actions';
 import * as url from 'utils/urls';
 import Player from 'app/helper/Player';
 
@@ -69,6 +69,24 @@ export default function Wrapper(props: Props) {
     [dispatch],
   );
 
+  const onLikeClicked = useCallback(
+    (track: TrackInfo) => {
+      if (track.id) {
+        console.log('track', track.id);
+        dispatch(
+          apiActions.editCombinationLike.request({
+            combinationId: track.id,
+            isLiked: !track.like,
+          }),
+        );
+      }
+
+      const newTrack = { ...track, like: !track.like };
+      setTrack(newTrack);
+    },
+    [dispatch, setTrack],
+  );
+
   return (
     <div data-testid="Wrapper" className="relative w-full h-full">
       <Header
@@ -83,7 +101,11 @@ export default function Wrapper(props: Props) {
       <div className="relative pt-16 pb-16 h-full overflow-y-auto">
         {props.children}
       </div>
-      <PlayerBar track={currentTrack} setTrack={setTrack} />
+      <PlayerBar
+        track={currentTrack}
+        setTrack={setTrack}
+        onLikeClicked={onLikeClicked}
+      />
     </div>
   );
 }

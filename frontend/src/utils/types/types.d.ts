@@ -51,6 +51,10 @@ interface CoverFormPut {
   tags: string[];
 }
 
+interface LikeForm {
+  isLiked: Boolean;
+}
+
 interface Instrument {
   id: number;
   name: string;
@@ -98,6 +102,7 @@ type SongInfo = {
 };
 
 type TrackInfo = {
+  id?: number;
   song: SongInfo;
   sources: string[];
   like: boolean;

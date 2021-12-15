@@ -36,6 +36,17 @@ export const loadCombinationsMain = asyncAction<
   Combination[],
   AxiosError
 >(AT.LOAD_COMBINATIONS_MAIN);
+export const loadCombinationLike = asyncAction<number, LikeForm, AxiosError>(
+  AT.LOAD_COMBINATION_LIKE,
+);
+export const editCombinationLike = asyncAction<
+  {
+    combinationId: number;
+    isLiked: Boolean;
+  },
+  LikeForm,
+  AxiosError
+>(AT.EDIT_COMBINATION_LIKE);
 
 // song actions
 export const createSong = asyncAction<SongForm, Song, AxiosError>(
