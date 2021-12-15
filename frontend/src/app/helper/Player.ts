@@ -14,6 +14,7 @@ export default class Player extends TrackPlayer {
 
   /* player */
   private tracks!: TrackInfo[];
+  private currentTrack?: TrackInfo;
   private index = 0;
 
   onTrackChanged?: (track: TrackInfo) => void;
@@ -32,6 +33,7 @@ export default class Player extends TrackPlayer {
       this.index = idx;
       this.setTrack(this.tracks[idx]);
       this.play();
+      this.currentTrack = this.tracks[idx];
       this.onTrackChanged?.(this.tracks[idx]);
     } else {
       throw Error(
@@ -50,7 +52,7 @@ export default class Player extends TrackPlayer {
   }
 
   getTrack() {
-    return this.tracks[this.index];
+    return this.currentTrack;
   }
 
   addTrack(track: TrackInfo) {

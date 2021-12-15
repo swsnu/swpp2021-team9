@@ -4,7 +4,6 @@ import * as AT from 'api/actionTypes';
 import * as actions from 'api/actions';
 import { api } from 'api/band';
 import { ActionType } from 'typesafe-actions';
-import { wrapperActions } from 'app/wrapper/slice';
 
 // Root saga
 export default function* profilePageSaga(payload: any) {
@@ -18,7 +17,7 @@ export function* getProfileResponse(
   yield put(profileActions.loadingProfileResponse('start load'));
   try {
     const profileResponse = yield api.getUserInfo(action.payload);
-    yield put(profileActions.successProfileResponse(profileResponse.data));
+    yield put(profileActions.successProfileResponse(profileResponse));
   } catch (e: any) {
     yield put(profileActions.errorProfileResponse(e));
   }

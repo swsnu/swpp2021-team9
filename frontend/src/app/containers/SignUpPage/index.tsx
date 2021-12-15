@@ -10,7 +10,7 @@ export type Props = {};
 
 export default function SignUpPage(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useSignUpSlice();
+  useSignUpSlice();
   const signUpState = useSelector(selectSignUp);
 
   const history = useHistory();

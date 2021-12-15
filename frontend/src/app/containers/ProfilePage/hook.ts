@@ -43,8 +43,8 @@ export const useProfile = (props: Props) => {
   // handle initial state
   useEffect(() => {
     if (!wrapperState.user) {
-      //alert('You have to login to see profile page');
-      //history.replace(urls.Main());
+      alert('You have to login to see profile page');
+      history.replace(urls.Main());
     } else if (profileResponse.error) {
       alert('Failed to load original data');
       history.replace(urls.Main());
@@ -88,6 +88,7 @@ export const useProfile = (props: Props) => {
     history,
     props.match.params.id,
     wrapperState.user,
+    postProfileResponse.data,
   ]);
 
   // handle post response

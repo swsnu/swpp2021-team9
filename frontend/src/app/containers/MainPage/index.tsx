@@ -54,10 +54,8 @@ export default function MainPage(props: Props) {
 
   const onClickPlay = useCallback(
     (index: number) => {
-      if (
-        player.getTrack()?.song?.title ??
-        '' !== trackInfos[index].song.title
-      ) {
+      const currentCombi = player.getTrack()?.combinationId ?? -1;
+      if (currentCombi !== trackInfos[index].combinationId) {
         player.addTrack(trackInfos[index]);
       }
     },
