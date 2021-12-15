@@ -8,6 +8,7 @@ import { ActionType } from 'typesafe-actions';
 // Root saga
 export default function* songPageSaga() {
   yield takeEvery(AT.LOAD_SONG.REQUEST, getSongRequest);
+  yield takeEvery(AT.CREATE_COMBINATION.REQUEST, postCombinationRequest);
   yield takeEvery(AT.LOAD_COMBINATIONS.REQUEST, getCombinationsRequest);
   yield takeEvery(AT.LOAD_COVERS_SONG.REQUEST, getCoversRequest);
   yield takeEvery(AT.LOAD_INSTRUMENTS.REQUEST, getInstrumentsRequest);
@@ -22,6 +23,18 @@ export function* getSongRequest(
     yield put(songActions.successSongResponse(response));
   } catch (e: any) {
     yield put(songActions.errorSongResponse(e));
+  }
+}
+
+export function* postCombinationRequest(
+  action: ActionType<typeof actions.createCombination.request>,
+) {
+  yield put(songActions.loadingCombinationResponse('start load'));
+  try {
+    const response = yield api.postCombination(action.payload);
+    yield put(songActions.successCombinationResponse(response.data));
+  } catch (e: any) {
+    yield put(songActions.errorCombinationResponse(e));
   }
 }
 

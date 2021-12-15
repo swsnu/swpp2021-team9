@@ -35,6 +35,7 @@ export default function SongPage(props: Props) {
 
   // loading
   const songResponse = songState.songResponse;
+  const combinationResponse = songState.combinationResponse;
   const combinationsResponse = songState.combinationsResponse;
   const coversResponse = songState.coversResponse;
   const instrumentsResponse = songState.instrumentsResponse;
@@ -63,22 +64,42 @@ export default function SongPage(props: Props) {
   const player = useMemo(() => Player.getInstance(), []);
 
   const onClickPlay = useCallback(() => {
-    const currentSongInfo = songResponse.data!;
-
-    let sources: string[] = combination
+    let covers: number[] = combination
       .filter(item => item.cover)
-      .map(item => item.cover!.audio);
+      .map(item => item.cover!.id);
 
-    if (sources.length === 0) return;
+    dispatch(
+      apiActions.createCombination.request({
+        songId: Number(props.match.params.id),
+        covers,
+      }),
+    );
+  }, [combination, dispatch, props.match.params.id]);
 
-    const currentTrackInfo: TrackInfo = {
-      combinationId: 1, //TODO
-      song: currentSongInfo,
-      sources,
-      like: false,
-    };
-    player.addTrack(currentTrackInfo);
-  }, [combination, player, songResponse.data]);
+  useEffect(() => {
+    if (!combinationResponse.loading) {
+      if (combinationResponse.error) {
+        console.log(combinationResponse.error);
+      } else if (combinationResponse.data) {
+        console.log(combinationResponse.data);
+        const currentSongInfo = songResponse.data!;
+        let sources: string[] = combination
+          .filter(item => item.cover)
+          .map(item => item.cover!.audio);
+
+        if (sources.length === 0) return;
+
+        const currentTrackInfo: TrackInfo = {
+          combinationId: combinationResponse.data.id,
+          song: currentSongInfo,
+          sources,
+          like: false,
+        };
+        console.log(currentTrackInfo);
+        player.addTrack(currentTrackInfo);
+      }
+    }
+  }, [combination, combinationResponse, player, songResponse.data]);
 
   const renderTopCover = useCallback(() => {
     if (current === null) return null;

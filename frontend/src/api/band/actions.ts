@@ -28,6 +28,11 @@ export const createCover = asyncAction<CoverForm, Cover, AxiosError>(
 );
 
 // combination actions
+export const createCombination = asyncAction<
+  CombinationForm,
+  Combination,
+  AxiosError
+>(AT.CREATE_COMBINATION);
 export const loadCombinations = asyncAction<number, Combination[], AxiosError>(
   AT.LOAD_COMBINATIONS,
 );
