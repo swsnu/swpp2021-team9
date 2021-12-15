@@ -6,7 +6,7 @@ export const api = {
     return await apiClient.post<null>(`/api/user/signup/`, form);
   },
   signin: async (form: SignInForm) => {
-    return await apiClient.post<User>(`/api/user/signin/`, form);
+    return await apiClient.post<UserInfo>(`/api/user/signin/`, form);
   },
   signout: async () => {
     const response = await apiClient.get<null>(`/api/user/signout/`);
@@ -15,6 +15,13 @@ export const api = {
   getUserInfo: async (userId: number) => {
     const response = await apiClient.get<User>(`/api/user/info/${userId}/`);
     return response.data;
+  },
+
+  postUserInfo: async (userPostForm: UserPostForm) => {
+    return await apiClient.post<User>(
+      `/api/user/info/${userPostForm.id}/`,
+      userPostForm,
+    );
   },
 
   // `/api/instrument/`
@@ -60,6 +67,7 @@ export const api = {
     const response = await apiClient.get<Cover>(`/api/cover/info/${coverId}/`);
     return response.data;
   },
+
   putCoverInfo: async (coverForm: CoverFormPut) => {
     return await apiClient.put<Cover>(
       `/api/cover/info/${coverForm.id}/`,

@@ -79,8 +79,16 @@ interface User {
   email: string;
   description: string;
   photo: string;
-  followings: number[];
+  followings: UserInfo[];
   instruments: number[];
+}
+
+interface UserPostForm {
+  id: number;
+  username?: string;
+  description?: string;
+  photo?: Blob;
+  instruments?: number[];
 }
 
 type UserInfo = {
