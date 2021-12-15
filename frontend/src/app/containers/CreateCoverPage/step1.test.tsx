@@ -42,6 +42,20 @@ const stubSegments: Segment[] = [
     labelText: `TEST_LABEL_2`,
     update: jest.fn(),
   },
+  {
+    id: '',
+    startTime: 1,
+    endTime: 6,
+    labelText: `TEST_LABEL_3`,
+    update: jest.fn(),
+  },
+  {
+    id: 'asdasdwqeqwfr',
+    startTime: 1,
+    endTime: 6,
+    labelText: `TEST_LABEL_4`,
+    update: jest.fn(),
+  },
 ];
 
 let events = {};
@@ -304,11 +318,16 @@ describe('<CreateCoverRecord>', () => {
     fireEvent.click(addSegment);
     fireEvent.click(addSegment);
     fireEvent.click(addSegment);
+    fireEvent.click(addSegment);
 
     const mergeCheckBoxes = getAllByTestId('MergeCheckBox');
     const playBtns = getAllByTestId('PlayButton');
     const delBtns = getAllByTestId('DeleteButton');
     const mergeBtn = getByTestId('MergeBtn');
+
+    // check when id is ''
+    fireEvent.click(playBtns[3]);
+    fireEvent.click(delBtns[3]);
 
     fireEvent.click(playBtns[0]);
     jest.spyOn(WaveformView, 'getPeaks').mockReturnValueOnce(null);

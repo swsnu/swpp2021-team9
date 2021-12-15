@@ -163,7 +163,7 @@ export default function CreateCoverRecord(props: Props) {
     if (file.type === 'audio/wav') {
       const url = await editor.readAndDecode(file, true);
       setUploadedUrl(url);
-    } else if (file.type === 'audio/mpeg') {
+    } else {
       const upload = URL.createObjectURL(file);
       setUploadedUrl(upload);
       editor.readAndDecode(file);

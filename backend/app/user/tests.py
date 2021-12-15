@@ -23,7 +23,6 @@ settings.MEDIA_ROOT = temp_root
 class UserManagersTests(TestCase):
     """
     TestCase Class for User managements
-
     Test creation of normal user and super user
     """
 
