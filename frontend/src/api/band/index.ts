@@ -6,7 +6,7 @@ export const api = {
     return await apiClient.post<null>(`/api/user/signup/`, form);
   },
   signin: async (form: SignInForm) => {
-    return await apiClient.post<User>(`/api/user/signin/`, form);
+    return await apiClient.post<UserInfo>(`/api/user/signin/`, form);
   },
   signout: async () => {
     const response = await apiClient.get<null>(`/api/user/signout/`);
@@ -15,6 +15,13 @@ export const api = {
   getUserInfo: async (userId: number) => {
     const response = await apiClient.get<User>(`/api/user/info/${userId}/`);
     return response.data;
+  },
+
+  postUserInfo: async (userPostForm: UserPostForm) => {
+    return await apiClient.post<User>(
+      `/api/user/info/${userPostForm.id}/`,
+      userPostForm,
+    );
   },
 
   // `/api/instrument/`
@@ -55,11 +62,12 @@ export const api = {
     return response.data;
   },
 
-  // `/api/cover/info/<coverId: int>/`
+  // `/api/cover/info/<pk:int>/`
   getCoverInfo: async (coverId: number) => {
     const response = await apiClient.get<Cover>(`/api/cover/info/${coverId}/`);
     return response.data;
   },
+
   putCoverInfo: async (coverForm: CoverFormPut) => {
     return await apiClient.put<Cover>(
       `/api/cover/info/${coverForm.id}/`,
@@ -70,7 +78,7 @@ export const api = {
     return await apiClient.delete<null>(`/api/cover/info/${coverId}/`);
   },
 
-  // `/api/cover/like/<id:int>/`
+  // `/api/cover/like/<pk:int>/`
   getCoverLike: async (coverId: number) => {
     const response = await apiClient.get<{ isLiked: Boolean }>(
       `/api/cover/like/${coverId}/`,
@@ -107,6 +115,23 @@ export const api = {
       `/api/combination/main/`,
     );
     return response.data;
+  },
+
+  // `/api/combination/like/<pk:int>/`
+  getCombinationLike: async (combinationId: number) => {
+    const response = await apiClient.get<{ isLiked: Boolean }>(
+      `/api/combination/like/${combinationId}/`,
+    );
+    return response.data;
+  },
+  putCombinationLike: async (form: {
+    combinationId: number;
+    isLiked: Boolean;
+  }) => {
+    return await apiClient.put<{ isLiked: Boolean }>(
+      `/api/combination/like/${form.combinationId}/`,
+      { isLiked: form.isLiked },
+    );
   },
 
   // `/api/song/`

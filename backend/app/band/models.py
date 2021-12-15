@@ -120,6 +120,10 @@ class Combination(models.Model):
     def count_views(self) -> int:
         return CombinationLog.objects.filter(cover=self).count()
 
+    @property
+    def covers_count(self) -> int:
+        return self.covers.count()
+
     def __str__(self):
         return f"([{self.pk}] {self.song} combination)"
 

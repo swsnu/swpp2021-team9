@@ -2,6 +2,14 @@ import * as AT from 'api/actionTypes';
 import { asyncAction } from 'api/utils';
 import { AxiosError } from 'axios';
 
+// user actions
+export const signin = asyncAction<SignInForm, UserInfo, string>(AT.LOAD_SIGNIN);
+export const signup = asyncAction<SignUpForm, null, string>(AT.LOAD_SIGNUP);
+export const loadProfile = asyncAction<number, User, string>(AT.LOAD_PROFILE);
+export const postProfile = asyncAction<UserPostForm, User, string>(
+  AT.POST_PROFILE,
+);
+
 // instrument actions
 export const loadInstruments = asyncAction<undefined, Instrument[], AxiosError>(
   AT.LOAD_INSTRUMENTS,
@@ -28,6 +36,11 @@ export const createCover = asyncAction<CoverForm, Cover, AxiosError>(
 );
 
 // combination actions
+export const createCombination = asyncAction<
+  CombinationForm,
+  Combination,
+  AxiosError
+>(AT.CREATE_COMBINATION);
 export const loadCombinations = asyncAction<number, Combination[], AxiosError>(
   AT.LOAD_COMBINATIONS,
 );
@@ -36,6 +49,17 @@ export const loadCombinationsMain = asyncAction<
   Combination[],
   AxiosError
 >(AT.LOAD_COMBINATIONS_MAIN);
+export const loadCombinationLike = asyncAction<number, LikeForm, AxiosError>(
+  AT.LOAD_COMBINATION_LIKE,
+);
+export const editCombinationLike = asyncAction<
+  {
+    combinationId: number;
+    isLiked: Boolean;
+  },
+  LikeForm,
+  AxiosError
+>(AT.EDIT_COMBINATION_LIKE);
 
 // song actions
 export const createSong = asyncAction<SongForm, Song, AxiosError>(

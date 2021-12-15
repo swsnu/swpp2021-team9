@@ -18,6 +18,7 @@ import { api } from 'api/band';
 interface Props {
   track?: TrackInfo;
   setTrack: (track: TrackInfo) => void;
+  onLikeClicked: (track: TrackInfo) => void;
 }
 
 export default function PlayerBar(props: Props) {
@@ -54,13 +55,6 @@ export default function PlayerBar(props: Props) {
   const onNextClicked = useCallback(() => {
     player.playNext();
   }, [player]);
-
-  const onLikeClicked = useCallback(() => {
-    if (props.track) {
-      const newTrack: TrackInfo = { ...props.track, like: !props.track.like };
-      props.setTrack(newTrack);
-    }
-  }, [props]);
 
   const updateProgress = useCallback(() => {
     const currentTime = player.getCurrentTime();
@@ -108,7 +102,9 @@ export default function PlayerBar(props: Props) {
         <button
           className="h-full mx-2 px-2 text-xl outline-none"
           id="like-button"
-          onClick={onLikeClicked}
+          onClick={() => {
+            props.track && props.onLikeClicked(props.track);
+          }}
         >
           {props.track?.like ? (
             <FontAwesomeIcon

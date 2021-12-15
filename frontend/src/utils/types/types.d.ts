@@ -51,6 +51,10 @@ interface CoverFormPut {
   tags: string[];
 }
 
+interface LikeForm {
+  isLiked: Boolean;
+}
+
 interface Instrument {
   id: number;
   name: string;
@@ -79,8 +83,16 @@ interface User {
   email: string;
   description: string;
   photo: string;
-  followings: number[];
+  followings: UserInfo[];
   instruments: number[];
+}
+
+interface UserPostForm {
+  id: number;
+  username?: string;
+  description?: string;
+  photo?: Blob;
+  instruments?: number[];
 }
 
 type UserInfo = {
@@ -98,6 +110,7 @@ type SongInfo = {
 };
 
 type TrackInfo = {
+  combinationId: number;
   song: SongInfo;
   sources: string[];
   like: boolean;
