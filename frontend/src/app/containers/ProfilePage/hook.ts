@@ -38,48 +38,39 @@ export const useProfile = (props: Props) => {
   const postProfileResponse = pageState.postProfileResponse;
 
   const [form, setForm] = useState<UserPostForm>(initForm);
-  const [userForm, setUserForm] = useState<User>(initUserForm);
+  const [photo, setPhoto] = useState<string>('');
+  const [followings, setFollowings] = useState<UserInfo[]>([]);
 
   // handle initial state
   useEffect(() => {
+    dispatch(apiActions.loadProfile.request(Number(props.match.params.id)));
+  }, []);
+
+  useEffect(() => {
     if (!wrapperState.user) {
-      //alert('You have to login to see profile page');
+      alert('You have to login to see profile page');
       //history.replace(urls.Main());
-    } else if (profileResponse.error) {
-      alert('Failed to load original data');
-      history.replace(urls.Main());
-    } else if (profileResponse.data) {
-      const user = profileResponse.data;
-
-      if (user.id !== wrapperState.user.id) {
-        alert('You cannot edit this cover');
+    } else if (!profileResponse.loading) {
+      if (profileResponse.error) {
+        alert('Failed to load original data');
         history.replace(urls.Main());
-      } else {
-        if (postProfileResponse.data) {
-          const userForm = postProfileResponse.data;
-          setUserForm({
-            id: user.id,
-            username: user.username,
-            description: user.description,
-            photo: user.photo,
-            instruments: user.instruments,
-            email: user.email,
-            followings: user.followings,
-          });
+      } else if (profileResponse.data) {
+        const user = profileResponse.data;
 
+        if (user.id !== wrapperState.user.id) {
+          alert('You cannot edit this cover');
+          history.replace(urls.Main());
+        } else {
           setForm({
             id: user.id,
             username: user.username,
             description: user.description,
-            photo: userForm.photo,
-            /* TODO : user.photo(string)-> how to change to blob format*/
-            //photo:user.photo
             instruments: user.instruments,
           });
+          setPhoto(user.photo);
+          setFollowings(user.followings);
         }
       }
-    } else if (!profileResponse.loading) {
-      dispatch(apiActions.loadProfile.request(Number(props.match.params.id)));
     }
   }, [
     profileResponse,
@@ -131,12 +122,18 @@ export const useProfile = (props: Props) => {
     [form],
   );
 
+  const onSave = useCallback(() => {
+    dispatch(apiActions.postProfile.request(form));
+  }, []);
+
   return {
     onChangeDescription,
     onChangeName,
     onChangeInstruments,
     onChangePicture,
+    onSave,
     form,
-    userForm,
+    photo,
+    followings,
   };
 };

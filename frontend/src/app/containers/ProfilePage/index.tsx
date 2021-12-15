@@ -17,8 +17,10 @@ export default function ProfilePage(props: Props) {
     onChangeName,
     onChangeInstruments,
     onChangePicture,
+    onSave,
     form,
-    userForm,
+    photo,
+    followings,
   } = useProfile(props);
 
   /* Start of crop related functions, variables*/
@@ -232,7 +234,7 @@ export default function ProfilePage(props: Props) {
 
                 <div className="bg-white p-3 hover:shadow">
                   <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
-                    <img src={userForm.photo} />
+                    <img src={photo} />
                     <button
                       data-testid="editPictureButton"
                       id="editpicture_button"
@@ -303,48 +305,12 @@ export default function ProfilePage(props: Props) {
                 <span> Following </span>
               </div>
               <div className="grid grid-cols-3">
-                <div className="text-center my-2">
-                  <img
-                    src={
-                      userForm.followings[0]
-                        ? userForm.followings[0].photo
-                        : undefined
-                    }
-                  />
-                  <a href="#" className="text-main-color">
-                    {userForm.followings[0]
-                      ? userForm.followings[0].username
-                      : undefined}
-                  </a>
-                </div>
-                <div className="text-center my-2">
-                  <img
-                    src={
-                      userForm.followings[1]
-                        ? userForm.followings[1].photo
-                        : undefined
-                    }
-                  />
-                  <a href="#" className="text-main-color">
-                    {userForm.followings[1]
-                      ? userForm.followings[1].username
-                      : undefined}
-                  </a>
-                </div>
-                <div className="text-center my-2">
-                  <img
-                    src={
-                      userForm.followings[2]
-                        ? userForm.followings[2].photo
-                        : undefined
-                    }
-                  />
-                  <a href="#" className="text-main-color">
-                    {userForm.followings[2]
-                      ? userForm.followings[2].username
-                      : undefined}
-                  </a>
-                </div>
+                {followings.map(userInfo => (
+                  <div key={userInfo.id} className="text-center my-2">
+                    <img src={userInfo.photo} alt="Profile" />
+                    <div className="text-main-color">{userInfo.username}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
