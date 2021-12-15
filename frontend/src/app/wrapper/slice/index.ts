@@ -1,6 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { SagaInjectionModes } from 'redux-injectors';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer } from 'utils/redux-injectors';
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import wrapperSaga from './saga';
 
 /* --- STATE --- */
 export interface WrapperState {
@@ -33,5 +35,10 @@ export const { actions: wrapperActions, reducer } = slice;
 
 export const useWrapperSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
+  useInjectSaga({
+    key: slice.name,
+    saga: wrapperSaga,
+    mode: SagaInjectionModes.RESTART_ON_REMOUNT,
+  });
   return { actions: slice.actions, reducer: slice.reducer };
 };

@@ -22,6 +22,13 @@ export const LOAD_COMBINATIONS = asyncActionCreator('LOAD_COMBINATIONS');
 export const LOAD_COMBINATIONS_MAIN = asyncActionCreator(
   'LOAD_COMBINATIONS_MAIN',
 );
+export const CREATE_COMBINATION = asyncActionCreator('CREATE_COMBINATION');
+export const LOAD_COMBINATION_LIKE = asyncActionCreator(
+  'LOAD_COMBINATION_LIKE',
+);
+export const EDIT_COMBINATION_LIKE = asyncActionCreator(
+  'EDIT_COMBINATION_LIKE',
+);
 
 // song actionTypes
 export const CREATE_SONG = asyncActionCreator('CREATE_SONG');

@@ -11,6 +11,7 @@ jest.mock('app/helper/TrackPlayer');
 let player = new TrackPlayer();
 
 const dummyTrack: TrackInfo = {
+  combinationId: 1,
   song: dummySongs[0],
   sources: [dummyCovers[0].audio, dummyCovers[1].audio],
   like: false,

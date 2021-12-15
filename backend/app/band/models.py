@@ -114,6 +114,10 @@ class Combination(models.Model):
     def like_count(self) -> int:
         return self.likes.count()
 
+    @property
+    def covers_count(self) -> int:
+        return self.covers.count()
+
     def __str__(self):
         return f"([{self.pk}] {self.song} combination)"
 

@@ -11,6 +11,9 @@ jest.mock('app/helper/TrackPlayer');
 let player = Player.getInstance();
 
 const mockSetTrack = jest.fn().mockImplementation((track: TrackInfo) => {});
+const mockOnLikeClicked = jest
+  .fn()
+  .mockImplementation((track: TrackInfo) => {});
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -24,7 +27,7 @@ beforeEach(() => {
 
 test('should render', () => {
   const { container } = render(
-    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+    <PlayerBar setTrack={track => {}} onLikeClicked={track => {}} />,
   );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
@@ -40,7 +43,9 @@ test('should render', () => {
 });
 
 test('should handle control buttons', () => {
-  const { container } = render(<PlayerBar setTrack={mockSetTrack} />);
+  const { container } = render(
+    <PlayerBar setTrack={mockSetTrack} onLikeClicked={track => {}} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   const playButton = container.querySelector('#play-button');
@@ -69,13 +74,17 @@ test('should handle control buttons', () => {
 
 test('should handle like button', () => {
   const { container } = render(
-    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
+    <PlayerBar
+      track={dummyTrackInfos[0]}
+      setTrack={mockSetTrack}
+      onLikeClicked={mockOnLikeClicked}
+    />,
   );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   let likeButton = container.querySelector('#like-button');
   fireEvent.click(likeButton!);
-  expect(mockSetTrack).toBeCalledWith({ ...dummyTrackInfos[0], like: true });
+  expect(mockOnLikeClicked).toBeCalledWith(dummyTrackInfos[0]);
 
   act(() => {
     player.onTrackChanged?.({ ...dummyTrackInfos[0], sources: ['CHANGE'] });
@@ -87,12 +96,14 @@ test('should handle like button', () => {
 });
 
 test('should handle like button when no track', () => {
-  const { container } = render(<PlayerBar setTrack={mockSetTrack} />);
+  const { container } = render(
+    <PlayerBar setTrack={mockSetTrack} onLikeClicked={mockOnLikeClicked} />,
+  );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
   let likeButton = container.querySelector('#like-button');
   fireEvent.click(likeButton!);
-  expect(mockSetTrack).toBeCalledTimes(0);
+  expect(mockOnLikeClicked).toBeCalledTimes(0);
 });
 
 test('should handle unliked state', () => {
@@ -100,6 +111,7 @@ test('should handle unliked state', () => {
     <PlayerBar
       track={{ ...dummyTrackInfos[0], like: false }}
       setTrack={mockSetTrack}
+      onLikeClicked={mockOnLikeClicked}
     />,
   );
   let likeIcon = queryByTestId('likeIcon');
@@ -113,6 +125,7 @@ test('should handle liked state', () => {
     <PlayerBar
       track={{ ...dummyTrackInfos[0], like: true }}
       setTrack={mockSetTrack}
+      onLikeClicked={mockOnLikeClicked}
     />,
   );
   let likeIcon = queryByTestId('likeIcon');
@@ -129,7 +142,11 @@ test('display 0:00 when length === 0', () => {
   (player.getDuration as jest.Mock).mockReturnValue(0);
 
   const { queryByTestId } = render(
-    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
+    <PlayerBar
+      track={dummyTrackInfos[0]}
+      setTrack={mockSetTrack}
+      onLikeClicked={mockOnLikeClicked}
+    />,
   );
   Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
     configurable: true,
@@ -159,7 +176,11 @@ test('should interval', () => {
   (player.getCurrentTime as jest.Mock).mockReturnValue(currentTime);
 
   const { queryByTestId } = render(
-    <PlayerBar track={dummyTrackInfos[0]} setTrack={mockSetTrack} />,
+    <PlayerBar
+      track={dummyTrackInfos[0]}
+      setTrack={mockSetTrack}
+      onLikeClicked={mockOnLikeClicked}
+    />,
   );
   Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
     configurable: true,
@@ -220,7 +241,10 @@ test('should interval', () => {
 
 test('should play button with status', () => {
   const { queryByTestId } = render(
-    <PlayerBar setTrack={(track: TrackInfo) => {}} />,
+    <PlayerBar
+      setTrack={(track: TrackInfo) => {}}
+      onLikeClicked={mockOnLikeClicked}
+    />,
   );
   expect(screen.getByTestId('PlayerBar')).toBeTruthy();
 
