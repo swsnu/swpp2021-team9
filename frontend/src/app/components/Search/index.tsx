@@ -18,12 +18,20 @@ export default function Search({ onSearchClicked }: Props) {
     [setInputKey],
   );
 
-  const handleClick = useCallback(() => {
-    onSearchClicked && onSearchClicked(inputKey);
-  }, [inputKey, onSearchClicked]);
+  const handleClick = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      onSearchClicked && onSearchClicked(inputKey);
+    },
+    [inputKey, onSearchClicked],
+  );
 
   return (
-    <div data-testid="Search" className="relative w-full flex items-stretch">
+    <form
+      data-testid="Search"
+      className="relative w-full flex items-stretch"
+      onSubmit={handleClick}
+    >
       <input
         type="text"
         data-testid="searchTerm"
@@ -34,11 +42,10 @@ export default function Search({ onSearchClicked }: Props) {
       <button
         type="submit"
         data-testid="submit"
-        onClick={handleClick}
         className="px-3 border-2 border-gray-300 rounded-r-md text-center text-gray-400 text-base"
       >
         <FontAwesomeIcon icon={faSearch} />
       </button>
-    </div>
+    </form>
   );
 }

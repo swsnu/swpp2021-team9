@@ -4,15 +4,14 @@ import { screen } from '@testing-library/dom';
 import Album from '.';
 
 import AlbumImage from '../Album/AlbumImage.png';
+import { dummyCombinations } from 'api/dummy';
 
 test('should render', () => {
   //const set = setup();
   render(
     <Album
-      id={0}
-      thumbnail={AlbumImage}
-      title="Album1"
-      singer="Singer1"
+      combination={dummyCombinations[0]}
+      isPlaying={false}
       onClickTitle={() => {}}
       onClickPlay={() => {}}
     />,

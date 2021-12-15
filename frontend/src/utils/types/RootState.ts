@@ -1,3 +1,5 @@
+import { MainState } from 'app/containers/MainPage/slice';
+import { SearchResultState } from 'app/containers/SearchResultPage/slice';
 import { CreateCoverState } from 'app/containers/CreateCoverPage/slice';
 import { SignInState } from 'app/containers/SignInPage/slice';
 import { CreateSongState } from 'app/containers/CreateSongPage/slice';
@@ -17,6 +19,8 @@ import { ProfileState } from 'app/containers/ProfilePage/slice';
   You have to declare them here manually
 */
 export interface RootState {
+  main?: MainState;
+  searchResult?: SearchResultState;
   createCover?: CreateCoverState;
   createSong?: CreateSongState;
   song?: SongState;

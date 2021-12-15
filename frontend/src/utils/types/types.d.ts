@@ -8,7 +8,7 @@ type SignInForm = SignUpForm;
 interface Combination {
   id: number;
   views: number;
-  song: number;
+  song: Song;
   covers: Cover[];
   likes: number;
 }
@@ -95,11 +95,6 @@ type UserInfo = {
   id: number;
   username: string;
   photo?: string;
-};
-
-type PlayInfo = {
-  covers: string[];
-  song: SongInfo;
 };
 
 type SongInfo = {

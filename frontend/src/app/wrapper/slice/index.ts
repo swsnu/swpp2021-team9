@@ -4,15 +4,13 @@ import { useInjectReducer } from 'utils/redux-injectors';
 
 /* --- STATE --- */
 export interface WrapperState {
-  name: string;
   user?: UserInfo;
-  currentPlaying?: PlayInfo;
+  currentTrack?: TrackInfo;
 } // state 형식 정의
 
 export const initialState: WrapperState = {
-  name: 'wrapper',
   user: undefined,
-  currentPlaying: undefined,
+  currentTrack: undefined,
 };
 
 const slice = createSlice({
@@ -21,7 +19,9 @@ const slice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<UserInfo>) {
       state.user = action.payload;
-      return state;
+    },
+    setCurrentPlaying(state, action: PayloadAction<TrackInfo>) {
+      state.currentTrack = action.payload;
     },
   },
 });
@@ -32,15 +32,3 @@ export const useWrapperSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions, reducer: slice.reducer };
 };
-
-/**
- * Example Usage:
- *
- * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useExampleSlice();
- *
- *  const onButtonClick = (evt) => {
- *    dispatch(actions.someAction());
- *   };
- * }
- */

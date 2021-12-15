@@ -20,7 +20,7 @@ import Player from 'app/helper/Player';
 
 let player = Player.getInstance();
 const store = configureAppStore();
-const mockPlayerSetTracks = jest
+const mockPlayerAddTrack = jest
   .fn()
   .mockImplementation((_currentTrackInfo: TrackInfo[]) => {});
 
@@ -70,10 +70,10 @@ jest.mock('app/components/Dropdown/CoverDropdown', () => {
   };
 });
 
-jest.mock('./SongInfo', () => {
+jest.mock('./SongInfoArea', () => {
   return {
     __esModule: true,
-    ...jest.requireActual('./SongInfo'),
+    ...jest.requireActual('./SongInfoArea'),
     default: props => <div></div>,
   };
 });
@@ -127,7 +127,7 @@ beforeEach(() => {
         res(dummyInstruments);
       }),
   );
-  player.setTracks = mockPlayerSetTracks;
+  player.addTrack = mockPlayerAddTrack;
 });
 
 test('selecting cover test', async () => {
@@ -139,7 +139,7 @@ test('selecting cover test', async () => {
   // try to play with nothing
   const playButton = page.getByTestId('PlayButton');
   fireEvent.click(playButton);
-  expect(mockPlayerSetTracks).toHaveBeenCalledTimes(0);
+  expect(mockPlayerAddTrack).toHaveBeenCalledTimes(0);
 
   // add cover
   const addCoverButton = page.getByTestId('AddCoverButton');
@@ -181,5 +181,5 @@ test('selecting cover test', async () => {
 
   // play
   fireEvent.click(playButton);
-  expect(mockPlayerSetTracks).toHaveBeenCalled();
+  expect(mockPlayerAddTrack).toHaveBeenCalled();
 });
