@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Album from '../../components/Album/index';
@@ -18,6 +18,7 @@ export default function MainPage(props: Props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const mainState = useSelector(selectMain);
+  const [trackInfos, setTrackInfos] = useState<TrackInfo[]>([]);
   useSelector(selectWrapper);
 
   const player = useMemo(() => Player.getInstance(), []);
@@ -35,26 +36,30 @@ export default function MainPage(props: Props) {
         window.alert('Error: could not fetch bands.');
       } else if (combinationsResponse.data && player) {
         // setting tracks
-        const trackInfos = combinationsResponse.data.map(combination => {
-          const sources = combination.covers.map(cover => cover.audio);
-          const trackInfo: TrackInfo = {
-            combinationId: combination.id,
-            song: combination.song,
-            sources,
-            like: false,
-          };
-          return trackInfo;
-        });
-        player.setTracks(trackInfos);
+        setTrackInfos(
+          combinationsResponse.data.map(combination => {
+            const sources = combination.covers.map(cover => cover.audio);
+            const trackInfo: TrackInfo = {
+              combinationId: combination.id,
+              song: combination.song,
+              sources,
+              like: false,
+            };
+            return trackInfo;
+          }),
+        );
       }
     }
   }, [combinationsResponse, player]);
 
   const onClickPlay = useCallback(
     (index: number) => {
-      if (player.getIndex !== index) player.setIndex(index);
+      const currentCombi = player.getTrack()?.combinationId ?? -1;
+      if (currentCombi !== trackInfos[index].combinationId) {
+        player.addTrack(trackInfos[index]);
+      }
     },
-    [player],
+    [player, trackInfos],
   );
 
   const getIsPlaying = useCallback(

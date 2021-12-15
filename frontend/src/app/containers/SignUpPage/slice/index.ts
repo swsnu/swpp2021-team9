@@ -33,6 +33,10 @@ const slice = createSlice({
       state.signUpResponse.error = action.payload;
       return state;
     },
+    clearSignUpResponse(state, action: PayloadAction<undefined>) {
+      state.signUpResponse = { loading: false };
+      return state;
+    },
   },
 });
 
