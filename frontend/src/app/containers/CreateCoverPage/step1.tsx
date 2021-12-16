@@ -267,6 +267,17 @@ export default function CreateCoverRecord(props: Props) {
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
       <YoutubePlayer url={refUrl} />
 
+      <div>
+        <input
+          data-testid={`check_preview`}
+          type="checkbox"
+          className="form-checkbox"
+          checked={withAudio}
+          onChange={() => setWithAudio(!withAudio)}
+        />
+        <span className="ml-2">with audio</span>
+      </div>
+
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (
         <div className="flex flex-col justify-center items-center space-y-4">
