@@ -7,10 +7,24 @@ import { fireEvent, screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import Wrapper from '.';
 import { WrapperState } from './slice';
+import { api } from 'api/band';
 
 jest.mock('app/helper/TrackPlayer');
 
 const store = configureAppStore();
+const mockHistoryPush = jest.fn().mockImplementation(() => {
+  console.log('push');
+});
+const mockHistoryGo = jest.fn().mockImplementation(() => {
+  console.log('go');
+});
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+    go: mockHistoryGo,
+  }),
+}));
 
 function setup() {
   const path = '/';
@@ -29,7 +43,7 @@ function setup() {
 
 describe('index', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   test('should render', () => {
@@ -46,6 +60,7 @@ describe('index', () => {
         username: 'USERNAME',
       },
     };
+    api.signout = jest.fn();
     const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
     useSelectorMock.mockReturnValue(mockState);
     const { page } = setup();

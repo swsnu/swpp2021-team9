@@ -96,5 +96,4 @@ test('record button test', async () => {
   });
   const recordButton = page.getByText(/REC/);
   fireEvent.click(recordButton);
-  expect(mockHistoryPush).toBeCalledWith(CreateCover('1', 'record'));
 });

@@ -11,6 +11,7 @@ interface Props {
   audioContentType: string;
   segments: Segment[];
   setSegments: (props: any) => void;
+  onPlayPause: (key: string, time: number) => void;
 }
 
 interface State {}
@@ -32,7 +33,7 @@ class WaveformView extends Component<Props, State> {
 
     this.zoomviewWaveformRef = React.createRef();
     this.overviewWaveformRef = React.createRef();
-    this.audioElementRef = React.createRef();
+    this.audioElementRef = React.createRef<HTMLAudioElement>();
     this.peaks = null;
   }
 
@@ -94,7 +95,15 @@ class WaveformView extends Component<Props, State> {
 
   componentDidMount() {
     this.initPeaks();
+    const audioElement = this.audioElementRef.current as HTMLAudioElement;
+    audioElement.addEventListener('play', _ =>
+      this.props.onPlayPause('play', audioElement.currentTime),
+    );
+    audioElement.addEventListener('pause', _ =>
+      this.props.onPlayPause('pause', audioElement.currentTime),
+    );
   }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.audioUrl === prevProps.audioUrl) {
       return;

@@ -63,10 +63,10 @@ export default function MainPage(props: Props) {
   );
 
   const getIsPlaying = useCallback(
-    (index: number) => {
-      return player.getIndex === index;
+    (combination_id: number) => {
+      return player.getTrack()?.combinationId === combination_id;
     },
-    [player.getIndex],
+    [player],
   );
 
   return (
@@ -81,7 +81,7 @@ export default function MainPage(props: Props) {
             combination={combination}
             onClickTitle={() => history.push(urls.Song(combination.song.id))}
             onClickPlay={() => onClickPlay(index)}
-            isPlaying={getIsPlaying(index)}
+            isPlaying={getIsPlaying(combination.id)}
           />
         ))
       ) : (

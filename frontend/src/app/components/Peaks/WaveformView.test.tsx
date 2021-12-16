@@ -76,6 +76,7 @@ const getWaveformView = (
       audioContentType={'audio/mpeg'}
       setSegments={setSeg}
       segments={[]}
+      onPlayPause={jest.fn()}
     />
   );
 };
