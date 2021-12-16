@@ -1,3 +1,4 @@
+import { userInfo } from 'os';
 import { apiClient } from './client';
 
 export const api = {
@@ -18,9 +19,31 @@ export const api = {
   },
 
   postUserInfo: async (userPostForm: UserPostForm) => {
+    //const audioBlob = await fetch(userPostForm.photo).then(r => r.blob());
+    const userFormData = new FormData();
+    if (userPostForm.photo) {
+      const photoFile = new File([userPostForm.photo], 'image.png', {
+        type: 'image/png',
+      });
+      userFormData.append('photo', photoFile);
+    }
+
+    if (userPostForm.username) {
+      userFormData.append('username', userPostForm.username);
+    }
+    if (userPostForm.description) {
+      userFormData.append('description', userPostForm.description);
+    }
+    if (userPostForm.instruments) {
+      userFormData.append(
+        'instruments',
+        JSON.stringify(userPostForm.instruments),
+      );
+    }
+
     return await apiClient.post<User>(
       `/api/user/info/${userPostForm.id}/`,
-      userPostForm,
+      userFormData,
     );
   },
 

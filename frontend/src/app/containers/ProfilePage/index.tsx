@@ -46,7 +46,6 @@ export default function ProfilePage(props: Props) {
   const [checkedVocals, setCheckedVocals] = useState(false);
   const [checkedDrum, setCheckedDrum] = useState(false);
   const [checkedKeyboard, setCheckedKeyboard] = useState(false);
-  const [checkedInstruments, setcheckedInstruments] = useState(new Set());
 
   const onSelectFile = e => {
     if (e.target.files && e.target.files.length > 0) {
@@ -102,8 +101,9 @@ export default function ProfilePage(props: Props) {
     // setCroppedImg(croppedimage);
     canvas.toBlob(blob => {
       blob.name = 'croppedImg';
-      setCroppedImg(blob);
-      console.log(URL.createObjectURL(blob));
+      setCroppedImg(URL.createObjectURL(blob));
+      //setPhotoUrl(URL.createObjectURL(blob));
+      //console.log(URL.createObjectURL(blob));
     }, 'image/png');
   }, [completedCrop]);
   /* End of crop related functions, variables*/
@@ -124,7 +124,6 @@ export default function ProfilePage(props: Props) {
     }
   }
 
-  const checkHandler = ({ id }) => {};
   let Instruments: number[] = [];
   function onChooseInstruments(event) {
     if (checkedBass) Instruments.push(0);
@@ -231,7 +230,7 @@ export default function ProfilePage(props: Props) {
             <input
               type="checkbox"
               className="form-checkbox"
-              onChange={handleChangeBass}
+              onChange={handleChangeGuitar}
             />
             <div className="px-4 py-2"> {instrument_name_list[1]} </div>
           </label>
@@ -239,18 +238,27 @@ export default function ProfilePage(props: Props) {
             <input
               type="checkbox"
               className="form-checkbox"
-              onChange={handleChangeBass}
+              onChange={handleChangeVocals}
             />
             <div className="px-4 py-2"> {instrument_name_list[2]} </div>
-            <input type="checkbox" className="form-checkbox" />
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              onChange={handleChangeDrum}
+            />
             <div className="px-4 py-2"> {instrument_name_list[3]} </div>
-            <input type="checkbox" className="form-checkbox" />
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              onChange={handleChangeKeyboard}
+            />
             <div className="px-4 py-2"> {instrument_name_list[4]} </div>
           </label>
         </div>
         <button
           id="editnameButton"
           className="mx-1 py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900"
+          onClick={onChooseInstruments}
         >
           Choose Instruments !
         </button>

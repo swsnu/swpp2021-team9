@@ -12,7 +12,7 @@ const initForm: UserPostForm = {
   id: -1,
   username: 'Your ID',
   description: 'Your Description',
-  photo: new Blob([]),
+  photo: '',
   instruments: [],
 };
 
@@ -102,13 +102,13 @@ export const useProfile = (props: Props) => {
   const onChangeInstruments = useCallback(
     (Instruments: number[]) => {
       setForm({ ...form, instruments: Instruments });
-      console.log(Instruments);
+      //console.log(Instruments);
     },
     [form],
   );
 
   const onChangePicture = useCallback(
-    (Photo: Blob) => {
+    (Photo: string) => {
       setForm({ ...form, photo: Photo });
       //console.log(Photo);
     },
@@ -117,7 +117,8 @@ export const useProfile = (props: Props) => {
 
   const onSave = useCallback(() => {
     dispatch(apiActions.postProfile.request(form));
-    console.log('Form updated!');
+    //console.log(form);
+    //console.log('Form updated!');
   }, []);
 
   return {
