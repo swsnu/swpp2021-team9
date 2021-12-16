@@ -35,6 +35,9 @@ class CoverInfoTestCase(TestCase):
         response = client.post("/api/log/cover/", {"cover_id": last_cover.id + 1})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+        response = client.post("/api/log/cover/", {"id": cover.id})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_combination_info(self):
         client = Client(enforce_csrf_checks=True)
 
@@ -52,10 +55,12 @@ class CoverInfoTestCase(TestCase):
         response = client.post(
             "/api/log/combination/", {"combination_id": combination.id}
         )
-
         self.assertEqual(response.status_code, status.HTTP_208_ALREADY_REPORTED)
 
         response = client.post(
             "/api/log/combination/", {"combination_id": last_combination.id + 1}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = client.post("/api/log/combination/", {"id": combination.id})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
