@@ -63,5 +63,5 @@ def start():
     except KeyboardInterrupt:
         scheduler.shutdown()
         print("Scheduler shut down successfully!")
-    # except Exception as e:
-    #     print("pass error", e)
+    except Exception as error:
+        print("pass error", error)
