@@ -91,7 +91,7 @@ interface UserPostForm {
   id: number;
   username?: string;
   description?: string;
-  photo?: Blob;
+  photo?: string;
   instruments?: number[];
 }
 
