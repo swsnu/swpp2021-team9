@@ -72,7 +72,7 @@ class CoverSerializer(serializers.ModelSerializer):
             "song",
             "tags",
             "like_count",
-            "views",
+            "view",
             # "combination",
             "user_id",
             "song_id",

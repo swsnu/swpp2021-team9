@@ -118,7 +118,7 @@ class Combination(models.Model):
         return self.likes.count()
 
     def count_views(self) -> int:
-        return CombinationLog.objects.filter(cover=self).count()
+        return CombinationLog.objects.filter(combination=self).count()
 
     @property
     def covers_count(self) -> int:
@@ -157,6 +157,7 @@ class CoverLog(models.Model):
 class CombinationLog(models.Model):
     """CombinationLog model"""
 
+    addr = models.CharField(max_length=50, db_column="addr")
     user: User = ForeignKey(
         User, related_name="+", on_delete=models.SET_NULL, null=True
     )
@@ -168,6 +169,8 @@ class CombinationLog(models.Model):
 
 
 class RecoSong(models.Model):
+    """RecoSong model
+    load from s3 refresh every 6 hours"""
     song: Song = ForeignKey(Song, on_delete=models.CASCADE)
     recos = models.CharField(max_length=50, db_column="recos")
 

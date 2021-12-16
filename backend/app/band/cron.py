@@ -1,18 +1,23 @@
+""" Update with cron
+update_reco_dict: get recommendation dict from s3 every 6 hours
+update_view_count: update view count of Cover and Combination every 30 minutes
+"""
 import pickle
-from django.db.models.query import QuerySet
-import requests
 import json
+import requests
 from apscheduler.schedulers.background import BackgroundScheduler
-from django_apscheduler.jobstores import register_events, DjangoJobStore, register_job
+from django_apscheduler.jobstores import register_events, DjangoJobStore
 
 from band.models import RecoSong, Cover, Combination
 
-recommandation_url = "https://bandreco.s3.ap-northeast-2.amazonaws.com/result.pickle"
+RECOMMENDATION_URL = "https://bandreco.s3.ap-northeast-2.amazonaws.com/result.pickle"
 
 
 def update_reco_dict():
-    res = requests.get(recommandation_url)
+    print("start update_reco_dict")
+    res = requests.get(RECOMMENDATION_URL)
     recommandation_dict: dict = pickle.loads(res.content)
+    print(recommandation_dict)
 
     new_recos = [
         RecoSong(song_id=song_id, recos=json.dumps(recos))
@@ -24,10 +29,12 @@ def update_reco_dict():
 
 
 def update_view_count():
+    print("start update_view_count")
+
     def update_view(model):
         model_all = model.objects.all()
-        for m in model_all:
-            m.view = m.count_views()
+        for item in model_all:
+            item.view = item.count_views()
         model.objects.bulk_update(model_all, ["view"])
 
     update_view(Cover)
@@ -40,13 +47,13 @@ def start():
     register_events(scheduler)
 
     @scheduler.scheduled_job("interval", hours=6)
-    def auto_test():
-        print("auto_test running")
+    def _auto_update_reco_dict():
+        print("auto_update_reco_dict running")
         update_reco_dict()
 
-    @scheduler.scheduled_job("interval", minutes=1)
-    def auto_update_view():
-        print("auto_update_view running")
+    @scheduler.scheduled_job("interval", minutes=30)
+    def _auto_update_view_count():
+        print("auto_update_view_count running")
         update_view_count()
 
     try:
@@ -56,5 +63,5 @@ def start():
     except KeyboardInterrupt:
         scheduler.shutdown()
         print("Scheduler shut down successfully!")
-    except Exception:
-        print("pass error")
+    # except Exception as e:
+    #     print("pass error", e)

@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { api } from 'api/band';
 import { SagaInjectionModes } from 'redux-injectors';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
@@ -21,11 +22,14 @@ const slice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<UserInfo>) {
       state.user = action.payload;
+      return state;
     },
     setCurrentPlaying(state, action: PayloadAction<TrackInfo>) {
       state.currentTrack = action.payload;
+      return state;
     },
     signOut(state, action: PayloadAction<undefined>) {
+      api.signout();
       state.user = undefined;
     },
   },

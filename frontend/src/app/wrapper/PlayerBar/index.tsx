@@ -36,7 +36,7 @@ export default function PlayerBar(props: Props) {
     };
     player.onTrackChanged = newTrack => {
       props.setTrack(newTrack);
-      // api.logCombination(newTrack.combinationId);
+      api.logCombination(newTrack.combinationId);
     };
   }, [player, props]);
 

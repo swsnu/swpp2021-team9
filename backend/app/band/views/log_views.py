@@ -10,16 +10,16 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from band.models import CoverLog, CombinationLog
+from band.models import CoverLog, CombinationLog, Cover, Combination
 
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
+        addr = x_forwarded_for.split(",")[0]
     else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
+        addr = request.META.get("REMOTE_ADDR")
+    return addr
 
 
 class CoverLogsView(APIView):
@@ -47,9 +47,10 @@ class CoverLogsView(APIView):
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
-            CoverLog(addr=addr, user_id=user_id, cover_id=cover_id).save()
-        except IntegrityError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            cover = Cover.objects.all().get(id=cover_id)
+            CoverLog(addr=addr, user_id=user_id, cover=cover).save()
+        except Cover.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -78,8 +79,9 @@ class CombinationLogsView(APIView):
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
-            CombinationLog(addr=addr, user_id=user_id, combination_id=combination_id).save()
-        except IntegrityError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            combination = Combination.objects.all().get(id=combination_id)
+            CombinationLog(addr=addr, user_id=user_id, combination=combination).save()
+        except Combination.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_200_OK)
