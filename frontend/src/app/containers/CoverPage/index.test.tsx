@@ -62,6 +62,7 @@ beforeEach(() => {
         res(dummyCovers[1]);
       }),
   );
+  api.logCover = jest.fn();
 });
 
 it('should handle buttons', async () => {

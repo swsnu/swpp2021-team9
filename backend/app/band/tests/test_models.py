@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from band.tests.tools import set_up_data, make_cover_data
 
-from band.models import Combination, Instrument, Song, Cover
+from band.models import Combination, Instrument, Song, Cover, CombinationLog, CoverLog
 
 
 # pylint: disable=C0114
@@ -72,3 +72,17 @@ class BandModelTest(TestCase):
         self.assertEqual(
             f"([{combination.pk}] {combination.song} combination)", str(combination)
         )
+
+    def test_counting(self):
+        cover: Cover = Cover.objects.all().first()
+        self.assertEqual(
+            cover.count_views(), CoverLog.objects.filter(cover=cover).count()
+        )
+
+        combination: Combination = Combination.objects.all().first()
+        self.assertEqual(
+            combination.count_views(),
+            CombinationLog.objects.filter(combination=combination).count(),
+        )
+
+        self.assertEqual(combination.covers_count, combination.covers.count())

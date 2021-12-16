@@ -12,7 +12,6 @@ import {
 } from 'utils/types/injector-typings';
 import { selectSlice } from './selectors';
 import signInPageSaga, { getSignInResponse } from './saga';
-import { dummyCovers } from 'api/dummy';
 import { takeEvery } from '@redux-saga/core/effects';
 import * as AT from 'api/actionTypes';
 import { runSaga } from 'redux-saga';
@@ -92,14 +91,6 @@ test('should take sagas', () => {
 });
 
 test('should loading signin Response', async () => {
-  const signinform_dummy: SignInForm = {
-    email: 'swpp2021@naver.com',
-    password: 'swpp2021',
-  };
-  const userinfo_dummy: UserInfo = {
-    username: '',
-    id: 0,
-  };
   const dispatched: any[] = [];
   api.signin = jest.fn(
     (form: SignInForm) =>
@@ -123,15 +114,6 @@ test('should loading signin Response', async () => {
 });
 
 test('should signin Response onError', async () => {
-  const signinform_dummy: SignInForm = {
-    email: 'swpp2021@naver.com',
-    password: 'swpp2021',
-  };
-  const userinfo_dummy: UserInfo = {
-    username: '',
-    id: 0,
-  };
-
   const dispatched: any[] = [];
 
   api.signin = jest.fn(

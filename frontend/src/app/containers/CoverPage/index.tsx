@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
+
 import { useCoverSlice } from './slice';
 import * as apiActions from 'api/actions';
 import { selectCover } from './slice/selectors';
@@ -8,6 +9,7 @@ import WavePlayer from './WavePlayer';
 import * as urls from 'utils/urls';
 import { getThumbnail } from 'utils/imageTools';
 import { selectWrapper } from 'app/wrapper/slice/selectors';
+import { api } from 'api/band';
 
 interface MatchParams {
   id: string;
@@ -25,6 +27,7 @@ export default function CoverPage(props: Props) {
 
   useEffect(() => {
     dispatch(apiActions.loadCover.request(Number(props.match.params.id)));
+    api.logCover(Number(props.match.params.id));
   }, [dispatch, props.match]);
 
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function CoverPage(props: Props) {
   const author = cover?.user;
   const editable =
     author && wrapperState.user ? author.id === wrapperState.user.id : false;
-  console.log(cover);
+
   return (
     <div data-testid="CoverPage" className="flex justify-center">
       {cover ? (

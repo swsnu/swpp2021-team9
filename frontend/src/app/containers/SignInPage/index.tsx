@@ -9,7 +9,7 @@ export type Props = {};
 
 export default function SignInPage(props: Props) {
   const dispatch = useDispatch();
-  const { actions } = useSignInSlice();
+  useSignInSlice();
   const signInState = useSelector(selectSignIn);
 
   const history = useHistory();

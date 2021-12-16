@@ -166,6 +166,20 @@ describe('band api', () => {
     expect(apiClient.get).lastCalledWith(`/api/song/info/${mockId}/`);
   });
 
+  test(`/api/log/`, async () => {
+    const mockId = 323;
+
+    expect(await api.logCombination(mockId)).toEqual(MOCK_POST_RESPONSE);
+    expect(apiClient.post).lastCalledWith(`/api/log/combination/`, {
+      combination_id: mockId,
+    });
+
+    expect(await api.logCover(mockId)).toEqual(MOCK_POST_RESPONSE);
+    expect(apiClient.post).lastCalledWith(`/api/log/cover/`, {
+      cover_id: mockId,
+    });
+  });
+
   // Basic testing
   //   test(`urlll/<id:int>/`, async () => {
   //     const mockId = 323;

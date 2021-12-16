@@ -43,6 +43,9 @@ export const useProfile = (props: Props) => {
     if (!wrapperState.user) {
       alert('You have to login to see profile page');
       history.replace(urls.Main());
+    } else if (profileResponse.error) {
+      alert('Failed to load original data');
+      history.replace(urls.Main());
     } else if (!profileResponse.loading) {
       if (profileResponse.error) {
         alert('Failed to load original data');
@@ -72,6 +75,7 @@ export const useProfile = (props: Props) => {
     history,
     props.match.params.id,
     wrapperState.user,
+    postProfileResponse.data,
   ]);
 
   // handle post response
@@ -102,7 +106,7 @@ export const useProfile = (props: Props) => {
   const onChangeInstruments = useCallback(
     (Instruments: number[]) => {
       setForm({ ...form, instruments: Instruments });
-      //console.log(Instruments);
+      // console.log(Instruments);
     },
     [form],
   );
@@ -110,7 +114,7 @@ export const useProfile = (props: Props) => {
   const onChangePicture = useCallback(
     (Photo: string) => {
       setForm({ ...form, photo: Photo });
-      //console.log(Photo);
+      // console.log(Photo);
     },
     [form],
   );

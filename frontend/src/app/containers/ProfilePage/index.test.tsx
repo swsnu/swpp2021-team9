@@ -91,7 +91,7 @@ test('When click checkbox_bass and click choose instrument button', () => {
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  const checkbass = screen.getByTestId('checkbass');
+  const checkbass = screen.getByTestId('checkBass');
   fireEvent.click(checkbass);
 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
@@ -105,7 +105,7 @@ test('When click checkbox_guitar and click choose instrument button', () => {
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  const checkguitar = screen.getByTestId('checkguitar');
+  const checkguitar = screen.getByTestId('checkGuitar');
   fireEvent.click(checkguitar);
 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
@@ -119,7 +119,7 @@ test('When click checkbox_vocals and click choose instrument button', () => {
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  const checkvocals = screen.getByTestId('checkvocals');
+  const checkvocals = screen.getByTestId('checkVocals');
   fireEvent.click(checkvocals);
 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
@@ -133,7 +133,7 @@ test('When click checkbox_drum and click choose instrument button', () => {
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  const checkdrum = screen.getByTestId('checkdrum');
+  const checkdrum = screen.getByTestId('checkDrum');
   fireEvent.click(checkdrum);
 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
@@ -147,7 +147,7 @@ test('When click checkbox_keyboard and click choose instrument button', () => {
 
   const alertMock = jest.spyOn(window, 'alert').mockImplementation();
 
-  const checkkeyboard = screen.getByTestId('checkkeyboard');
+  const checkkeyboard = screen.getByTestId('checkKeyboard');
   fireEvent.click(checkkeyboard);
 
   const chooseInstrument = screen.getByTestId('chooseInstrument');
