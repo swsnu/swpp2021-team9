@@ -24,6 +24,7 @@ import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import { selectCreateCover } from './slice/selectors';
 import { selectMakeCombinationSlice } from '../SongPage/slice/selectors';
+import Player from 'app/helper/Player';
 interface MatchParams {
   id?: string;
 }
@@ -40,9 +41,11 @@ export default function CreateCoverRecord(props: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [withAudio, setWithAudio] = useState(true);
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
+  const player = Player.getInstance();
 
   const editor = useMemo(() => AudioEditor.getInstance(), []);
   const history = useHistory();
@@ -129,11 +132,32 @@ export default function CreateCoverRecord(props: Props) {
   const onRecordClicked = () => {
     if (isRecording) {
       stopRecording();
+      if (withAudio) {
+        player.pause();
+      }
     } else {
       startRecording();
+      if (withAudio) {
+        player.setCurrentTime(0);
+        player.play();
+      }
     }
     setIsRecording(!isRecording);
   };
+
+  const preViewOnPlayPause = useCallback(
+    (key: string, time: number) => {
+      if (withAudio) {
+        if (key === 'play') {
+          player.setCurrentTime(time);
+          player.play();
+        } else if (key === 'pause') {
+          player.pause();
+        }
+      }
+    },
+    [player, withAudio],
+  );
 
   const onCancelClicked = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -271,6 +295,7 @@ export default function CreateCoverRecord(props: Props) {
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
               segments={segments}
+              onPlayPause={preViewOnPlayPause}
             />
           ) : null
         ) : null}
@@ -296,6 +321,7 @@ export default function CreateCoverRecord(props: Props) {
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
               segments={segments}
+              onPlayPause={preViewOnPlayPause}
             />
           ) : null
         ) : null}
