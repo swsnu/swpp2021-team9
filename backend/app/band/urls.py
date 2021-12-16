@@ -9,6 +9,7 @@ from band.views import (
     cover_views,
     combination_views,
     song_views,
+    log_views,
 )
 
 urlpatterns = [
@@ -53,4 +54,9 @@ urlpatterns = [
     path("song/search/", song_views.SongSearch.as_view(), name="song_search"),
     path("song/info/<int:pk>/", song_views.SongInfo.as_view(), name="song_info"),
     path("song/", song_views.SongView.as_view(), name="song"),
+
+    # Log urls
+    path("log/cover/", log_views.CoverLogsView.as_view(), name="log_cover"),
+    path("log/combination/", log_views.CombinationLogsView.as_view(), name="log_combination"),
+
 ]

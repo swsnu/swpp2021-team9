@@ -80,7 +80,7 @@ class Cover(models.Model):
     likes = ManyToManyField(
         User, db_table="Cover_Likes", related_name="like_covers", blank=True
     )
-    views: int = IntegerField(db_column="view", default=0)
+    view: int = IntegerField(db_column="view", default=0)
     combination: "Combination" = ForeignKey(
         "Combination",
         related_name="+",
@@ -88,6 +88,9 @@ class Cover(models.Model):
         null=True,
         blank=True,
     )
+
+    def count_views(self) -> int:
+        return CoverLog.objects.filter(cover=self).count()
 
     @property
     def like_count(self) -> int:
@@ -114,6 +117,9 @@ class Combination(models.Model):
     def like_count(self) -> int:
         return self.likes.count()
 
+    def count_views(self) -> int:
+        return CombinationLog.objects.filter(combination=self).count()
+
     @property
     def covers_count(self) -> int:
         return self.covers.count()
@@ -137,6 +143,7 @@ class CoverTag(models.Model):
 class CoverLog(models.Model):
     """CoverLog model"""
 
+    addr = models.CharField(max_length=50, db_column="addr")
     user: User = ForeignKey(
         User, related_name="+", on_delete=models.SET_NULL, null=True
     )
@@ -150,6 +157,7 @@ class CoverLog(models.Model):
 class CombinationLog(models.Model):
     """CombinationLog model"""
 
+    addr = models.CharField(max_length=50, db_column="addr")
     user: User = ForeignKey(
         User, related_name="+", on_delete=models.SET_NULL, null=True
     )
@@ -158,3 +166,13 @@ class CombinationLog(models.Model):
 
     class Meta:
         db_table = "CombinationLog"
+
+
+class RecoSong(models.Model):
+    """RecoSong model
+    load from s3 refresh every 6 hours"""
+    song: Song = ForeignKey(Song, on_delete=models.CASCADE)
+    recos = models.CharField(max_length=50, db_column="recos")
+
+    class Meta:
+        db_table = "RecoSong"

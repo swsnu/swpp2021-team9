@@ -14,7 +14,7 @@ instrument_name_list = ["Bass", "Guitar", "Vocal", "Drum", "Keyboard"]
 
 
 def make_user_data(i: int):
-    return {"email": f"setup_{i}@metaband.sp", "password": f"pwdpwd{i}"}
+    return {"email": f"setup_{i}@metaband.spi", "password": f"pwdpwd{i}"}
 
 
 def make_song_data(i: int):
@@ -32,7 +32,7 @@ def make_cover_data(song_id: int, i: int):
         "title": f"COVER_TITLE{song_id}_{i}",
         "category": f"COVER_CATEGORY{song_id}_{i}",
         "description": f"COVER_DESCRIPTION{song_id}_{i}",
-        "views": (song_id * i * 100000) % 9883,
+        "view": (song_id * i * 100000) % 9883,
     }
 
 

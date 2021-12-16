@@ -26,7 +26,8 @@ jobs:
         - yarn test --coverage --watchAll=false
         - coveralls-lcov -v -n coverage/lcov.info > coverage.json
         - cd ../backend && pylint app
-        - cd app && coverage run --source='.' manage.py test
+        - cd app && python3 manage.py migrate 
+        - coverage run --source='.' manage.py test
         - coverage xml
         - coveralls --merge=../../frontend/coverage.json
         - cd ../../ && sonar-scanner
