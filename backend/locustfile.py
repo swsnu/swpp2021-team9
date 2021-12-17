@@ -15,7 +15,7 @@ class WebsiteUser(HttpUser):
 
         response = self.client.post(
             "/api/user/signin/",
-            json={"email": "test@test.com", "password": "testtest",},
+            json={"email": "test@test.com", "password": "testtest"},
             headers={"X-CSRFToken": csrftoken},
         )
         if response.status_code != 200:
