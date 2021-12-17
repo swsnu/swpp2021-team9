@@ -1,7 +1,9 @@
 from locust import HttpUser, between, task, TaskSet
 
 
-class UserBehavior(TaskSet):
+class WebsiteUser(HttpUser):
+    wait_time = between(1, 5)
+
     def on_start(self):
         self.signin()
 
@@ -24,9 +26,4 @@ class UserBehavior(TaskSet):
 
         if res.status_code != 200:
             print(str(res.status_code) + "combination main")
-
-
-class WebsiteUser(HttpUser):
-    task_set = UserBehavior
-    wait_time = between(1, 5)
 
