@@ -1,4 +1,5 @@
 from locust import HttpUser, between, task
+from requests.auth import HTTPBasicAuth
 
 
 class WebsiteUser(HttpUser):
@@ -9,16 +10,21 @@ class WebsiteUser(HttpUser):
 
     @task(1)
     def signin(self):
-        res = self.client.get("/api/token/")
-        csrf_token = res.cookies["csrftoken"].value
+        # res = self.client.get("/api/token/")
+        # csrftoken = res.cookies["csrftoken"]
 
-        res = self.client.post(
-            "/api/user/sigin/",
-            json={"email": "test@test.com", "password": "testtest"},
-            headers={"X-CSRFToken": csrf_token},
-        )
-        if res.status_code != 200:
-            print(str(res.status_code) + " signin")
+        # res = self.client.post(
+        #     "/api/user/sigin/",
+        #     json={
+        #         "email": "test@test.com",
+        #         "password": "testtest",
+        #         "csrfmiddlewaretoken": csrftoken,
+        #     },
+        #     headers={"X-CSRFToken": csrftoken},
+        # )
+        # if res.status_code != 200:
+        #     print(str(res.status_code) + " signin")
+        self.client.auth = HTTPBasicAuth("username", "password")
 
     @task(2)
     def get_combinations_main(self):
