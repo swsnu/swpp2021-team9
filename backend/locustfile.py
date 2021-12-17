@@ -5,7 +5,7 @@ class UserBehavior(TaskSet):
     def on_start(self):
         self.signin()
 
-    @task
+    @task(1)
     def signin(self):
         res = self.client.get("/api/token/")
         csrf_token = res.cookies["csrftoken"]
@@ -18,7 +18,7 @@ class UserBehavior(TaskSet):
         if res.status_code != 200:
             print(str(res.status_code) + " signin")
 
-    @task
+    @task(2)
     def get_combinations_main(self):
         res = self.client.get("/api/combination/main/")
 
