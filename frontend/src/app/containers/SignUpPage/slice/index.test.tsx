@@ -91,14 +91,6 @@ test('should take sagas', () => {
 });
 
 test('should loading signup Response', async () => {
-  const signinform_dummy: SignUpForm = {
-    email: 'swpp2021@naver.com',
-    password: 'swpp2021',
-  };
-  const userinfo_dummy: UserInfo = {
-    username: '',
-    id: 0,
-  };
   const dispatched: any[] = [];
   api.signup = jest.fn(
     (form: SignUpForm) =>
@@ -122,15 +114,6 @@ test('should loading signup Response', async () => {
 });
 
 test('should signin Response onError', async () => {
-  const signinform_dummy: SignInForm = {
-    email: 'swpp2021@naver.com',
-    password: 'swpp2021',
-  };
-  const userinfo_dummy: UserInfo = {
-    username: '',
-    id: 0,
-  };
-
   const dispatched: any[] = [];
 
   api.signup = jest.fn(

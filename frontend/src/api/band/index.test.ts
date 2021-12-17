@@ -180,6 +180,42 @@ describe('band api', () => {
     });
   });
 
+  test(`/api/user/info/<id:int>/`, async () => {
+    const mockForm: UserPostForm = {
+      id: 22,
+    };
+    const mockFull: UserPostForm = {
+      id: 22,
+      username: 'USERNAME',
+      description: 'DESCRIPTION',
+      instruments: [1, 2, 3, 4],
+    };
+
+    expect(await api.postUserInfo(mockForm)).toEqual(MOCK_POST_RESPONSE);
+
+    expect(await api.postUserInfo(mockFull)).toEqual(MOCK_POST_RESPONSE);
+    let calls = (apiClient.post as jest.Mock).mock.calls;
+    expect(calls[0][0]).toEqual('/api/user/info/22/');
+    expect(calls[1][0]).toEqual('/api/user/info/22/');
+
+    expect(calls[1][1].get('username')).toEqual('USERNAME');
+    expect(calls[1][1].get('description')).toEqual('DESCRIPTION');
+  });
+
+  test(`/api/combination/like/<pk:int>/`, async () => {
+    const mockId = 323;
+    const mockForm = { combinationId: mockId, isLiked: true };
+
+    expect(await api.getCombinationLike(mockId)).toEqual(MOCK_GET_DATA);
+    expect(apiClient.get).lastCalledWith(`/api/combination/like/${mockId}/`);
+
+    expect(await api.putCombinationLike(mockForm)).toEqual(MOCK_PUT_RESPONSE);
+    expect(apiClient.put).lastCalledWith(
+      `/api/combination/like/${mockForm.combinationId}/`,
+      { isLiked: mockForm.isLiked },
+    );
+  });
+
   // Basic testing
   //   test(`urlll/<id:int>/`, async () => {
   //     const mockId = 323;

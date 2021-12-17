@@ -3,6 +3,7 @@ import {
   createSlice as createSliceOriginal,
   SliceCaseReducers,
   CreateSliceOptions,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 
 /* Wrap createSlice with stricter Name options */
@@ -17,3 +18,9 @@ export const createSlice = <
 ) => {
   return createSliceOriginal(options);
 };
+
+export function clearAction<S>(initialState: S) {
+  return (state: S, action: PayloadAction<undefined>) => {
+    return initialState;
+  };
+}

@@ -11,13 +11,11 @@ import {
   RootStateKeyType,
 } from 'utils/types/injector-typings';
 import { selectSlice } from './selectors';
-import profilePageSaga, { getProfileResponse } from './saga';
-import { takeEvery } from '@redux-saga/core/effects';
+import { getProfileResponse } from './saga';
 import * as AT from 'api/actionTypes';
 import * as ReactRedux from 'react-redux';
 import { renderHook } from '@testing-library/react-hooks';
 import { api } from 'api/band';
-import { dummyUser } from 'api/dummy';
 import { runSaga } from 'redux-saga';
 
 jest.mock('utils/redux-injectors', () => {
