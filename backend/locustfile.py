@@ -27,7 +27,6 @@ class UserBehavior(TaskSet):
 
 
 class WebsiteUser(HttpUser):
-    host = "http://localhost:8000"
     task_set = UserBehavior
     wait_time = between(1, 5)
 
