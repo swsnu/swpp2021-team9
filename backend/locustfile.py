@@ -1,4 +1,4 @@
-from locust import HttpUser, between, task, TaskSet
+from locust import HttpUser, between, task
 
 
 class WebsiteUser(HttpUser):
@@ -10,7 +10,7 @@ class WebsiteUser(HttpUser):
     @task(1)
     def signin(self):
         res = self.client.get("/api/token/")
-        csrf_token = res.cookies["csrftoken"]
+        csrf_token = res.cookies["csrftoken"].value
 
         res = self.client.post(
             "/api/user/sigin/",
