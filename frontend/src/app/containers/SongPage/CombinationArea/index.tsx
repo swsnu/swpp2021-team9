@@ -1,7 +1,3 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { CreateCover } from 'utils/urls';
-
 import AddedCoverList from './AddedCoverList';
 import AddCoverButton from './AddCoverButton';
 
@@ -13,11 +9,10 @@ export interface Props {
   instruments: Instrument[];
   covers: Cover[];
   onClickPlay: () => void;
+  onRecordClick: () => void;
 }
 
 export default function CombinationArea(props: Props) {
-  const history = useHistory();
-
   return (
     <div data-testid="CombinationArea" className="mt-4 ml-4 sm:ml-0">
       <h2 className="text-left text-sm font-bold text-gray-600 tracking-wider">
@@ -36,7 +31,7 @@ export default function CombinationArea(props: Props) {
           </div>
         </button>
         <button
-          onClick={() => history.push(CreateCover(props.songId, 'record'))}
+          onClick={props.onRecordClick}
           className="ml-2 mr-4 sm:mr-0 inline-flex justify-center items-center mt-2 px-2 border-transparent rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600"
         >
           <div className="text-md text-center">

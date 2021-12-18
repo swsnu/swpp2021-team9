@@ -18,9 +18,31 @@ export const api = {
   },
 
   postUserInfo: async (userPostForm: UserPostForm) => {
+    const userFormData = new FormData();
+    if (userPostForm.photo) {
+      const blob = await fetch(userPostForm.photo).then(r => r.blob());
+      const photoFile = new File([blob], 'image.png', {
+        type: 'image/png',
+      });
+      userFormData.append('photo', photoFile);
+    }
+
+    if (userPostForm.username) {
+      userFormData.append('username', userPostForm.username);
+    }
+    if (userPostForm.description) {
+      userFormData.append('description', userPostForm.description);
+    }
+    if (userPostForm.instruments) {
+      userFormData.append(
+        'instruments',
+        JSON.stringify(userPostForm.instruments),
+      );
+    }
+
     return await apiClient.post<User>(
       `/api/user/info/${userPostForm.id}/`,
-      userPostForm,
+      userFormData,
     );
   },
 
@@ -124,6 +146,7 @@ export const api = {
     );
     return response.data;
   },
+
   putCombinationLike: async (form: {
     combinationId: number;
     isLiked: Boolean;

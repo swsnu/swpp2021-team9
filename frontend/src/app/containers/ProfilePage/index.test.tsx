@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import user from '@testing-library/user-event';
 import { fireEvent, screen, render, waitFor } from '@testing-library/react';
 import { configureAppStore } from 'store/configureStore';
-import userEvent from '@testing-library/user-event';
 import ProfilePage from '.';
 import { dummyUser } from 'api/dummy';
 import * as urls from 'utils/urls';
 import { api } from 'api/band';
 import { RootState } from '../../../utils/types';
-
-const store = configureAppStore();
+import * as Hooks from './hook';
+import { renderHook } from '@testing-library/react-hooks';
+import { useCropImage } from './hook';
+import { Crop } from 'react-image-crop';
 
 window.alert = jest.fn();
 
@@ -155,17 +155,12 @@ test('When click checkbox_keyboard and click choose instrument button', () => {
   expect(alertMock).toHaveBeenCalledTimes(1);
 });
 
-test('Uploading file works properly', () => {
+test('Uploading file works properly', async () => {
   const { page } = setup(stubState);
-  render(page);
+  const { getByTestId } = render(page);
 
-  let file;
-  file = new File(['(⌐□_□)'], 'swpp2021.png', { type: 'image/png' });
-
-  const editPictureButton = screen.getByTestId('editPictureButton');
-  const uploadFile = screen.getByTestId('uploadFile');
+  const uploadFile = getByTestId('uploadFile');
   fireEvent.change(uploadFile);
-  fireEvent.click(editPictureButton);
 });
 
 it('error on load cover', async () => {
@@ -176,4 +171,55 @@ it('error on load cover', async () => {
   await waitFor(() => expect(mockHistoryReplace).toBeCalledTimes(1));
   expect(window.alert).toHaveBeenCalled();
   expect(mockHistoryReplace).toHaveBeenLastCalledWith(urls.Main());
+});
+
+it('test mock prompt', async () => {
+  window.prompt = jest.fn().mockReturnValue('PROMPT RETURN');
+  const { page } = setup(stubState);
+  const { getByTestId } = render(page);
+  const editnameButton = getByTestId('editnameButton');
+  const editBioButton = getByTestId('editBioButton');
+
+  fireEvent.click(editnameButton);
+  fireEvent.click(editBioButton);
+});
+
+it('test image flow', async () => {
+  const mockUseCropImage = {
+    onSelectFile: jest.fn(),
+    upImg: 'null',
+    setUpImg: jest.fn(),
+    croppedImg: 'null',
+    setCroppedImg: jest.fn(),
+    onLoad: jest.fn(),
+    crop: null,
+    setCrop: jest.fn(),
+    completedCrop: null,
+    onCompleteCrop: jest.fn(),
+  };
+  jest.spyOn(Hooks, 'useCropImage').mockImplementation(() => ({
+    ...mockUseCropImage,
+    previewCanvasRef: React.useRef(),
+  }));
+  const { page } = setup(stubState);
+  const { queryByTestId, getByTestId } = render(page);
+
+  expect(queryByTestId('reactCrop')).toBeTruthy();
+  expect(queryByTestId('editprofileButton')).toBeTruthy();
+
+  const editprofileButton = getByTestId('editprofileButton');
+  fireEvent.click(editprofileButton);
+  expect(mockUseCropImage.setUpImg).toHaveBeenLastCalledWith(null);
+});
+
+it('test cropimage', async () => {
+  (Hooks.useCropImage as jest.Mock).mockRestore();
+  const { result } = renderHook(() => useCropImage());
+
+  result.current.onCompleteCrop({
+    x: 0,
+    y: 100,
+    width: 10,
+    height: 10,
+  } as Crop);
 });

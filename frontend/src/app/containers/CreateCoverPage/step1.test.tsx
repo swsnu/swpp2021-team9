@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import * as ReactMediaRecorder from 'react-media-recorder';
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import CreateCoverRecordPage from './step1';
@@ -238,7 +238,7 @@ describe('<CreateCoverRecord>', () => {
   });
 
   it('when mediaBlobUrl is null', async () => {
-    mockUseReactMedia = jest
+    jest
       .spyOn(ReactMediaRecorder, 'useReactMediaRecorder')
       .mockImplementation(
         ({
@@ -373,5 +373,16 @@ describe('<CreateCoverRecord>', () => {
   it('makeCombiState is undefined', () => {
     spySelectMakeCombi.mockResolvedValueOnce({});
     render(page);
+  });
+
+  it('with Audio', async () => {
+    const { getByTestId, getAllByTestId } = render(page);
+    const withAudio = getByTestId('check_preview');
+    await waitFor(() => {
+      fireEvent.click(withAudio);
+    });
+    await waitFor(() => {
+      fireEvent.click(withAudio);
+    });
   });
 });

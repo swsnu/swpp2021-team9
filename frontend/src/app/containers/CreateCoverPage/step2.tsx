@@ -84,7 +84,7 @@ export default function CreateCoverInfoPage(props: Props) {
   }, [createCoverState, history]);
 
   const submitDisabled = () => {
-    return Form.title === '';
+    return Form.title === '' || createCoverState.createResponse.loading;
   };
 
   const styles = {

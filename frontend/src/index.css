@@ -76,3 +76,16 @@ select {
 .small-button {
   @apply py-1 px-2 justify-center border-transparent rounded-lg text-sm font-medium whitespace-nowrap text-white bg-blue-800 hover:bg-blue-900;
 }
+
+.page-container {
+  @apply flex flex-col items-center
+}
+
+.page-child {
+  @apply flex flex-col w-screen sm:w-full sm:px-8 max-w-screen-lg
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}

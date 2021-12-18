@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,6 +32,7 @@ export default function SongPage(props: Props) {
   const songState = useSelector(selectSong);
   const combination = useSelector(selectCombination);
   const current = useSelector(selectCurrent);
+  const [recordWait, setRecordWait] = useState(false);
 
   // loading
   const songResponse = songState.songResponse;
@@ -95,11 +96,22 @@ export default function SongPage(props: Props) {
           sources,
           like: false,
         };
-        console.log(currentTrackInfo);
         player.addTrack(currentTrackInfo);
       }
+
+      if (recordWait) {
+        history.push(urls.CreateCover(props.match.params.id, 'record'));
+      }
     }
-  }, [combination, combinationResponse, player, songResponse.data]);
+  }, [
+    combination,
+    combinationResponse,
+    history,
+    player,
+    props.match.params.id,
+    recordWait,
+    songResponse.data,
+  ]);
 
   const renderTopCover = useCallback(() => {
     if (current === null) return null;
@@ -119,6 +131,11 @@ export default function SongPage(props: Props) {
       )
     );
   }, [current, combination, coversResponse.data]);
+
+  const onRecordClick = useCallback(() => {
+    onClickPlay();
+    setRecordWait(true);
+  }, [onClickPlay]);
 
   return (
     <div data-testid="SongPage" className="flex justify-center h-full">
@@ -140,6 +157,7 @@ export default function SongPage(props: Props) {
             instruments={instrumentsResponse.data}
             covers={coversResponse.data}
             onClickPlay={onClickPlay}
+            onRecordClick={onRecordClick}
           />
         )}
         {renderTopCover()}

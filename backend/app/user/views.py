@@ -89,6 +89,7 @@ class UserInfo(
 
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
+        print("Before serializer is valid : ", request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.save()
 

@@ -63,16 +63,16 @@ export default function MainPage(props: Props) {
   );
 
   const getIsPlaying = useCallback(
-    (index: number) => {
-      return player.getIndex === index;
+    (combination_id: number) => {
+      return player.getTrack()?.combinationId === combination_id;
     },
-    [player.getIndex],
+    [player],
   );
 
   return (
     <div
       data-testid="MainPage"
-      className="items-center overflow-hidden grid grid-cols-12 pt-8"
+      className="items-center overflow-hidden grid grid-cols-10 pt-8"
     >
       {combinationsResponse.data && combinationsResponse.data.length > 0 ? (
         combinationsResponse.data.map((combination, index) => (
@@ -81,7 +81,7 @@ export default function MainPage(props: Props) {
             combination={combination}
             onClickTitle={() => history.push(urls.Song(combination.song.id))}
             onClickPlay={() => onClickPlay(index)}
-            isPlaying={getIsPlaying(index)}
+            isPlaying={getIsPlaying(combination.id)}
           />
         ))
       ) : (

@@ -24,6 +24,7 @@ import { Segment } from 'peaks.js';
 import AudioEditor from 'app/helper/AudioEditor';
 import { selectCreateCover } from './slice/selectors';
 import { selectMakeCombinationSlice } from '../SongPage/slice/selectors';
+import Player from 'app/helper/Player';
 interface MatchParams {
   id?: string;
 }
@@ -40,9 +41,11 @@ export default function CreateCoverRecord(props: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [isRecordingEnabled, setIsRecordingEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [withAudio, setWithAudio] = useState(true);
 
   const [refUrl, setRefUrl] = useState<string>('');
   const songId = props.match.params.id;
+  const player = Player.getInstance();
 
   const editor = useMemo(() => AudioEditor.getInstance(), []);
   const history = useHistory();
@@ -129,11 +132,32 @@ export default function CreateCoverRecord(props: Props) {
   const onRecordClicked = () => {
     if (isRecording) {
       stopRecording();
+      if (withAudio) {
+        player.pause();
+      }
     } else {
       startRecording();
+      if (withAudio) {
+        player.setCurrentTime(0);
+        player.play();
+      }
     }
     setIsRecording(!isRecording);
   };
+
+  const preViewOnPlayPause = useCallback(
+    (key: string, time: number) => {
+      if (withAudio) {
+        if (key === 'play') {
+          player.setCurrentTime(time);
+          player.play();
+        } else if (key === 'pause') {
+          player.pause();
+        }
+      }
+    },
+    [player, withAudio],
+  );
 
   const onCancelClicked = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -243,6 +267,17 @@ export default function CreateCoverRecord(props: Props) {
       {/* 참조할 영상 또는 음원 파일 재생하는 부분 */}
       <YoutubePlayer url={refUrl} />
 
+      <div>
+        <input
+          data-testid={`check_preview`}
+          type="checkbox"
+          className="form-checkbox"
+          checked={withAudio}
+          onChange={() => setWithAudio(!withAudio)}
+        />
+        <span className="ml-2">with audio</span>
+      </div>
+
       {/* 취소, 업로드, 녹음, 다음 페이지 */}
       {isRecordingEnabled ? (
         <div className="flex flex-col justify-center items-center space-y-4">
@@ -271,6 +306,7 @@ export default function CreateCoverRecord(props: Props) {
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
               segments={segments}
+              onPlayPause={preViewOnPlayPause}
             />
           ) : null
         ) : null}
@@ -296,6 +332,7 @@ export default function CreateCoverRecord(props: Props) {
               audioContentType={'audio/mpeg'}
               setSegments={setSegments}
               segments={segments}
+              onPlayPause={preViewOnPlayPause}
             />
           ) : null
         ) : null}
