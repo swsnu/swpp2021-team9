@@ -88,8 +88,17 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "bandcruit.urls"
 
-CSRF_TRUSTED_ORIGINS = ["https://www.metaband.space/*", "metaband.space/*", "http://localhost", "metaband.space"]
-CORS_ORIGIN_WHITELIST = ["https://www.metaband.space", "https://metaband.space", "http://localhost"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://www.metaband.space/*",
+    "metaband.space/*",
+    "http://localhost",
+    "metaband.space",
+]
+CORS_ORIGIN_WHITELIST = [
+    "https://www.metaband.space",
+    "https://metaband.space",
+    "http://localhost",
+]
 
 TEMPLATES = [
     {
@@ -118,7 +127,7 @@ DATABASES = {
         "NAME": get_secret("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
         "USER": get_secret("SQL_USER", "band"),
         "PASSWORD": get_secret("SQL_PASSWORD", "dlrjsqlalf"),
-        "HOST": "mysql.db",
+        "HOST": get_secret("HOST", "mysql.db"),
         "PORT": os.environ.get("SQL_PORT", "3306"),
     }
 }
@@ -131,15 +140,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 
