@@ -49,12 +49,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.resetAllMocks();
-  api.getCombinationsMain = jest.fn(
-    () =>
-      new Promise((res, rej) => {
-        res(dummyCombinations);
-      }),
-  );
+  api.getCombinationsMain = jest.fn().mockResolvedValue(dummyCombinations);
 });
 
 test('should render', () => {
@@ -89,12 +84,7 @@ test('should handle clicking title button correctly', async () => {
 });
 
 test('should handle error', async () => {
-  api.getCombinationsMain = jest.fn(
-    () =>
-      new Promise((res, rej) => {
-        rej('REJECT');
-      }),
-  );
+  api.getCombinationsMain = jest.fn().mockRejectedValue('REJECT');
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   setup();
   await waitFor(() => expect(window.alert).toBeCalledTimes(1));

@@ -97,9 +97,10 @@ export default function SongPage(props: Props) {
           like: false,
         };
         player.addTrack(currentTrackInfo);
-        if (recordWait) {
-          history.push(urls.CreateCover(props.match.params.id, 'record'));
-        }
+      }
+
+      if (recordWait) {
+        history.push(urls.CreateCover(props.match.params.id, 'record'));
       }
     }
   }, [

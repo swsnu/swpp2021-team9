@@ -5,5 +5,5 @@ const stubOptions = {
 };
 
 test('createSegmentLabel', () => {
-  const res = createSegmentLabel(stubOptions);
+  createSegmentLabel(stubOptions);
 });

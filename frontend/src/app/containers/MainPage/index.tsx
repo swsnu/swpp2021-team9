@@ -72,7 +72,7 @@ export default function MainPage(props: Props) {
   return (
     <div
       data-testid="MainPage"
-      className="items-center overflow-hidden grid grid-cols-12 pt-8"
+      className="items-center overflow-hidden grid grid-cols-10 pt-8"
     >
       {combinationsResponse.data && combinationsResponse.data.length > 0 ? (
         combinationsResponse.data.map((combination, index) => (

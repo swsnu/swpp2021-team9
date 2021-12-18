@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice } from 'utils/@reduxjs/toolkit';
+import { clearAction, createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import profilePageSaga from './saga';
 
@@ -47,6 +47,7 @@ const slice = createSlice({
       state.postProfileResponse.error = action.payload;
       return state;
     },
+    clearRedux: clearAction(initialState),
   },
 });
 

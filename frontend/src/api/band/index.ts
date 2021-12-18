@@ -1,4 +1,3 @@
-import { userInfo } from 'os';
 import { apiClient } from './client';
 
 export const api = {
@@ -19,10 +18,10 @@ export const api = {
   },
 
   postUserInfo: async (userPostForm: UserPostForm) => {
-    //const audioBlob = await fetch(userPostForm.photo).then(r => r.blob());
     const userFormData = new FormData();
     if (userPostForm.photo) {
-      const photoFile = new File([userPostForm.photo], 'image.png', {
+      const blob = await fetch(userPostForm.photo).then(r => r.blob());
+      const photoFile = new File([blob], 'image.png', {
         type: 'image/png',
       });
       userFormData.append('photo', photoFile);
@@ -147,6 +146,7 @@ export const api = {
     );
     return response.data;
   },
+
   putCombinationLike: async (form: {
     combinationId: number;
     isLiked: Boolean;

@@ -6,7 +6,7 @@ import { render } from '@testing-library/react';
 import { fireEvent, waitFor } from '@testing-library/dom';
 import { configureAppStore } from 'store/configureStore';
 import SongPage from '.';
-import { Song, Main, CreateCover } from 'utils/urls';
+import { Song, Main } from 'utils/urls';
 import { api } from 'api/band';
 import {
   dummySongs,

@@ -99,7 +99,6 @@ class UserInfo(
                 instrument_list = json.loads(instrument_list)
                 instruments = Instrument.objects.filter(id__in=instrument_list)
                 new_user.instruments.set(instruments)
-                
             except JSONDecodeError:
                 return Response("instrument format not json", 400)
 

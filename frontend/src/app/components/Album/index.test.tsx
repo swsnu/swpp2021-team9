@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import Album from '.';
 
-import AlbumImage from '../Album/AlbumImage.png';
 import { dummyCombinations } from 'api/dummy';
 
 test('should render', () => {
