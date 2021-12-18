@@ -374,4 +374,15 @@ describe('<CreateCoverRecord>', () => {
     spySelectMakeCombi.mockResolvedValueOnce({});
     render(page);
   });
+
+  it('with Audio', async () => {
+    const { getByTestId, getAllByTestId } = render(page);
+    const withAudio = getByTestId('check_preview');
+    await waitFor(() => {
+      fireEvent.click(withAudio);
+    });
+    await waitFor(() => {
+      fireEvent.click(withAudio);
+    });
+  });
 });
